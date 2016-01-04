@@ -34,9 +34,9 @@ Benodigde datasets:
 
 ## Delen van de applicatie
 De applicatie bestaat uit drie delen:
-* Het startscherm, waarin de gebruiker zijn beginbestemming en eindlocatie opgeeft.
-* Het resultatenscherm, die in één oogopslag toont welke optie het goedkoopst is en welke het snelst is.
-* Het detailscherm, met daarin visualisaties van de reisduur, de prijs en eventueel de route.
+* Het **startscherm**, waarin de gebruiker zijn beginbestemming en eindlocatie opgeeft.
+* Het **resultatenscherm**, die in één oogopslag toont welke optie het goedkoopst is en welke het snelst is.
+* Het **detailscherm**, met daarin visualisaties van de reisduur, de prijs en eventueel de route.
 
 
 ## Platform en API's
