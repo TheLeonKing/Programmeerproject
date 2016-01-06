@@ -31,3 +31,20 @@ Dinsdag 5 januari 2016
 
 ## Complicaties
 * Als de looptocht erg lang wordt, zal Google Maps alsnog kiezen voor een busreis. Hier kan ik echter geen prijzen voor opvragen. Ik weet nog niet hoe ik dit moet oplossen.
+
+
+# Dag 3
+Woensdag 6 januari 2016
+
+## Belangrijke besluiten
+* Ik heb ervoor gekozen om me voorlopig enkel te focussen op treinreizen, dus bus- en metroreizen sluit ik uit. De "complicatie" van gisteren is hiermee opgelost.
+
+## Bereikte mijlpalen
+* PHP-code geschreven om de recente benzineprijzen op te halen en deze op te slaan in een MYSQL-database.
+* Nieuwe bron gevonden voor de verbruiksgegevens van auto's (RDW), die beter aansluit op de Nederlandse situatie.
+* JavaScript-code geschreven om de verbruiksgegevens van een bepaalde auto op te halen.
+* JavaScript-code geschreven waarmee de prijs van een autorit berekend kan worden.
+
+## Complicaties
+* Van sommige auto's zijn geen gebruiksgegevens beschikbaar. Ik moet nog een manier zoeken om hiermee om te gaan.
+* Sommige auto's zijn elektrisch. Hoe bereken ik hiervan de kosten?

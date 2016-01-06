@@ -1,15 +1,28 @@
 <?php
 
+require('classes/connect.php');
+require('classes/gas.php');
+
 // Only execute script when "from" and "to" location are set.
-if (isset($_GET['from']) && isset($_GET['from'])) {
+if (isset($_GET['from']) && isset($_GET['from']) && isset($_GET['licensePlate'])) {
 	$from = $_GET['from'];
 	$to = $_GET['to'];
+	$licensePlate = $_GET['licensePlate'];
 }
 else {
 	die("We konden geen start- en eindlocatie vinden. Weet u zeker dat u hier rechtstreeks via onze website bent gekomen?");
 }
 
 echo $from;
+
+// Establish a database connection.				
+$database = new Database();
+$db = $database->connect();
+
+// Fetch the prices from the databases.
+$gas = new Gas();
+$gasPrices = $gas->fetchPrices($db);
+
 
 ?>
 <!doctype html>
@@ -28,10 +41,11 @@ echo $from;
 <body>
 	<div id="log"></div>
 	
-	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=nl"></script>
+	<script src="js/car.js"></script>
 	<script src="js/googleMaps.js"></script>
 	<script>
-		travelTime('<?php print $from; ?>', '<?php print $to; ?>');
+		travel('<?php print $from; ?>', '<?php print $to; ?>', '<?php print $licensePlate; ?>', <?php print json_encode($gasPrices); ?>);
 	</script>
 </body>
 </html>
