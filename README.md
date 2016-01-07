@@ -29,7 +29,7 @@ Benodigde API's:
 
 Benodigde datasets:
 * [Fuel Economy Data] (https://www.fueleconomy.gov/feg/download.shtml): Officiële verzameling datasets van de Amerikaanse overheid. Toont van vrijwel elk voertuig in de wereld het brandstofverbruik in "miles per gallon" (kan omgerekend worden naar "liter per 100 km") en het type benzine. Ik zal de verschillende datasets (ze zijn gescheden per jaar) combineren en uitlezen met PHP.
-* [United Consumers] (https://www.unitedconsumers.com/tanken/informatie/brandstof-prijzen.asp): Actuele brandstofprijzen</a>: Helaas is er voor Nederland geen dataset of API waarmee de huidige brandstofprijs opgehaald kan worden. Daarom ben ik genoodzaakt deze prijs te crawlen van een webpagina. Voor mijn applicatie gebruik ik de pagina van United Consumers, omdat die de meest uitgebreide informatie toont (namelijk ook de prijzen per benzinestation).
+* [United Consumers] (https://www.unitedconsumers.com/tanken/informatie/brandstof-prijzen.asp): Helaas is er voor Nederland geen dataset of API waarmee de huidige brandstofprijs opgehaald kan worden. Daarom ben ik genoodzaakt deze prijs te crawlen van een webpagina. Voor mijn applicatie gebruik ik de pagina van United Consumers, omdat die de meest uitgebreide informatie toont (namelijk ook de prijzen per benzinestation).
 
 
 ## Delen van de applicatie

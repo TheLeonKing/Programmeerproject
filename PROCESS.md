@@ -48,3 +48,26 @@ Woensdag 6 januari 2016
 ## Complicaties
 * Van sommige auto's zijn geen gebruiksgegevens beschikbaar. Ik moet nog een manier zoeken om hiermee om te gaan.
 * Sommige auto's zijn elektrisch. Hoe bereken ik hiervan de kosten?
+
+
+# Dag 4
+Donderdag 7 januari 2016
+
+## Belangrijke besluiten
+* Vandaag heb ik vooral mijn eerdere besluiten uitgewerkt. Ik heb dus geen nieuwe besluiten gemaakt.
+
+## Bereikte mijlpalen
+* Design Document (voorlopig) grotendeels afgemaakt.
+* Code geschreven om NS-prijzen te berekenen (hiervoor moesten veel verschillende databronnen gekopieerd worden).
+* Betere manier gevonden om met asynchrone functies om te gaan.
+
+## Complicaties
+* Er moet heel veel error handling in de applicatie komen (gebruiker vult reis in waarvoor geen treinreis mogelijk is, treinstations worden niet herkend, etc.). Ik moet nog een goede manier verzinnen om dit overzichtelijk te implementeren.
+
+
+# Dag 5
+Vrijdag 8 januari 2016
+
+## To Do:
+* Design maken.
+* Schetsen in Design Document zetten.
