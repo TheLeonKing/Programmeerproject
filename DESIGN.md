@@ -16,9 +16,9 @@ Deze sectie beschrijft het framework van mijn applicatie.
 Ik zal een "Gas" PHP class gebruiken voor alle functies die betrekking hebben op de benzine(prijzen) en een “Database” PHP class om verbinding te maken met de MYSQL database. Ik weet nog niet of ik Javascript classes zal gebruiken.
 
 ## UI-schetsen
-<img src="doc/sketches/start.jpg" border="5" />
+<img src="doc/sketches/start.jpg" />
 
-<img src="doc/sketches/result.jpg" border="5" />
+<img src="doc/sketches/result.jpg" />
 
 ## Frameworks and API's
 “Trein of auto” gebruikt de volgende frameworks:

@@ -13,13 +13,13 @@ De webapplicatie "Trein of Auto" is bedoeld om antwoord te geven op deze vragen.
 Hieronder volgen wireframes van de drie pagina's, zoals beschreven in de paragraaf "Delen van de applicatie".
 
 ### Startscherm
-<img src="doc/wireframes/start.png" border="5" />
+<img src="doc/wireframes/start.png" />
 
 ### Resultatenscherm
-<img src="doc/wireframes/resultaten.png" border="5" />
+<img src="doc/wireframes/resultaten.png" />
 
 ### Detailscherm
-<img src="doc/wireframes/detail.png" border="5" />
+<img src="doc/wireframes/detail.png" />
 
 
 ## Benodigde datasets
