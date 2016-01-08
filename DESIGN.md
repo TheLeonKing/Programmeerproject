@@ -18,7 +18,7 @@ Ik zal een "Gas" PHP class gebruiken voor alle functies die betrekking hebben op
 ## UI-schetsen
 <img src="doc/sketches/start.jpg" border="5" />
 
-<img src="doc/sketches/resultaten.jpg" border="5" />
+<img src="doc/sketches/result.jpg" border="5" />
 
 ## Frameworks and API's
 “Trein of auto” gebruikt de volgende frameworks:
