@@ -1,0 +1,54 @@
+body {
+	background-color: #FFFFFF;
+}
+
+.ui.center {
+	text-align: center;
+}
+
+.ui.top {
+	margin-top: 2em;
+}
+
+h3 .fa {
+	margin-right: 5px;
+}
+
+
+.ui.accordion .title {	
+	/* Prevent user from selecting accordion title when (s)he clicks it. */
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;	
+}
+
+.ui.styled {
+	border-radius: 0 !important;
+	width: 100% !important;
+}
+
+#map {
+	width: 500px;
+	height: 400px;
+}
+
+#legend {
+	margin-top: 0.2em;
+}
+
+#legend .item {
+	display: inline-block;
+	margin-right: 0.75em;
+}
+
+#legend .item.header {
+	font-weight: bold;
+}
+
+#legend .item.car {
+	color: purple;
+}
+
+#legend .item.train {
+	color: #3090C7;
+}

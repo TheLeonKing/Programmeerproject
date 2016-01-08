@@ -1,0 +1,15 @@
+body {
+	background: url('../images/bg.jpg') no-repeat center center fixed;
+}
+
+body > .grid {
+	height: 100%;
+}
+
+.column {
+	max-width: 450px;
+}
+
+#licensePlateError {
+	display: none;
+}

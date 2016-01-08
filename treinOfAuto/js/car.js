@@ -4,8 +4,8 @@ Contains all JS functions that are unique for the car journey.
 */
 
 
-/* Fetch the gas usage statistics from the user's car. */
-function findCarPrice(licensePlate, carJourney, gasPrices) {
+/* Fetch the gas usage and CO2 statistics from the user's car. */
+function fetchCarStats(licensePlate) {
 	// Create asynchronous logic for return value.
 	var dfd = $.Deferred();
 	
@@ -19,20 +19,21 @@ function findCarPrice(licensePlate, carJourney, gasPrices) {
 	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 			var responseArray = JSON.parse(xmlhttp.responseText);
-			userCar['gasType'] = responseArray[0].brandstof_omschrijving.toLowerCase();
-			userCar['gasUsage'] = parseFloat(responseArray[0].brandstofverbruik_gecombineerd);
-		
-			// If the fuel type is invalid (e.g. 'Niet geregistreerd' or a random number), set it to null.
-			// TODO: WAT TE DOEN MET ELEKTRICITEIT?
-			// TODO: CREATE USER INPUTS FOR 'NULL' CASES.
+			// Sometimes fuel statistics are in first element, sometimes they're in the second. Choose the right one.
+			response = (typeof responseArray[0].brandstof_omschrijving === 'undefined') ? responseArray[1] : responseArray[0];
+			userCar['gasType'] = response.brandstof_omschrijving.toLowerCase();
+			userCar['gasUsage'] = parseFloat(response.brandstofverbruik_gecombineerd);
+			userCar['co2Emission'] = parseFloat(response.co2_uitstoot_gecombineerd);
+			
+			// If the fuel type is invalid (e.g. 'Niet geregistreerd' or a faulty value), set it to null.
 			if (userCar['gasType'] !== 'benzine' && userCar['gasType'] !== 'diesel' && userCar['gasType'] !== 'lpg') {
 				userCar['gasType'] = null;
-				window.alert("ERROR: NO USAGE STATISTICS FOUND.");
-				window.stop()
+				dfd.reject("Couldn't find usage statistics for this car.");
+			}
+			else {
+				dfd.resolve(userCar);
 			}
 			
-			gasPrice = calculateGasPrice(licensePlate, carJourney, gasPrices, userCar)
-			dfd.resolve(gasPrice);
 		}
 	}
 	
@@ -52,5 +53,11 @@ function calculateGasPrice(licensePlate, carJourney, gasPrices, userCar) {
 	litersUsed = userCar['gasUsage'] * (travelDistance / 100);
 	gasPrice = gasPrices[userCar['gasType']]['average'] * litersUsed;
 	
-	return gasPrice;
+	return gasPrice.toFixed(2);
+}
+
+
+/* Calculates CO2 emission in grams per kilometer. */
+function totalCarEmission(distance, emission) {
+	return parseInt(distance * emission);
 }

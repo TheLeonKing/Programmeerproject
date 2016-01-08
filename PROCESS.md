@@ -57,7 +57,7 @@ Donderdag 7 januari 2016
 * Vandaag heb ik vooral mijn eerdere besluiten uitgewerkt. Ik heb dus geen nieuwe besluiten gemaakt.
 
 ## Bereikte mijlpalen
-* Design Document (voorlopig) grotendeels afgemaakt.
+* Design Document grotendeels getypt.
 * Code geschreven om NS-prijzen te berekenen (hiervoor moesten veel verschillende databronnen gekopieerd worden).
 * Betere manier gevonden om met asynchrone functies om te gaan.
 
@@ -68,6 +68,15 @@ Donderdag 7 januari 2016
 # Dag 5
 Vrijdag 8 januari 2016
 
-## To Do:
-* Design maken.
-* Schetsen in Design Document zetten.
+## Belangrijke besluiten
+* Ik heb besloten hoe het design van de webapplicatie er (voorlopig) uitziet.
+* Ik heb besloten om de 'detailpagina' te integreren in de resultatenpagina (m.b.v. accordion dropdowns).
+
+## Bereikte mijlpalen
+* Design ontworpen.
+* Design Document afgemaakt met toevoeging van designschetsen.
+* Extra error handling met JavaScript toegevoegd (controleert kentekenplaat vóórdat formulier verstuurd wordt).
+* Google Maps-kaart met trein- en autoroutes geïntegreerd.
+
+## Complicaties
+* Vandaag zijn geen nieuwe complicaties ontstaan. Een mooi begin van het weekend!
