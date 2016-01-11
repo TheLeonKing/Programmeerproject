@@ -3,7 +3,6 @@ MAIN.JS
 Contains all general JS functions (i.e. the ones not unique to the train or car journey).
 */
 
-
 /* Initializes the accordion. */
 $(document).ready(function(){
 	$('.ui.accordion').accordion({
@@ -34,7 +33,12 @@ function travel(fromLocation, toLocation, licensePlate, gasPrices) {
 					findTrainPrice(journeyStations).done(function(trainPrice) {
 						
 						// Calculate gas price of car journey.
-						carPrice = calculateGasPrice(licensePlate, carJourney, gasPrices, userCar);						
+						carPrice = calculateGasPrice(licensePlate, carJourney, gasPrices, userCar);
+						
+						// Calculate CO2 emission of both car and train journey.
+						carEmission = totalCarEmission(carJourney.distance.value/1000, userCar['co2Emission']);
+						trainEmission = totalTrainEmission(trainJourney.distance.value/1000);
+						
 						
 						// Create a 'journey' object containing all the information we've just gathered.
 						journey = {
@@ -44,6 +48,7 @@ function travel(fromLocation, toLocation, licensePlate, gasPrices) {
 						
 						// Print results to page.
 						printStats(journey);
+						visualize(journey, userCar, gasPrices);
 						
 					});
 				})
@@ -75,6 +80,10 @@ function printStats(journey) {
 	setElement('duration_car_detail', journey.car.duration.text);
 	setElement('duration_train', journey.train.duration.text);
 	setElement('duration_train_detail', journey.train.duration.text);
+	
+	findWinner(journey.car.emission, journey.train.emission, 'emission');
+	setElement('emission_car', journey.car.emission);
+	setElement('emission_train', journey.train.emission);
 }
 
 

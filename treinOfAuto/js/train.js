@@ -46,19 +46,8 @@ function extractStations(steps, fromLocation) {
 		function (v, i) { v.index = i; return (v.instructions).match('^Trein') }
 	);
 	
-	// If the first step starts at a train station, extract the train station name from the "from" field.
-	firstTransitIndex = stepsFiltered[0]['index'];
-	if (firstTransitIndex == 0) {
-		// Extract part before first comma, e.g. "Amsterdam Centraal, Stationsplein, Amsterdam, Netherlands" to "Amsterdam Centraal".
-		fromStation = fromLocation.substr(0, fromLocation.indexOf(','));
-	}
-	// If the first train step isn't the first step, extract the train station name from the previous step.
-	else {
-		// Extract the beginning station from the first transit step.
-		fromStation = steps[firstTransitIndex]['transit']['departure_stop']['name'];
-	}
-	
-	// Extract the end station from the final transit step.
+	// Extract beginning station from first transit step and end station from last transit step.
+	fromStation = stepsFiltered[0]['transit']['departure_stop']['name'];
 	toStation = $(stepsFiltered).get(-1)['transit']['arrival_stop']['name'];
 	
 	return {'from': fromStation, 'to': toStation};

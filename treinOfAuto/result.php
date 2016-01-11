@@ -10,7 +10,7 @@ if (isset($_GET['from']) && isset($_GET['from']) && isset($_GET['licensePlate'])
 	$licensePlate = str_replace('-', '', trim($_GET['licensePlate']));
 }
 else {
-	die("We konden geen start- en eindlocatie vinden. Weet u zeker dat u hier rechtstreeks via onze website bent gekomen?");
+	die("We konden niet alle benodigde gegevens vinden. Weet u zeker dat u hier rechtstreeks via onze website bent gekomen?");
 }
 
 // Establish a database connection.				
@@ -26,6 +26,7 @@ $gasPrices = $gas->fetchPrices($db);
 // - Emission chart: implement "number of travelers".
 // - Error handling.
 // - Custom fields for usage statistics.
+// - Combined graph?
 
 ?>
 <!doctype html>
@@ -40,6 +41,7 @@ $gasPrices = $gas->fetchPrices($db);
 	<link rel="stylesheet" type="text/css" href="css/libs/semantic.min.css">
 	<link rel="stylesheet" type="text/css" href="css/libs/font-awesome.min.css">
 	<link rel="stylesheet" href="css/result.css" />
+	<link rel="stylesheet" href="css/visualizations.css" />
 	
 	<script src="js/libs/jquery.js"></script>
 	
@@ -82,7 +84,7 @@ $gasPrices = $gas->fetchPrices($db);
 					
 					<!-- Price chart -->
 					<div class="sixteen wide column">
-						<br><br><br><br>
+						<canvas id="priceChart"></canvas>
 					</div>
 				</div>
 				
@@ -105,7 +107,7 @@ $gasPrices = $gas->fetchPrices($db);
 					
 					<!-- Duration chart -->
 					<div class="sixteen wide column">
-						<br><br><br><br>
+						<canvas id="durationChart"></canvas>
 					</div>
 				</div>
 				
@@ -118,6 +120,7 @@ $gasPrices = $gas->fetchPrices($db);
 				<i class="dropdown icon"></i> Kosten
 			</div>
 			<div class="content">
+				<canvas id="gasPricesChart"></canvas>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 			</div>
 			
@@ -163,13 +166,17 @@ $gasPrices = $gas->fetchPrices($db);
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=nl"></script>
 	<script src="js/libs/d3.min.js"></script>
 	<script src="js/libs/accordion.min.js"></script>
+	<script src="js/libs/moment.min.js"></script>
+	<script src="js/libs/chart.min.js"></script>
 	
 	<script src="js/main.js"></script>
 	<script src="js/car.js"></script>
 	<script src="js/train.js"></script>
 	<script src="js/googleMaps.js"></script>
+	<script src="js/visualizations.js"></script>
 	<script>
 		travel('<?php print $from; ?>', '<?php print $to; ?>', '<?php print $licensePlate; ?>', <?php print json_encode($gasPrices); ?>);
 	</script>
+	
 </body>
 </html>

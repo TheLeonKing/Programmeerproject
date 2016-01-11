@@ -80,3 +80,17 @@ Vrijdag 8 januari 2016
 
 ## Complicaties
 * Vandaag zijn geen nieuwe complicaties ontstaan. Een mooi begin van het weekend!
+
+
+# Dag 6
+Maandag 11 januari 2016
+
+## Belangrijke besluiten
+* Geen.
+
+## Bereikte mijlpalen
+* Visualisaties voor prijs, duur en benzinestations (nog niet helemaal af) gemaakt.
+* Verschillende bugs in de code van vorige week gefixt.
+
+## Complicaties
+* Het maken van de visualisaties kostte meer tijd dan verwacht, maar nu heb ik het redelijk door.

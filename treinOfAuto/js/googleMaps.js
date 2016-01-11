@@ -20,8 +20,8 @@ function initializeMap() {
 	carDirectionsRenderer = new google.maps.DirectionsRenderer({
 		map: map,
 		polylineOptions: {
-			strokeColor: 'purple',
-			strokeOpacity: 0.5,
+			strokeColor: '#505050',
+			strokeOpacity: 0.8,
 			strokeWeight: 6
 		}
 	});
@@ -47,6 +47,7 @@ function carTravel(fromLocation, toLocation) {
 	}, function(response, status) {
 		// If directions were found, return the first available route as an object. Otherwise, show an error.
 		if (status === google.maps.DirectionsStatus.OK) {
+			carResponse = response;
 			dfd.resolve(response.routes[0].legs[0]); // point.duration.text , point.distance.text
 		} else {
 			dfd.reject('Autoroute kon niet gevonden worden. Foutmelding: ' + status);
@@ -71,6 +72,8 @@ function trainTravel(fromLocation, toLocation) {
 	}, function(response, status) {
 		// If directions were found, return the first available route as an object. Otherwise, show an error.
 		if (status === google.maps.DirectionsStatus.OK) {
+			trainResponse = response;
+			google.maps.event.trigger(trainDirectionsRenderer, "resize");
 			dfd.resolve(response.routes[0].legs[0]); // point.duration.text , point.distance.text
 		} else {
 			dfd.reject('Treinroute kon niet gevonden worden. Foutmelding: ' + status);
