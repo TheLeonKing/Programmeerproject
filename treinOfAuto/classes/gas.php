@@ -57,7 +57,12 @@ class Gas {
 	public function pushPrices($db, $priceArray) {
 		
 		// For each gas type in the array, update the corresponding row in the table.
-		foreach ($priceArray as $gasType => $prices) {			
+		foreach ($priceArray as $gasType => $prices) {
+			// Put 'euro95' in the database as 'benzine'.
+			if ($gasType == 'euro95') {
+				$gasType = 'benzine';
+			}
+			
 			$pdo = $db->prepare('UPDATE gas_prices
 								 SET average = :average, bp = :bp, esso = :esso, shell = :shell, texaco = :texaco, total = :total
 								 WHERE gas_type= :gasType');

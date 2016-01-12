@@ -94,3 +94,18 @@ Maandag 11 januari 2016
 
 ## Complicaties
 * Het maken van de visualisaties kostte meer tijd dan verwacht, maar nu heb ik het redelijk door.
+
+
+# Dag 7
+Dinsdag 12 januari 2016
+
+## Belangrijke besluiten
+* Ik heb besloten om ook de instructies van het reisadvies toe te voegen.
+
+## Bereikte mijlpalen
+* Visualisatie van benzinestations afgemaakt.
+* Visualisatie van CO2-uitstoot toegevoegd.
+* Instructies van reisadvies opgehaald, verwerkt en toegevoegd.
+
+## Complicaties
+* Het ging vandaag ontzettend lekker, geen complicaties!

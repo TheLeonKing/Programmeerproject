@@ -1,0 +1,97 @@
+#gasPricesChart svg {
+	display: block;
+	margin: 0 auto;
+}
+
+.chartTitle {
+	text-anchor: middle;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.axis path,
+.axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+
+/* Bar colors: verified color blind safe */
+
+/* BP */
+.bar:nth-of-type(1) {
+	fill: #a6cee3;
+}
+
+/* Esso */
+.bar:nth-of-type(2) {
+	fill: #1f78b4;
+}
+
+/* Shell */
+.bar:nth-of-type(3) {
+	fill: #b2df8a;
+}
+
+/* Texaco */
+.bar:nth-of-type(4) {
+	fill: #33a02c;
+}
+
+/* Total */
+.bar:nth-of-type(5) {
+	fill: #808080;
+}
+
+.x.axis path {
+	display: none;
+}
+
+.line {
+	fill: none;
+	stroke: #444;
+	stroke-width: 2px;
+}
+
+svg text {
+	font-size: 0.8em;
+}
+
+.tick text, .tooltip .gasStation {
+	text-transform: capitalize;
+}
+
+.axisLabel {
+	text-anchor: end;
+	font-weight: bold;
+}
+
+.averageLineLabel {
+	text-anchor: middle;
+}
+
+.tooltip {
+	padding: 11px;
+	background: rgba(0, 0, 0, 0.8);
+	color: #fff;
+	border-radius: 2px;
+}
+
+/* Adds a small arrow at the tooltip's bottom; credits to http://bl.ocks.org/Caged/6476579. */
+.tooltip:after {
+	box-sizing: border-box;
+	display: inline;
+	font-size: 10px;
+	width: 100%;
+	line-height: 1;
+	color: rgba(0, 0, 0, 0.8);
+	content: "\25BC";
+	position: absolute;
+	text-align: center;
+}
+
+.tooltip.n:after {
+	margin: -1px 0 0 0;
+	top: 100%;
+	left: 0;
+}

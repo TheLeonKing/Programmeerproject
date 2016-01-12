@@ -103,3 +103,26 @@ function totalTrainEmission(distance) {
 	// Number '30.1' based on an official report by NS from 2013: http://goo.gl/kYZJms.
 	return parseInt(distance * 30.1);
 }
+
+
+/* Fetches the first possible travel advice from the NS API. */
+function fetchTrainTravelAdvice(journeyStations) {	
+	
+	var dfd = $.Deferred();
+	
+	$.ajax({
+		url: 'trainTravelAdvice.php',
+		data: { 'from': journeyStations.fromCode, 'to': journeyStations.toCode },
+		type: 'POST',
+		dataType: 'json',
+		success: function (travelAdvice) {
+			dfd.resolve(travelAdvice);
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			dfd.reject('Kon geen reisadvies vinden.');
+		}
+	});
+	
+	return dfd.promise();
+	
+}

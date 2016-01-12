@@ -15,6 +15,10 @@ $(document).ready(function(){
         }
 		, collapsible: true
 	});
+	
+	$('.ui.dropdown')
+		.dropdown()
+	;
 });
 
 
@@ -30,27 +34,32 @@ function travel(fromLocation, toLocation, licensePlate, gasPrices) {
 			trainTravel(fromLocation, toLocation).done(function(trainJourney) {
 				// Extract the beginning and end station from the train route, calculate the price based on these stations.
 				findTrainStations(trainJourney.steps, fromLocation).done(function(journeyStations) {
-					findTrainPrice(journeyStations).done(function(trainPrice) {
-						
-						// Calculate gas price of car journey.
-						carPrice = calculateGasPrice(licensePlate, carJourney, gasPrices, userCar);
-						
-						// Calculate CO2 emission of both car and train journey.
-						carEmission = totalCarEmission(carJourney.distance.value/1000, userCar['co2Emission']);
-						trainEmission = totalTrainEmission(trainJourney.distance.value/1000);
-						
-						
-						// Create a 'journey' object containing all the information we've just gathered.
-						journey = {
-							car: { duration: { text: carJourney.duration.text, value: carJourney.duration.value }, distance: { total: (carJourney.distance.value/1000) }, price: carPrice, emission: carEmission },
-							train: { duration: { text: trainJourney.duration.text, value: trainJourney.duration.value }, distance: { total: (trainJourney.distance.value/1000), train: totalTrainDistance(trainJourney.steps) }, price: trainPrice, emission: trainEmission }
-						};
-						
-						// Print results to page.
-						printStats(journey);
-						visualize(journey, userCar, gasPrices);
-						
-					});
+					fetchTrainTravelAdvice(journeyStations).done(function(trainTravelAdvice) {
+						findTrainPrice(journeyStations).done(function(trainPrice) {
+							
+							// Calculate gas price of car journey.
+							carPrice = calculateGasPrice(licensePlate, carJourney, gasPrices, userCar);
+							
+							// Calculate CO2 emission of both car and train journey.
+							carEmission = totalCarEmission(carJourney.distance.value/1000, userCar['co2Emission']);
+							trainEmission = totalTrainEmission(trainJourney.distance.value/1000);
+							
+							
+							// Create a 'journey' object containing all the information we've just gathered.
+							journey = {
+								car: { duration: { text: carJourney.duration.text, value: carJourney.duration.value }, distance: { total: (carJourney.distance.value/1000) }, price: carPrice, emission: carEmission },
+								train: { duration: { text: trainJourney.duration.text, value: trainJourney.duration.value }, distance: { total: (trainJourney.distance.value/1000), train: totalTrainDistance(trainJourney.steps) }, price: trainPrice, emission: trainEmission }
+							};
+							
+							// Print results to page.
+							printStats(journey);
+							printTravelAdvice(carJourney, trainJourney);
+							visualize(journey, userCar, gasPrices);
+							
+						});
+					})
+					// If 'fetchTrainTravelAdvice' failed (i.e. no train travel advice was found).
+					.fail(function(error) { console.log(error); });
 				})
 				// If 'findTrainStations' failed (i.e. one or both train station(s) couldn't be found).
 				.fail(function(error) { console.log(error); });
@@ -81,7 +90,8 @@ function printStats(journey) {
 	setElement('duration_train', journey.train.duration.text);
 	setElement('duration_train_detail', journey.train.duration.text);
 	
-	findWinner(journey.car.emission, journey.train.emission, 'emission');
+	emissionWinner = findWinner(journey.car.emission, journey.train.emission, 'emission');
+	setElement('emission_winner', emissionWinner);
 	setElement('emission_car', journey.car.emission);
 	setElement('emission_train', journey.train.emission);
 }
@@ -115,4 +125,104 @@ function setElement(id, string) {
 function setColors(type, winner, loser) {
 	$('#' + type + '_' + winner + '_container').css('color', 'rgb(0,163,0)');
 	$('#' + type + '_' + loser + '_container').css('color', 'rgb(238,17,17)');
+}
+
+
+/* Prints the travel advice to the DOM. */
+function printTravelAdvice(carJourney, trainJourney) {
+	printCarTravelAdvice(carJourney);
+	printTrainTravelAdvice(trainJourney);
+}
+
+
+/* Prints the car travel advice to the DOM. */
+function printCarTravelAdvice(carJourney) {
+	
+	// Set departure time as current time and arrival time as current time + journey duration.
+	var departureTime = new Date();
+	var arrivalTime = new Date(departureTime.getTime() + (carJourney.duration.value * 1000));
+	
+	// Convert departure and arrival time from date object to string.
+	departureTime = departureTime.getHours() + ':' + ('0' + departureTime.getMinutes()).substr(-2);
+	arrivalTime = arrivalTime.getHours() + ':' + ('0' + arrivalTime.getMinutes()).substr(-2);
+	
+	// Add first instruction (indicating the starting point).
+	startAddress = carJourney['start_address'];
+	addInstruction('Start op <strong>' + startAddress + '</strong>', 'Vertrek om ' + departureTime, 'car');		
+	
+	steps = carJourney['steps'];
+	
+	// Loop over all instruction steps.
+	for (var i = 0, l = steps.length; i < l; i++) {
+		instruction = steps[i]['instructions'];
+		distance = steps[i]['distance']['text'];
+		duration = steps[i]['duration']['text'];
+		travelMode = steps[i]['travel_mode'];
+		
+		addInstruction(instruction, distance + ' - ' + duration, 'car', steps[i]['travel_mode']);
+	}
+	
+	// Add last instruction (indicating the ending point).
+	endAddress = carJourney['end_address'];
+	addInstruction('Gearriveerd op <strong>' + endAddress + '</strong>', 'Aankomst om ' + arrivalTime, 'car');	
+	
+}
+
+
+/* Prints the train travel advice to the DOM. */
+function printTrainTravelAdvice(trainJourney) {
+	
+	// Add first instruction (indicating the starting point + departure time).
+	startAddress = trainJourney['start_address'];
+	departureTime = trainJourney['departure_time']['text'];
+	addInstruction('Start op <strong>' + startAddress + '</strong>', 'Vertrek om ' + departureTime, 'train');
+	
+	steps = trainJourney['steps'];
+	
+	// Loop over all instruction steps.
+	for (var i = 0, l = steps.length; i < l; i++) {
+		distance = steps[i]['distance']['text'];
+		duration = steps[i]['duration']['text'];
+		travelMode = steps[i]['travel_mode'];
+		
+		// If this is a transit step, extract the station the user should leave the
+		// train ('steps[i]['instructions']' here states the end station of the train,
+		// e.g. 'Rotterdam Centraal' while the user should leave at 'Amsterdam Centraal').
+		if ((steps[i]).hasOwnProperty('transit')) {
+			instruction = 'Trein naar ' + steps[i]['transit']['arrival_stop']['name'] + ' (vertrek ' + steps[i]['transit']['departure_time']['text'] + ')';
+			details =  + distance + ' - ' + duration;
+		}
+		else {
+			instruction = steps[i]['instructions'];
+		}
+		
+		addInstruction(instruction, distance + ' - ' + duration, 'train', steps[i]['travel_mode']);
+	}
+	
+	// Add last instruction (indicating the ending point + arrival time).
+	endAddress = trainJourney['end_address'];
+	arrivalTime = trainJourney['arrival_time']['text'];		
+	addInstruction('Gearriveerd op <strong>' + endAddress + '</strong>', 'Aankomst om ' + arrivalTime, 'train');
+}
+
+
+/* Adds a single instruction to the DOM (avoids code repetition). */
+function addInstruction(instruction, description, transitType, travelMode) {
+	
+	// Choose the right icon for the transit type.
+	if (travelMode == 'WALKING') {
+		icon = 'ion-android-walk';
+	}
+	else if (travelMode == 'DRIVING') {
+		icon = 'fa fa-car';
+	}
+	else if (travelMode == 'TRANSIT') {
+		icon = 'fa fa-train';
+	}
+	else {
+		icon = 'fa fa-map-marker';
+	}
+	
+	// Add instruction to DOM.
+	$('#directions_' + transitType).append('<div class="item"><i class="large icon ' + icon + ' middle aligned"></i><div class="content">' + instruction + '<div class="description">' + description + '</div></div></div>');
 }

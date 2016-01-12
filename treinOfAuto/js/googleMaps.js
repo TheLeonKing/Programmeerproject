@@ -20,7 +20,7 @@ function initializeMap() {
 	carDirectionsRenderer = new google.maps.DirectionsRenderer({
 		map: map,
 		polylineOptions: {
-			strokeColor: '#505050',
+			strokeColor: '#ef8a62',
 			strokeOpacity: 0.8,
 			strokeWeight: 6
 		}
