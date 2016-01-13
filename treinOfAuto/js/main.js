@@ -3,7 +3,7 @@ MAIN.JS
 Contains all general JS functions (i.e. the ones not unique to the train or car journey).
 */
 
-/* Initializes the accordion. */
+/* Initializes the accordion and dropdown. */
 $(document).ready(function(){
 	$('.ui.accordion').accordion({
 		// Draw directions in Google Maps div when accordion opens (can't be done in advance because of resizing).
@@ -19,6 +19,32 @@ $(document).ready(function(){
 	$('.ui.dropdown')
 		.dropdown()
 	;
+	
+});
+
+
+/* Shows the appropriate direction instructions when the button is clicked. */
+$('.step').click(function() {
+	// Set the right button as active.
+	$('.step').removeClass('active');
+	$(this).addClass('active');
+	
+	// Determine which directions we need to show and which to hide.
+	if ($(this).attr('id') == 'carDirButton') {
+		hide = '#directions_train';
+		show = '#directions_car';
+	}
+	else if ($(this).attr('id') == 'trainDirButton') {
+		hide = '#directions_car';
+		show = '#directions_train';
+	}
+	
+	// Fade directions in and out.
+	$(hide).stop(true);
+	$(hide).fadeOut('slow', function() {
+		$(show).stop(true);
+		$(show).fadeIn('slow');
+	});
 });
 
 
@@ -164,7 +190,10 @@ function printCarTravelAdvice(carJourney) {
 	
 	// Add last instruction (indicating the ending point).
 	endAddress = carJourney['end_address'];
-	addInstruction('Gearriveerd op <strong>' + endAddress + '</strong>', 'Aankomst om ' + arrivalTime, 'car');	
+	addInstruction('Gearriveerd op <strong>' + endAddress + '</strong>', 'Aankomst om ' + arrivalTime, 'car');
+	
+	// Add departure and arrival time to button.
+	$('#carDirButton .bDescription').html(departureTime + ' - ' + arrivalTime);
 	
 }
 
@@ -203,6 +232,9 @@ function printTrainTravelAdvice(trainJourney) {
 	endAddress = trainJourney['end_address'];
 	arrivalTime = trainJourney['arrival_time']['text'];		
 	addInstruction('Gearriveerd op <strong>' + endAddress + '</strong>', 'Aankomst om ' + arrivalTime, 'train');
+	
+	// Add departure and arrival time to button.
+	$('#trainDirButton .bDescription').html(departureTime + ' - ' + arrivalTime);
 }
 
 

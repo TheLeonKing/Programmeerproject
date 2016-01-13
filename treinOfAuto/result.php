@@ -71,7 +71,7 @@ $gasPrices = $gas->fetchPrices($db);
 		
 		<div class="ui center top grid">
 			<!-- Price overview -->
-			<div class="eight wide column">
+			<div class="eight wide column">			
 				<h2>Goedkoper: <span id="price_winner"></span></h2>
 				
 				<div class="ui grid">
@@ -140,13 +140,32 @@ $gasPrices = $gas->fetchPrices($db);
 						<span class="item train">Trein: <span id="duration_train_detail"></span></span>
 					</div>
 				</div>
-				<!-- Car directions -->
+				<!-- Directions buttons -->	
+				<div id="dirButtons">
+					<div class="ui steps">
+						<a class="active step" id="carDirButton">
+							<i class="icon fa fa-car"></i>
+							<div class="bContent">
+								<div class="bTitle">Reisadvies auto</div>
+								<div class="bDescription"></div>
+							</div>
+						</a>
+					</div><div class="ui steps">
+						<a class="step" id="trainDirButton">
+							<i class="icon fa fa-train"></i>
+							<div class="bContent">
+								<div class="bTitle">Reisadvies trein</div>
+								<div class="bDescription"></div>
+							</div>
+						</a>
+					</div>
+				</div>
+				
+				<!-- Directions list -->
+				<div id="container">
 				<div class="ui relaxed divided list" id="directions_car"></div>
-				
-				<br><br><br><br>
-				
-				<!-- Train directions -->
-				<div class="ui relaxed divided list" id="directions_train"></div>
+				<div class="ui relaxed divided list" id="directions_train" style="display: none !important;"></div>
+				</div>
 			</div>
 			
 			<!-- Environment -->
@@ -162,12 +181,12 @@ $gasPrices = $gas->fetchPrices($db);
 					
 					<!-- Car CO2 -->
 					<div class="eight wide column" id="emission_car_container">
-						<h3><i class="fa fa-car"></i> <span id="emission_car"></span> g/km</h3>
+						<h3><i class="fa fa-car"></i> <span id="emission_car"></span> gram</h3>
 					</div>
 					
 					<!-- Train CO2 -->
 					<div class="eight wide column" id="emission_train_container">
-						<h3><i class="fa fa-train"></i> <span id="emission_train"></span> g/km</h3>
+						<h3><i class="fa fa-train"></i> <span id="emission_train"></span> gram</h3>
 					</div>
 					
 					<!-- CO2 chart -->
@@ -177,24 +196,68 @@ $gasPrices = $gas->fetchPrices($db);
 						<h4 class="ui header">
 							<i class="users icon"></i>
 							<div class="content dropdownContent">
-								Aantal personen: 
-								<div class="ui inline dropdown" tabindex="0">
-								<div class="text">één</div>
-								<i class="dropdown icon"></i>
-								<div class="menu transition hidden" tabindex="-1">
-									<div class="header">Totaal reisgezelschap</div>
-									<div class="item active selected" data-text="één">1</div>
-									<div class="item" data-text="twee">2</div>
-									<div class="item" data-text="drie">3</div>
-									<div class="item" data-text="vier">4</div>
-									<div class="item" data-text="vijf">5</div>
-									<div class="item" data-text="zes">6</div>
+								Ik maak deze reis
+								<div class="ui inline dropdown" tabindex="0" id="amountOfJourneys">
+									<div class="text">één</div>
+									<i class="dropdown icon"></i>
+									<div class="menu transition hidden" tabindex="-1">
+										<div class="header">Frequentie reis</div>
+										<div class="item active selected" data-text="één">1</div>
+										<div class="item" data-text="twee">2</div>
+										<div class="item" data-text="drie">3</div>
+										<div class="item" data-text="vier">4</div>
+										<div class="item" data-text="vijf">5</div>
+										<div class="item" data-text="zes">6</div>
+										<div class="item" data-text="zeven">7</div>
+										<div class="item" data-text="acht">8</div>
+										<div class="item" data-text="negen">9</div>
+										<div class="item" data-text="tien">10</div>
+										<div class="item" data-text="custom">Vaker...</div>
+									</div>
 								</div>
+								keer per
+								<div class="ui inline dropdown" tabindex="0" id="journeyFrequency">
+									<div class="text">jaar</div>
+									<i class="dropdown icon"></i>
+									<div class="menu transition hidden" tabindex="-1">
+										<div class="header">Frequentie reis</div>
+										<div class="item selected" data-text="week">week</div>
+										<div class="item" data-text="maand">maand</div>
+										<div class="item active" data-text="jaar">jaar</div>
+									</div>
 								</div>
+								<div class="ui inline dropdown" tabindex="0" id="amountOfPersons">
+									<div class="text">in m'n eentje</div>
+									<i class="dropdown icon"></i>
+									<div class="menu transition hidden" tabindex="-1">
+										<div class="header">Totaal reisgezelschap</div>
+										<div class="item active selected" data-text="in m'n eentje">1</div>
+										<div class="item" data-text="met z'n twee&#235;n">2</div>
+										<div class="item" data-text="met z'n drie&#235;n">3</div>
+										<div class="item" data-text="met z'n vieren">4</div>
+										<div class="item" data-text="met z'n vijven">5</div>
+										<div class="item" data-text="met m'n zessen">6</div>
+									</div>
+								</div>.
 							</div>
 						</h4>
 						
 						<canvas id="emissionChart"></canvas>
+						
+						<div class="ui grid">
+						<!-- Car trees -->
+						<div class="eight wide column">
+							Er zijn <strong><span class="number" id="trees_car_text">?</span> bomen</strong> per persoon nodig om de uitstoot van deze autoreis op te absorberen.
+							<div id="trees_car_visualization" class="treeVisualization"></div>
+						</div>
+						
+						<!-- Train trees -->
+						<div class="eight wide column">
+							<span class="treeStat">Er zijn <strong><span id="trees_train_text">?</span> bomen</strong> per persoon nodig om de uitstoot van deze treinreis te absorberen.
+							<div id="trees_train_visualization" class="treeVisualization"></div>
+						</div>
+						
+						</div>
 					</div>
 				</div>
 			</div>

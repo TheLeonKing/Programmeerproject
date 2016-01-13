@@ -3,23 +3,58 @@ VISUALIZATIONS.JS
 Contains all codes for the visualizations.
 */
 
-defaultBarOptions = {}
+defaultBarOptions = {};
 emissionChart;
+amountOfJourneys = 1;
+journeyFrequency = 'jaar';
+amountOfPersons = 1;
 
-/* When 'amountOfPersons' dropdown changes, update the car emission. */
-$('.item').click(function() {
-	var amountOfPersons = parseInt($(this).text());
-	var newEmission = parseInt(journey.car.emission/amountOfPersons);
+
+// If the user changes a dropdown value, update the emission stats.
+$('#amountOfJourneys .item').click(function() {
+	amountOfJourneys = parseInt($(this).text());
+	updateEmission();
+});
+
+$('#journeyFrequency .item').click(function() {
+	journeyFrequency = $(this).text();
+	updateEmission();
+});
+
+$('#amountOfPersons .item').click(function() {
+	amountOfPersons = parseInt($(this).text());
+	updateEmission();
+});
+
+
+/* Update the emission stats after the user changed a statistic. */
+function updateEmission() {
+	// Find out the 'amountOfJourneys' per year.
+	if (journeyFrequency == 'week') {
+		var amountOfJourneysYear = amountOfJourneys * 52;
+	}
+	else if (journeyFrequency == 'maand') {
+		var amountOfJourneysYear = amountOfJourneys * 12;
+	}
 	
-	// Set new emission on DOM.
-	emissionWinner = findWinner(journey.car.emission, journey.train.emission, 'emission');
+	// Calculate new emission numbers.
+	var newCarEmission = parseInt((journey.car.emission/amountOfPersons)*amountOfJourneysYear);
+	var newTrainEmission = parseInt(journey.train.emission*amountOfJourneysYear);
+	
+	// Update statistics on DOM.
+	emissionWinner = findWinner(newCarEmission, newTrainEmission, 'emission');
 	setElement('emission_winner', emissionWinner);
-	setElement('emission_car', newEmission);
+	setElement('emission_car', newCarEmission);
+	setElement('emission_train', newTrainEmission);
 	
 	// Update chart.
-	emissionChart.data.datasets[0].data[0] = newEmission;
+	emissionChart.data.datasets[0].data[0] = newCarEmission;
+	emissionChart.data.datasets[0].data[1] = newTrainEmission;
 	emissionChart.update();
-});
+	
+	// Update trees visualization.
+	visualizeTrees(newCarEmission, newTrainEmission);
+}
 
 
 /* Draws the visualizations to the DOM. */
@@ -32,7 +67,7 @@ function visualize(journey, userCar, gasPrices) {
 			display: false
 		},
 		scales:{
-			yAxes:[{
+			yAxes: [{
 					ticks:{
 						fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",
 						fontSize: 10,
@@ -42,9 +77,9 @@ function visualize(journey, userCar, gasPrices) {
 						fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",
 						fontStyle: 'bold',
 						fontSize: 10,
-					},
+					}
 				}],
-			xAxes:[{
+			xAxes: [{
 					ticks:{
 						fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",
 						fontSize: 10,
@@ -55,6 +90,9 @@ function visualize(journey, userCar, gasPrices) {
 						fontStyle: 'bold',
 						fontSize: 10,
 					},
+					gridLines: {
+						display: false
+					}
 				}]
 		},
 		title: {
@@ -65,18 +103,18 @@ function visualize(journey, userCar, gasPrices) {
 	};
 	
 	
-	drawSimpleBarChart('priceChart', 'Prijs autoreis vs. treinreis', "Prijs (in euro's)", 'Prijs reis', [journey.car.price, journey.train.price], defaultBarOptions);
-	drawSimpleBarChart('durationChart', 'Reisduur autoreis vs. treinreis', 'Reisduur (in minuten)', 'Reisduur', [parseInt(journey.car.duration.value/60), parseInt(journey.train.duration.value/60)], defaultBarOptions);
+	drawSimpleBarChart('priceChart', 'Prijs autoreis vs. treinreis', "Prijs (in euro's)", 'Prijs reis', '€', [journey.car.price, journey.train.price], defaultBarOptions);
+	drawSimpleBarChart('durationChart', 'Reisduur autoreis vs. treinreis', 'Reisduur (in minuten)', 'Reisduur', 'minuten', [parseInt(journey.car.duration.value/60), parseInt(journey.train.duration.value/60)], defaultBarOptions);
 
 	drawGasStationsChart(userCar['gasType'], gasPrices);
 	
-	emissionChart = drawSimpleBarChart('emissionChart', 'CO2-uitstoot autoreis vs. treinreis', 'CO2-uitstoot (g/km)', 'CO2-uitstoot', [journey.car.emission, journey.train.emission], defaultBarOptions);
-
+	emissionChart = drawSimpleBarChart('emissionChart', 'Jaarlijkse CO2-uitstoot (per persoon) autoreis vs. treinreis', 'CO2-uitstoot per persoon per jaar (gram)', 'CO2-uitstoot', 'gram', [journey.car.emission, journey.train.emission], defaultBarOptions);
+	visualizeTrees(journey.car.emission, journey.train.emission);
 }
 
 
 /* Draws a simple bar chart, with only a 'Car' and a 'Train' bar (avoids code repetition). */
-function drawSimpleBarChart(chartID, title, yLabel, tooltipLabel, chartData, defaultBarOptions) {
+function drawSimpleBarChart(chartID, title, yLabel, tooltipLabel, tooltipSuffix, chartData, defaultBarOptions) {
 	// Chart data.
 	var chartData = {
 		labels: ['Auto', 'Trein'],
@@ -90,6 +128,13 @@ function drawSimpleBarChart(chartID, title, yLabel, tooltipLabel, chartData, def
 	
 	// Options specific to this chart (in addition to the defaultBarOptions).
 	var chartOptions = {
+		tooltips: {
+			callbacks: {
+				label: function(tooltipItem, data) {
+					return tooltipItem.xLabel + ': ' + tooltipItem.yLabel + ' ' + tooltipSuffix;
+				}
+			}
+		},
 		scales:{
 			yAxes:[{
 					ticks:{
@@ -111,7 +156,7 @@ function drawSimpleBarChart(chartID, title, yLabel, tooltipLabel, chartData, def
 	};
 	
 	// Draw chart.
-	var ctxChart = document.getElementById(chartID).getContext("2d");
+	var ctxChart = document.getElementById(chartID).getContext('2d');
 	return new Chart(ctxChart, {
 		type: 'bar',
 		data: chartData,
@@ -275,4 +320,36 @@ function drawGasStationsChart(type, gasPrices) {
 		.attr('class', 'averageLineLabel')
 		.text('Gemiddeld: €' + (priceTotal/data.length).toString().replace('.', ','));
 
+}
+
+
+/* Visualize how many trees are needed to absorb the CO2. */
+function visualizeTrees(carEmission, trainEmission) {
+	// A tree absorbs 48 pounds (21,7 k) of CO2 per year.
+	// Source: NC State University (https://www.ncsu.edu/project/treesofstrength/treefact.htm).
+	var kgAbsorbtion = 21.7724338;
+	
+	// Calculate the no. of trees needed for the train emission.
+	carTrees = (carEmission/1000) / kgAbsorbtion;
+	trainTrees = (trainEmission/1000) / kgAbsorbtion;
+	
+	// Add the trees to the DOM.
+	addTrees('car', carTrees);
+	addTrees('train', trainTrees);	
+}
+
+/* Adds the 'amountOfTrees' to the DOM. */
+function addTrees(type, amountOfTrees) {
+	// Determine how many full trees there are, and what te remainder is (e.g. 26.23 --> 26 & 0.23).
+	fullTrees = Math.floor(amountOfTrees);	
+	remainder = amountOfTrees % Math.floor(amountOfTrees);
+	
+	// Create 'fullTrees' number of fullTrees and 'remainder' part of the partial tree (width of full tree is 30 px).
+	var treesHTML = '<div class="treeContainer"><img src="images/tree.png" /></div>'.repeat(fullTrees) +
+		'<div class="treeContainer" style="width: ' + 30 * remainder + 'px;"><img src="images/tree.png" /></div>';
+	
+	// Add tree text and symbols to DOM.
+	$('#trees_' + type + '_text').html(amountOfTrees.toFixed(2));
+	$('#trees_' + type + '_visualization').html(treesHTML);
+	
 }

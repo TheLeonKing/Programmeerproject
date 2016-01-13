@@ -109,3 +109,17 @@ Dinsdag 12 januari 2016
 
 ## Complicaties
 * Het ging vandaag ontzettend lekker, geen complicaties!
+
+
+# Dag 7
+Woensdag 13 januari 2016
+
+## Belangrijke besluiten
+* Ik heb besloten om meer de focus te leggen op het milieu, om zo een storytelling-aspect toe te voegen.
+
+## Bereikte mijlpalen
+* Instructies voor auto- en treinreis toegevoegd.
+* 'Aantal bomen'-visualisatie toegevoegd.
+
+## Complicaties
+* Nieuwe bug ontdekt bij het plannen van reizen naar bepaalde locaties; hier moet ik nog naar kijken.

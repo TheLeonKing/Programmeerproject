@@ -58,6 +58,40 @@ h3 .fa {
 	color: #3090C7;
 }
 
+#dirButtons {
+	text-align: center;
+}
+
+#dirButtons .ui.steps {
+	text-align: left;
+}
+
+#dirButtons .ui.steps:nth-child(1), #dirButtons .ui.steps:nth-child(1) .active.step {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+#dirButtons .ui.steps:nth-child(2), #dirButtons .ui.steps:nth-child(2) .active.step {
+	border-left: 0;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+.treeVisualization {
+	margin-top: 10px;
+}
+
 .dropdownContent {
 	padding: 0 0 0 0.5em !important;
+	font-weight: normal;
+}
+
+.treeContainer {
+	display: inline-block;
+	width: 30px;
+	overflow: hidden;
+}
+
+.treeContainer img {
+	width: 30px;
 }
