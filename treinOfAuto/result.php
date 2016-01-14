@@ -28,6 +28,9 @@ $gasPrices = $gas->fetchPrices($db);
 // - Custom fields for usage statistics.
 // - Combined graph?
 // - Bug: Schenkerven 9 naar Drunen.
+// - Gas prices chart: van prijs per liter naar prijs per reis.
+// - Combination chart.
+// - http://databank.worldbank.org/data/reports.aspx?source=2&Topic=6.
 
 ?>
 <!doctype html>
@@ -37,8 +40,9 @@ $gasPrices = $gas->fetchPrices($db);
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	<title>Trein of auto: Wat is goedkoper en sneller?</title>
+	<title>Trein of Auto: Wat is goedkoper en sneller?</title>
 	
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/libs/semantic.min.css">
 	<link rel="stylesheet" type="text/css" href="css/libs/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="css/libs/ionicons.min.css">
@@ -50,7 +54,7 @@ $gasPrices = $gas->fetchPrices($db);
 	
 	<!--[if IE]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
+	<![endif]-->	
 </head>
 <body>
 
@@ -61,14 +65,14 @@ $gasPrices = $gas->fetchPrices($db);
 				Trein of Auto
 			</div>
 			<a href="#" class="item">Kosten</a>
-			<a href="#" class="item">Route</a>
+			<a href="#" class="item">Reis</a>
 			<a href="#" class="item">Milieu</a>
 		</div>
 	</div>
 
 
 	<div class="ui text container">
-		
+	
 		<div class="ui center top grid">
 			<!-- Price overview -->
 			<div class="eight wide column">			
@@ -123,23 +127,59 @@ $gasPrices = $gas->fetchPrices($db);
 				<i class="dropdown icon"></i> Kosten
 			</div>
 			<div class="content">
-				<div id="gasPricesChart"></div>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				<div id="mapContainer">
+					<div id="gasMap"></div>
+				</div>
+				
+				<div class="ui grid" id="gasPrices">
+					<!-- Gas prices chart -->
+					<div class="ten wide column">
+						<div id="gasPricesChart"></div>
+					</div>
+					
+					<!-- Cheapest gas options. -->
+					<div class="six wide column">
+						<div class="ui card" id="cheapestStation">
+							<div class="image">
+								<img src="images/loading.gif">
+							</div>
+							<div class="content">
+								<span class="header">Even geduld...</span>
+								<div class="description">
+									We zoeken jouw goedkoopste tankoptie.
+								</div>
+							</div>
+							<div class="extra content">
+								<i class="euro icon"></i>
+								<span class="price"></span>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			
 			<!-- Route -->
 			<div class="title">
-				<i class="dropdown icon"></i> Route
+				<i class="dropdown icon"></i> Reis
 			</div>
 			<div class="content">
 				<div id="mapContainer">
-					<div id="map"></div>
+					<div id="routeMap"></div>
 					<div id="legend">
 						<span class="item header">LEGENDA</span>
 						<span class="item car">Auto: <span id="duration_car_detail"></span></span>
 						<span class="item train">Trein: <span id="duration_train_detail"></span></span>
 					</div>
 				</div>
+				
+				<!-- Parking spots button -->
+				<div id="parkingButtonContainer">
+					<button class="ui labeled teal icon button" onclick="findParkingSpots();">
+						<i class="icon fa-map-marker"></i>
+						Toon parkeerplaatsen rond bestemming
+					</button>
+				</div>
+				
 				<!-- Directions buttons -->	
 				<div id="dirButtons">
 					<div class="ui steps">
@@ -265,12 +305,13 @@ $gasPrices = $gas->fetchPrices($db);
 	</div>
 
 	
-	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=nl"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=nl&libraries=places"></script>
 	<script src="js/libs/d3.min.js"></script>
 	<script src="js/libs/d3.tip.min.js"></script>
 	<script src="js/libs/semantic.min.js"></script>
 	<script src="js/libs/moment.min.js"></script>
 	<script src="js/libs/chart.min.js"></script>
+	<script src="js/libs/routeboxer.min.js"></script>
 	
 	<script src="js/main.js"></script>
 	<script src="js/car.js"></script>

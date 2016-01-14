@@ -3,11 +3,11 @@ VISUALIZATIONS.JS
 Contains all codes for the visualizations.
 */
 
-defaultBarOptions = {};
-emissionChart;
-amountOfJourneys = 1;
-journeyFrequency = 'jaar';
-amountOfPersons = 1;
+var amountOfJourneys = 1,
+	journeyFrequency = 'jaar',
+	amountOfPersons = 1,
+	defaultBarOptions = {},
+	emissionChart;
 
 
 // If the user changes a dropdown value, update the emission stats.
@@ -26,39 +26,8 @@ $('#amountOfPersons .item').click(function() {
 	updateEmission();
 });
 
-
-/* Update the emission stats after the user changed a statistic. */
-function updateEmission() {
-	// Find out the 'amountOfJourneys' per year.
-	if (journeyFrequency == 'week') {
-		var amountOfJourneysYear = amountOfJourneys * 52;
-	}
-	else if (journeyFrequency == 'maand') {
-		var amountOfJourneysYear = amountOfJourneys * 12;
-	}
-	
-	// Calculate new emission numbers.
-	var newCarEmission = parseInt((journey.car.emission/amountOfPersons)*amountOfJourneysYear);
-	var newTrainEmission = parseInt(journey.train.emission*amountOfJourneysYear);
-	
-	// Update statistics on DOM.
-	emissionWinner = findWinner(newCarEmission, newTrainEmission, 'emission');
-	setElement('emission_winner', emissionWinner);
-	setElement('emission_car', newCarEmission);
-	setElement('emission_train', newTrainEmission);
-	
-	// Update chart.
-	emissionChart.data.datasets[0].data[0] = newCarEmission;
-	emissionChart.data.datasets[0].data[1] = newTrainEmission;
-	emissionChart.update();
-	
-	// Update trees visualization.
-	visualizeTrees(newCarEmission, newTrainEmission);
-}
-
-
 /* Draws the visualizations to the DOM. */
-function visualize(journey, userCar, gasPrices) {
+function visualize(journey) {
 	
 	// Default bar chart options.
 	defaultBarOptions = {
@@ -106,7 +75,7 @@ function visualize(journey, userCar, gasPrices) {
 	drawSimpleBarChart('priceChart', 'Prijs autoreis vs. treinreis', "Prijs (in euro's)", 'Prijs reis', '€', [journey.car.price, journey.train.price], defaultBarOptions);
 	drawSimpleBarChart('durationChart', 'Reisduur autoreis vs. treinreis', 'Reisduur (in minuten)', 'Reisduur', 'minuten', [parseInt(journey.car.duration.value/60), parseInt(journey.train.duration.value/60)], defaultBarOptions);
 
-	drawGasStationsChart(userCar['gasType'], gasPrices);
+	drawGasStationsChart();
 	
 	emissionChart = drawSimpleBarChart('emissionChart', 'Jaarlijkse CO2-uitstoot (per persoon) autoreis vs. treinreis', 'CO2-uitstoot per persoon per jaar (gram)', 'CO2-uitstoot', 'gram', [journey.car.emission, journey.train.emission], defaultBarOptions);
 	visualizeTrees(journey.car.emission, journey.train.emission);
@@ -166,24 +135,7 @@ function drawSimpleBarChart(chartID, title, yLabel, tooltipLabel, tooltipSuffix,
 
 
 /* Draws a more complex bar chart, comparing the gas prices at the different stations. */
-function drawGasStationsChart(type, gasPrices) {
-	
-	// Check gas type.
-	if (type == 'benzine') {
-		type = 'Euro 95'
-		gasArray = gasPrices.benzine;
-	}
-	else if (type == 'diesel') {
-		gasArray = gasPrices.diesel;
-	}
-	else if (type == 'lpg') {
-		gasArray = gasPrices.lpg;
-	}
-	// Set to 'benzine' by default (to prevent errors).
-	else {
-		type = 'benzine';
-		gasArray = gasPrices.benzine;
-	}
+function drawGasStationsChart() {
 	
 	var data = [];
 	
@@ -258,7 +210,7 @@ function drawGasStationsChart(type, gasPrices) {
 		.attr('x', (width / 2))             
 		.attr('y', 0 - (margin.top / 2))
 		.attr('class', 'chartTitle')
-		.text('Actuele prijzen ' + type.toUpperCase() + ' per benzinestation');
+		.text('Actuele prijzen ' + gasType.toUpperCase() + ' per benzinestation');
 	
 	// Draw X axis.
 	svg.append('g')
@@ -280,7 +232,7 @@ function drawGasStationsChart(type, gasPrices) {
 		.attr('y', 6)
 		.attr('dy', '-5em')
 		.attr('class', 'axisLabel')
-		.text('Prijs ' + type + ' (in euro\'s)');
+		.text('Prijs ' + gasType + ' (in euro\'s)');
 
 	// Draw the bars.
 	svg.selectAll('.bar')
@@ -320,6 +272,39 @@ function drawGasStationsChart(type, gasPrices) {
 		.attr('class', 'averageLineLabel')
 		.text('Gemiddeld: €' + (priceTotal/data.length).toString().replace('.', ','));
 
+}
+
+
+/* Update the emission stats after the user changed a statistic. */
+function updateEmission() {
+	// Find out the 'amountOfJourneys' per year.
+	if (journeyFrequency == 'week') {
+		var amountOfJourneysYear = amountOfJourneys * 52;
+	}
+	else if (journeyFrequency == 'maand') {
+		var amountOfJourneysYear = amountOfJourneys * 12;
+	}
+	else {
+		var amountOfJourneysYear = amountOfJourneys;
+	}
+	
+	// Calculate new emission numbers.
+	var newCarEmission = parseInt((journey.car.emission/amountOfPersons)*amountOfJourneysYear);
+	var newTrainEmission = parseInt(journey.train.emission*amountOfJourneysYear);
+	
+	// Update statistics on DOM.
+	emissionWinner = findWinner(newCarEmission, newTrainEmission, 'emission');
+	setElement('emission_winner', emissionWinner);
+	setElement('emission_car', newCarEmission);
+	setElement('emission_train', newTrainEmission);
+	
+	// Update chart.
+	emissionChart.data.datasets[0].data[0] = newCarEmission;
+	emissionChart.data.datasets[0].data[1] = newTrainEmission;
+	emissionChart.update();
+	
+	// Update trees visualization.
+	visualizeTrees(newCarEmission, newTrainEmission);
 }
 
 

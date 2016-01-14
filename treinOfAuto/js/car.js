@@ -61,3 +61,66 @@ function calculateGasPrice(licensePlate, carJourney, gasPrices, userCar) {
 function totalCarEmission(distance, emission) {
 	return parseInt(distance * emission);
 }
+
+
+/* Finds the gas type of the user's car and sets the gasArray accordingly. */
+function findGasType(type, gasPrices) {
+	gasType = type;
+	if (gasType == 'benzine') {
+		gasType = 'Euro 95'
+		gasArray = gasPrices.benzine;
+	}
+	else if (gasType == 'diesel') {
+		gasArray = gasPrices.diesel;
+	}
+	else if (gasType == 'lpg') {
+		gasArray = gasPrices.lpg;
+	}
+	// Set to 'benzine' by default (to prevent errors).
+	else {
+		gasType = 'benzine';
+		gasArray = gasPrices.benzine;
+	}
+}
+
+
+/* Find the cheapest gas station for the user. */
+function findBestGasStation(pricesArray) {
+	// Find the cheapest gas station for the user's type of gas.
+	var cheapest = { price: 99 };
+	for(var i in pricesArray) {
+		if (parseFloat(pricesArray[i]) < cheapest.price) {
+			cheapest = { name: i, price: parseFloat(pricesArray[i]) };
+		}
+	}
+	// Loop over all gas stations we've found (backwards, so we start with the stations)
+	// closest to the user) and return the first one of the cheapest company type (e.g. 'BP').
+	for (var i = gasStations.length-1; i >= 0; --i) {
+		stationName = (gasStations[i]['name']).toLowerCase();
+		if ((stationName).indexOf(cheapest.name) >= 0) {
+			lat = gasStations[i].geometry.location.lat();
+			lng = gasStations[i].geometry.location.lng();
+			// Display gas station details on DOM. Include Google Maps API Street View image.
+			$('#cheapestStation .image').html('<img src="http://maps.googleapis.com/maps/api/streetview?size=290x217&location=' + lat + ',' + lng + '&fov=120&pitch=10&sensor=false" />');
+			$('#cheapestStation .header').html('Goedkoopst: ' + gasStations[i]['name']);
+			$('#cheapestStation .description').html(gasStations[i]['vicinity']);
+			$('#cheapestStation .price').html('Prijs: ' + (cheapest.price).toString().replace('.', ',') + ' euro per liter');
+			return;
+		}
+	}
+	
+	// If the function didn't return yet, the cheapest gas station is not on the user's route. Remove this
+	// station from the gasArray and recursively call this function to find the next cheapest gas station.
+	if (Object.keys(pricesArray).length > 1) {
+		delete pricesArray[cheapest.name];
+		findBestGasStation(pricesArray);
+	}
+	// If we checked the last gas station and it's not on the route either, display an error.
+	else {
+		$('#cheapestStation .image').html('<img src="images/noresults.png" />');
+		$('#cheapestStation .header').html('Niets gevonden');
+		$('#cheapestStation .description').html('We konden geen van de vijf benzinestations vinden op jouw route.');
+		$('#cheapestStation .price').html('Geen prijs');
+	}
+	
+}

@@ -123,3 +123,17 @@ Woensdag 13 januari 2016
 
 ## Complicaties
 * Nieuwe bug ontdekt bij het plannen van reizen naar bepaalde locaties; hier moet ik nog naar kijken.
+
+
+# Dag 8
+Donderdag 14 januari 2016
+
+## Belangrijke besluiten
+* Ik heb besloten om meer de focus te leggen op het plannen van een autoreis.
+
+## Bereikte mijlpalen
+* Parkeerplaatsen rond bestemming toegevoegd.
+* Benzinestations op route toegevoegd en dit verbonden met de laagste prijs.
+
+## Complicaties
+* Ik kan (nog) geen interessante invalshoeken vinden voor het storytelling-aspect.

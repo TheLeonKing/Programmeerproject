@@ -27,13 +27,23 @@ h3 .fa {
 	width: 100% !important;
 }
 
-#mapContainer {
-	width: 70%;
-	margin: 0 auto;
+#gasPrices {
+	margin-top: 1em;
 }
 
-#map {
+#cheapestStation .header {
+	margin-top: 0.5em;
+}
+
+#cheapestStation .content {
+    padding: .5em 1em;
+}
+
+#mapContainer {
 	width: 100%;
+}
+
+#routeMap, #gasMap {
 	height: 400px;
 }
 
@@ -58,8 +68,12 @@ h3 .fa {
 	color: #3090C7;
 }
 
-#dirButtons {
+#dirButtons, #parkingButtonContainer {
 	text-align: center;
+}
+
+#parkingButtonContainer {
+	margin-top: 1em;
 }
 
 #dirButtons .ui.steps {

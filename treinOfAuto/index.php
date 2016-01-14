@@ -5,7 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	<title>Trein of auto: Wat is goedkoper en sneller?</title>
+	<title>Trein of Auto: Wat is goedkoper en sneller?</title>
 	
 	<link rel="stylesheet" type="text/css" href="css/libs/semantic.min.css">
 	<link rel="stylesheet" href="css/main.css" />

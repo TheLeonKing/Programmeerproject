@@ -3,15 +3,20 @@ MAIN.JS
 Contains all general JS functions (i.e. the ones not unique to the train or car journey).
 */
 
+var gasType,
+	gasArray;
+
 /* Initializes the accordion and dropdown. */
 $(document).ready(function(){
 	$('.ui.accordion').accordion({
 		// Draw directions in Google Maps div when accordion opens (can't be done in advance because of resizing).
 		onOpen: function () {
             $('.ui.accordion').attr('open', true);
-			google.maps.event.trigger(map, 'resize');
+			google.maps.event.trigger(routeMap, 'resize');
 			carDirectionsRenderer.setDirections(carResponse);
 			trainDirectionsRenderer.setDirections(trainResponse);
+			google.maps.event.trigger(gasMap, 'resize');
+			carDirectionsRendererGas.setDirections(carResponse);
         }
 		, collapsible: true
 	});
@@ -19,7 +24,6 @@ $(document).ready(function(){
 	$('.ui.dropdown')
 		.dropdown()
 	;
-	
 });
 
 
@@ -70,17 +74,18 @@ function travel(fromLocation, toLocation, licensePlate, gasPrices) {
 							carEmission = totalCarEmission(carJourney.distance.value/1000, userCar['co2Emission']);
 							trainEmission = totalTrainEmission(trainJourney.distance.value/1000);
 							
-							
 							// Create a 'journey' object containing all the information we've just gathered.
 							journey = {
-								car: { duration: { text: carJourney.duration.text, value: carJourney.duration.value }, distance: { total: (carJourney.distance.value/1000) }, price: carPrice, emission: carEmission },
-								train: { duration: { text: trainJourney.duration.text, value: trainJourney.duration.value }, distance: { total: (trainJourney.distance.value/1000), train: totalTrainDistance(trainJourney.steps) }, price: trainPrice, emission: trainEmission }
+								car: { duration: { text: carJourney.duration.text, value: carJourney.duration.value }, distance: { total: (carJourney.distance.value/1000) }, start: { lat: carJourney.start_location.lat(), lng: carJourney.start_location.lng() }, end: { lat: carJourney.end_location.lat(), lng: carJourney.end_location.lng() }, price: carPrice, emission: carEmission },
+								train: { duration: { text: trainJourney.duration.text, value: trainJourney.duration.value }, distance: { total: (trainJourney.distance.value/1000), train: totalTrainDistance(trainJourney.steps) }, start: { lat: trainJourney.start_location.lat(), lng: trainJourney.start_location.lng() }, end: { lat: trainJourney.end_location.lat(), lng: trainJourney.end_location.lng() }, price: trainPrice, emission: trainEmission }
 							};
 							
 							// Print results to page.
 							printStats(journey);
 							printTravelAdvice(carJourney, trainJourney);
-							visualize(journey, userCar, gasPrices);
+							findGasType(userCar['gasType'], gasPrices);
+							findGasStations(boxes, 0);
+							visualize(journey);
 							
 						});
 					})
