@@ -1,5 +1,5 @@
 id,code,uic,naam,middel_naam,korte_naam,friendly,land,type,geo_lat,geo_lng
-266,ht,8400319,'s-Hertogenbosch,'s-Hertogenbosch,H'bosch,s-hertogenbosch,NL,knooppuntintercitystation,51.69048,5.29362
+266,ht,8400319,'s-Hertogenbosch,s Hertogenbosch,H'bosch,s-hertogenbosch,NL,knooppuntintercitystation,51.69048,5.29362
 269,hto,8400320,'s-Hertogenbosch Oost,Hertogenbosch O.,H'bosch O,s-hertogenbosch-oost,NL,stoptreinstation,51.700553894043,5.3183331489563
 227,hde,8400388,'t Harde,'t Harde,'t Harde,t-harde,NL,stoptreinstation,52.4091682,5.893611
 51,atn,8400045,Aalten,Aalten,Aalten,aalten,NL,stoptreinstation,51.9213265245505,6.57862722873687
@@ -311,7 +311,7 @@ id,code,uic,naam,middel_naam,korte_naam,friendly,land,type,geo_lat,geo_lng
 366,nwl,8400563,Schiedam Nieuwland,Nieuwland,Nieuwland,schiedam-nieuwland,NL,stoptreinstation,51.9222221374512,4.38222217559814
 433,sog,8400555,Schin op Geul,Schin op Geul,Schin op G,schin-op-geul,NL,stoptreinstation,50.856388092041,5.87222242355347
 432,sn,8400554,Schinnen,Schinnen,Schinnen,schinnen,NL,stoptreinstation,50.9391670227051,5.87444448471069
-428,shl,8400561,Schiphol,Schiphol,Schiphol,schiphol,NL,megastation,52.3094444274902,4.76194429397583
+428,shl,8400561,Schiphol Airport,Schiphol,Schiphol,schiphol,NL,megastation,52.3094444274902,4.76194429397583
 650,spv,8400559,Simpelveld,Simpelveld,Simpelveld,simpelveld,NL,facultatiefstation,50.8314750744184,5.97973823547363
 440,std,8400564,Sittard,Sittard,Sittard,sittard,NL,knooppuntintercitystation,51.0016670227051,5.85861110687256
 423,sdt,8400565,Sliedrecht,Sliedrecht,Sliedrecht,sliedrecht,NL,stoptreinstation,51.8297233581543,4.77833318710327

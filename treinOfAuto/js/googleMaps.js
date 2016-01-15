@@ -77,14 +77,25 @@ function carTravel(fromLocation, toLocation) {
 		if (status === google.maps.DirectionsStatus.OK) {
 			// Resolve the route we've found.
 			carResponse = response;
-			dfd.resolve(response.routes[0].legs[0]);
+			carJourney = response.routes[0].legs[0];
 			
-			// Use RouteBoxer to create boxes around 0.5 km of the route.
-			var path = response.routes[0].overview_path;
-			boxes = routeBoxer.box(path, 0.5);
+			// Check if journey contains car travel.
+			var valid = isValid(carJourney.steps, 'DRIVING');
+			
+			// If journey doesn't contain car travel, show error. Otherwise, return journey object.
+			if (valid == false) {
+				dfd.reject('We konden geen autoroute vinden voor deze reis. Waarschijnlijk liggen de locaties te dicht bij elkaar.');		
+			}
+			else {			
+				dfd.resolve(carJourney);
+			
+				// Use RouteBoxer to create boxes around 0.5 km of the route.
+				var path = response.routes[0].overview_path;
+				boxes = routeBoxer.box(path, 0.5);
+			}
 			
 		} else {
-			dfd.reject('Autoroute kon niet gevonden worden. Foutmelding: ' + status);
+			dfd.reject('We konden geen autoroute vinden voor deze reis. Wijzig uw begin- en/of eindlocatie.');
 		}
 	});
 	
@@ -109,9 +120,22 @@ function trainTravel(fromLocation, toLocation) {
 		// If directions were found, return the first available route as an object. Otherwise, show an error.
 		if (status === google.maps.DirectionsStatus.OK) {
 			trainResponse = response;
-			dfd.resolve(response.routes[0].legs[0]); // point.duration.text , point.distance.text
+			trainJourney = response.routes[0].legs[0];
+			
+			// Check if journey contains train travel.
+			var valid = isValid(trainJourney.steps, 'TRANSIT');
+
+			// If journey doesn't contain car travel, show error. Otherwise, return journey object.
+			if (valid == false) {
+				dfd.reject('We konden geen treinroute vinden voor deze reis. Waarschijnlijk liggen de locaties te dicht bij (of ver van) elkaar.');		
+			}
+			else {			
+				dfd.resolve(trainJourney);
+			}
+		
+		// If a technical error occurred when fetching the train directions from the Google Maps API.
 		} else {
-			dfd.reject('Treinroute kon niet gevonden worden. Foutmelding: ' + status);
+			dfd.reject('We konden geen treinroute ophalen. Probeer het later opnieuw.');
 		}
 	});
 	
@@ -159,7 +183,7 @@ function findParkingSpots() {
 	// Use the Google Maps API to find nearby parking spots.
 	placesService.nearbySearch({
 		location: destination,
-		radius: 500,
+		radius: 1000,
 		types: ['parking']
 		}, function(results, status) {
 			if (status === google.maps.places.PlacesServiceStatus.OK) {

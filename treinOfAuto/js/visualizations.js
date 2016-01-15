@@ -27,7 +27,7 @@ $('#amountOfPersons .item').click(function() {
 });
 
 /* Draws the visualizations to the DOM. */
-function visualize(journey) {
+function visualize(journey, userCar) {
 	
 	// Default bar chart options.
 	defaultBarOptions = {
@@ -75,7 +75,7 @@ function visualize(journey) {
 	drawSimpleBarChart('priceChart', 'Prijs autoreis vs. treinreis', "Prijs (in euro's)", 'Prijs reis', '€', [journey.car.price, journey.train.price], defaultBarOptions);
 	drawSimpleBarChart('durationChart', 'Reisduur autoreis vs. treinreis', 'Reisduur (in minuten)', 'Reisduur', 'minuten', [parseInt(journey.car.duration.value/60), parseInt(journey.train.duration.value/60)], defaultBarOptions);
 
-	drawGasStationsChart();
+	drawGasStationsChart(journey.car.distance.total, userCar);
 	
 	emissionChart = drawSimpleBarChart('emissionChart', 'Jaarlijkse CO2-uitstoot (per persoon) autoreis vs. treinreis', 'CO2-uitstoot per persoon per jaar (gram)', 'CO2-uitstoot', 'gram', [journey.car.emission, journey.train.emission], defaultBarOptions);
 	visualizeTrees(journey.car.emission, journey.train.emission);
@@ -135,15 +135,15 @@ function drawSimpleBarChart(chartID, title, yLabel, tooltipLabel, tooltipSuffix,
 
 
 /* Draws a more complex bar chart, comparing the gas prices at the different stations. */
-function drawGasStationsChart() {
+function drawGasStationsChart(distance, userCar) {
 	
 	var data = [];
 	
-	// Convert object to list with nested arrays (e.g. 'bp: 1.50' to '{gasStation: bp, price: 1,50}')
+	// Convert object to list with nested arrays (e.g. 'bp: 15.24' to '{ gasStation: bp, price: 15.24 }')
 	$.each(gasArray, function(key, value) {
 		// Exclude the average price from the bar chart.
 		if (key !== 'average') {
-			data.push({'gasStation': key, 'price': value});
+			data.push({'gasStation': key, 'price': calculateGasPrice(distance, value, userCar) });
 		}
 	});
 	
@@ -151,9 +151,9 @@ function drawGasStationsChart() {
 
 	var margin = {top: 25, right: 0, bottom: 40, left: 70},
 		width = 400 - margin.left - margin.right,
-		height = 250 - margin.top - margin.bottom;
+		height = 300 - margin.top - margin.bottom;
 		
-	var formatEuro = d3.format('.3f');
+	var formatEuro = d3.format('.2f');
 
 	var x = d3.scale.ordinal()
 		.rangeRoundBands([0, width], .1);
@@ -197,8 +197,8 @@ function drawGasStationsChart() {
 	});
 	
 	// Calculate lower and upper bound for Y axis.
-	yLower = d3.min(data, function(d) { return d.price-0.01; });
-	yUpper = d3.max(data, function(d) { return d.price+0.01; });
+	yLower = d3.min(data, function(d) { return (d.price-(d.price/200)).toFixed(2); });
+	yUpper = d3.max(data, function(d) { return (d.price+(d.price/200)).toFixed(2); });
 	
 	// Set up X domain (all gas types) and Y domain (calculated above).
 	x.domain(data.map(function(d) { return d.gasStation; }));
@@ -270,7 +270,7 @@ function drawGasStationsChart() {
 		.append('textPath')
 		.attr('xlink:href', '#averageLine')
 		.attr('class', 'averageLineLabel')
-		.text('Gemiddeld: €' + (priceTotal/data.length).toString().replace('.', ','));
+		.text('Gemiddeld: €' + (priceTotal/data.length).toFixed(2).toString().replace('.', ','));
 
 }
 

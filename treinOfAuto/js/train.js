@@ -30,7 +30,8 @@ function findTrainStations(steps, fromLocation) {
 			dfd.resolve(journeyStations);
 		}
 		else {
-			dfd.reject("Couldn't find train stations.");
+			console.log(journeyStations);
+			//dfd.reject('We konden de treinstations van uw reis niet vinden in de database. Contacteer alstublieft de webmaster.');
 		};
 	});
 	

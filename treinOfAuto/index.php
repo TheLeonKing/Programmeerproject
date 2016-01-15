@@ -27,26 +27,67 @@
 			</h2>
 			<form action="result.php" method="get" name="search" class="ui large form" id="journeyForm">
 				<div class="ui segment">
+					
+					<?php
+					
+					// Shows error message if one is set.
+					if (isset($_GET['error'])) {
+						// Split two-sentence error message by sentence.
+						$error = explode('. ', $_GET['error']);
+						print '<div class="ui negative message">
+						<div class="header">' . $error[0] . '</div>
+						<p>' . $error[1] . '</p>
+					</div>';
+					}
+					
+					?>
+					
 					<div class="field">
 						<div class="ui left icon input">
-						<i class="arrow up icon"></i>
-						<input type="text" name="from" id="fromLocation" placeholder="Van..." />
+							<i class="arrow up icon"></i>
+							<input type="text" name="from" id="fromLocation" placeholder="Van..." />
 						</div>
 					</div>
 					<div class="field">
 						<div class="ui left icon input">
-						<i class="arrow down icon"></i>
-						<input type="text" name="to" id="toLocation" placeholder="Naar..." />
+							<i class="arrow down icon"></i>
+							<input type="text" name="to" id="toLocation" placeholder="Naar..." />
 						</div>
 					</div>
 					<div class="field" id="licensePlateField">
-						<div class="ui left icon input">
-						<i class="car icon"></i>
-						<input type="text" name="licensePlate" id="licensePlate" placeholder="Kenteken" />
+						<div class="ui left icon input" id="licensePlateInput">
+							<i class="car icon"></i>
+							<input type="text" name="licensePlate" id="licensePlate" placeholder="Kenteken" />
 						</div>
-						<div class="ui pointing red basic label" id="licensePlateError">We konden geen gegevens vinden voor dit kenteken. Controleer uw invoer opnieuw, of geef hieronder zelf de gegevens op.</div>
 					</div>
-					<div class="ui fluid large teal submit button">Check je reisgegevens!</div>
+					
+					<div class="ui checkbox" id="customCheckboxContainer">
+						<input type="checkbox" name="customCheckbox" id="customCheckbox" tabindex="0">
+						<label for="customCheckbox">Voer zelf verbruiksgegevens in</label>
+					</div>
+					
+					<div id="customContainer">
+						<div class="ui selection dropdown" tabindex="0" id="gasTypeDropdown">
+							<input type="hidden" name="gasType">
+							<i class="dropdown icon"></i>
+							<div class="default text">Brandstoftype</div>
+							<div class="menu" tabindex="-1">
+								<div class="item" data-value="benzine">Benzine</div>
+								<div class="item" data-value="diesel">Diesel</div>
+								<div class="item" data-value="lpg">Gas</div>
+							</div>
+						</div>
+						
+						<div class="ui input field" id="usageInput">
+							<input type="text" name="gasUsage" placeholder="Verbruik (ltr/100 km)">
+						</div>
+						
+						<div class="ui input field" id="emissionInput">
+							<input type="text" name="emission" placeholder="CO2-uitstoot (g/km)">
+						</div>
+					</div>
+
+					<div class="ui fluid large teal submit button">Vergelijk!</div>
 				</div>
 
 				<div class="ui error message"></div>
@@ -64,6 +105,7 @@
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
 	<script src="js/libs/semantic.min.js"></script>
 	
+	<script src="js/main.js"></script>
 	<script src="js/googleMaps.js"></script>
 	<script src="js/form.js"></script>
 	<script>

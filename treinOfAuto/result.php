@@ -4,14 +4,41 @@ require('classes/connect.php');
 require('classes/gas.php');
 
 // Only execute script when "from" and "to" location are set.
-if (isset($_GET['from']) && isset($_GET['from']) && isset($_GET['licensePlate'])) {
+if (isset($_GET['from']) && isset($_GET['from'])) {
 	$from = $_GET['from'];
 	$to = $_GET['to'];
-	$licensePlate = str_replace('-', '', trim($_GET['licensePlate']));
+	
+	// If user specified custom usage statistics.
+	if (isset($_GET['customCheckbox']) && $_GET['customCheckbox'] == 'on') {
+		if (isset($_GET['gasType']) && isset($_GET['gasUsage']) && isset($_GET['emission'])) {
+			$customGas = ['gasType' => $_GET['gasType'], 'gasUsage' => $_GET['gasUsage'], 'emission' => $_GET['emission']];
+			$licensePlate = false;
+		}
+		else {
+			launchError('We konden uw verbruiksgegevens niet vinden.');
+		}
+	}
+	// If user entered his/her license plate.
+	else {
+		if (isset($_GET['licensePlate'])) {
+			$licensePlate = str_replace('-', '', trim($_GET['licensePlate']));
+			$customGas = [];
+		}
+		else {
+			launchError('We konden uw kentekengegevens niet vinden.');
+		}
+	}
 }
 else {
-	die("We konden niet alle benodigde gegevens vinden. Weet u zeker dat u hier rechtstreeks via onze website bent gekomen?");
+	launchError('We konden niet alle benodigde gegevens vinden.');
 }
+
+
+// Returns the user the index page with an error.
+function launchError($error) {
+	header('Location: index.php?error=' . $error . ' Heeft u onderstaand formulier correct ingevuld?');
+}
+
 
 // Establish a database connection.				
 $database = new Database();
@@ -22,15 +49,12 @@ $gas = new Gas();
 $gasPrices = $gas->fetchPrices($db);
 
 // TODO:
-// - Chart that compares gas prices per station.
-// - Emission chart: implement "number of travelers".
-// - Error handling.
-// - Custom fields for usage statistics.
+// - Busreizen implementeren / workaround maken.
+// - Bug: naar Walibi.
+// - Zig-zaglijn toevoegen aan benzinegrafiek.
 // - Combined graph?
-// - Bug: Schenkerven 9 naar Drunen.
-// - Gas prices chart: van prijs per liter naar prijs per reis.
-// - Combination chart.
 // - http://databank.worldbank.org/data/reports.aspx?source=2&Topic=6.
+// - Goed testen met verschillende routes.
 
 ?>
 <!doctype html>
@@ -313,13 +337,13 @@ $gasPrices = $gas->fetchPrices($db);
 	<script src="js/libs/chart.min.js"></script>
 	<script src="js/libs/routeboxer.min.js"></script>
 	
-	<script src="js/main.js"></script>
+	<script src="js/results.js"></script>
 	<script src="js/car.js"></script>
 	<script src="js/train.js"></script>
 	<script src="js/googleMaps.js"></script>
 	<script src="js/visualizations.js"></script>
 	<script>
-		travel('<?php print $from; ?>', '<?php print $to; ?>', '<?php print $licensePlate; ?>', <?php print json_encode($gasPrices); ?>);
+		travel('<?php print $from; ?>', '<?php print $to; ?>', '<?php print $licensePlate; ?>', <?php print json_encode($customGas); ?>, <?php print json_encode($gasPrices); ?>);
 	</script>
 	
 </body>

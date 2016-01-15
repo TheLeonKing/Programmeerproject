@@ -137,3 +137,17 @@ Donderdag 14 januari 2016
 
 ## Complicaties
 * Ik kan (nog) geen interessante invalshoeken vinden voor het storytelling-aspect.
+
+
+# Dag 9
+Vrijdag 15 januari 2016
+
+## Belangrijke besluiten
+* Ik heb besloten om de benzineprijzen in de grafiek niet per liter, maar voor de gehele prijs weer te geven.
+
+## Bereikte mijlpalen
+* De mogelijkheid toegevoegd om zelf de verbruiksgegevens van je auto op te vragen.
+* Veel mogelijke fouten opgevangen met foutmeldingen.
+
+## Complicaties
+* Vandaag heb ik vooral complicaties opgelost en dat is ook weleens fijn.
