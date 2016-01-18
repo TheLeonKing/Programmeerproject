@@ -5,7 +5,7 @@ Contains all JS functions that are unique for the train journey.
 
 
 /* Takes a steps object, returns the abbreviations of the beginning and end train station. */
-function findTrainStations(steps, fromLocation) {
+function findTrainStations(steps, fromLocation) {	
 	
 	var dfd = $.Deferred();
 	

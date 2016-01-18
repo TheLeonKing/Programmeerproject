@@ -111,7 +111,7 @@ Dinsdag 12 januari 2016
 * Het ging vandaag ontzettend lekker, geen complicaties!
 
 
-# Dag 7
+# Dag 8
 Woensdag 13 januari 2016
 
 ## Belangrijke besluiten
@@ -125,7 +125,7 @@ Woensdag 13 januari 2016
 * Nieuwe bug ontdekt bij het plannen van reizen naar bepaalde locaties; hier moet ik nog naar kijken.
 
 
-# Dag 8
+# Dag 9
 Donderdag 14 januari 2016
 
 ## Belangrijke besluiten
@@ -139,7 +139,7 @@ Donderdag 14 januari 2016
 * Ik kan (nog) geen interessante invalshoeken vinden voor het storytelling-aspect.
 
 
-# Dag 9
+# Dag 10
 Vrijdag 15 januari 2016
 
 ## Belangrijke besluiten
@@ -151,3 +151,16 @@ Vrijdag 15 januari 2016
 
 ## Complicaties
 * Vandaag heb ik vooral complicaties opgelost en dat is ook weleens fijn.
+
+
+# Dag 11
+Maandag 18 januari 2016
+
+## Belangrijke besluiten
+* Ik heb besloten om wandelalternatieven te zoeken voor alle stukken met de bus/metro/tram.
+
+## Bereikte mijlpalen
+* Visualisatie zoekt nu wandel-alternatief voor elk stukje van de route dat wel OV, maar niet auto is (e.g. een stuk met de bus). Je weet nu dus zeker dat de treinreis enkel uit wandel- en treinstappen bestaat! Dit kostte me ontzettend veel tijd en ik ben er de hele dag mee bezig geweest.
+
+## Complicaties
+* Geen; vandaag heb ik zo'n beetje de grootste complicatie (dat er soms toch nog bus-stukken in de route terecht kwamen) juist verholpen!

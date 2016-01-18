@@ -109,139 +109,95 @@ function carTravel(fromLocation, toLocation) {
 function trainTravel(fromLocation, toLocation) {
 	
 	var dfd = $.Deferred();
-
-	directionsService.route({
-		origin: fromLocation,
-		destination: toLocation,
-		travelMode: google.maps.TravelMode.TRANSIT,
-		transitOptions: { modes: [google.maps.TransitMode.TRAIN] } // Only find train routes.
-	}, function(response, status) {
-		// If directions were found, return the first available route as an object. Otherwise, show an error.
-		if (status === google.maps.DirectionsStatus.OK) {
-			trainResponse = response;
-			trainJourney = response.routes[0].legs[0];
+	
+	findClosestTrainStation(fromLocation, true).done(function(fromJourney) {
+		findClosestTrainStation(toLocation, false).done(function(toJourney) {
 			
-			// Check if journey contains train travel.
-			var valid = isValid(trainJourney.steps, 'TRANSIT');
-
-			// If journey doesn't contain car travel, show error. Otherwise, return journey object.
-			if (valid == false) {
-				dfd.reject('We konden geen treinroute vinden voor deze reis. Waarschijnlijk liggen de locaties te dicht bij (of ver van) elkaar.');		
-			}
-			else {
-				// Make sure all transit steps are train-only and return journey.
-				trainOnly(trainJourney);
-				dfd.resolve(trainJourney);
-			}
-		
-		// If a technical error occurred when fetching the train directions from the Google Maps API.
-		} else {
-			dfd.reject('We konden geen treinroute ophalen. Probeer het later opnieuw.');
-		}
+			console.log(fromJourney.steps);
+			
+			dfd.resolve('');
+		});
 	});
 	
 	return dfd.promise();
 }
 
 
-/* Recursively loops through all trainJourney steps and finds walking alternatives
-   for all transit, non-train steps (e.g. walking alternative for bus journey). */
-function trainOnly(trainJourney) {
+/* Finds the train station closest to a point. */
+function findClosestTrainStation(address, startLocation) {
 	
-	var steps = trainJourney.steps;
+	var dfd = $.Deferred();
 	
-	var subtract = { distance: 0, duration: 0 };
-	var add = { distance: 0, duration: 0 };
+	var geocoder = new google.maps.Geocoder();
 	
-	// Credits to http://stackoverflow.com/questions/4288759/asynchronous-for-cycle-in-javascript
-	// for the 'asyncLoop' function.
-	var asyncLoop = function(o) {
-		var i =- 1;
-
-		var loop = function() {
-			i++;
-			if (i==o.length) {
-				o.callback();
-				return;
-			}
-			o.functionToLoop(loop, i);
-		}
-		loop();
-	}
-	
-	asyncLoop({
-		length : steps.length,
-		functionToLoop : function(loop, i) {
+	geocoder.geocode({'address': address}, function(results, status) {
+		if (status === google.maps.GeocoderStatus.OK) {
+			var userLocation = results[0].geometry.location;
 			
-			// If this step is a transit step, but doesn't involve a train, find a walking route from
-			// the beginning location of the step to the end location of the step.
-			if (steps[i]['travel_mode'] === 'TRANSIT' && (steps[i]['instructions']).match('^Trein') == null) {
-				// Subtract the distance and duration from the step we're about to remove.
-				subtract.distance += steps[i]['distance']['value'];
-				subtract.duration += steps[i]['duration']['value'];
-				
-				// Find the 'from' and 'to' location from the step.
-				var fromLocation = steps[i]['start_location'].lat() + ',' + steps[i]['start_location'].lng();
-				var toLocation = steps[i]['end_location'].lat() + ',' + steps[i]['end_location'].lng();
-				
-				// Find a walking route from the 'from' to 'to' location.
-				directionsService.route({
-					origin: fromLocation,
-					destination: toLocation,
-					travelMode: google.maps.TravelMode.WALKING
-				}, function(response, status) {
-					// If directions were found, return the first available walking route as an object.
-					if (status === google.maps.DirectionsStatus.OK) {
-						var walkJourney = response.routes[0].legs[0];
+			// Use the Google Maps API to find nearby train stations.
+			placesService.nearbySearch({
+				location: userLocation,
+				radius: 100000,
+				types: ['train_station']
+				}, function(results, status) {
+					if (status === google.maps.places.PlacesServiceStatus.OK) {
 						
-						// Add the distance and duration of this walking route.
-						add.distance += walkJourney['distance']['value'];
-						add.duration += walkJourney['duration']['value'];
+						// Initialize 'closest' with an absurdly high distance.				
+						closest = { distance: 999999, station: {} };
 						
-						// Update the trainJourney distance and value.
-						trainJourney.distance.value = trainJourney.distance.value - subtract.distance + add.distance;
-						trainJourney.duration.value = trainJourney.duration.value - subtract.duration + add.duration;
+						// Loop over all train stations.
+						for (var i = 0; i < results.length; i++) {
+							// Extract the train station and calculate the distance from the specified location.
+							var stationLocation = new google.maps.LatLng(results[i].geometry.location.lat(), results[i].geometry.location.lng());
+							var distance = google.maps.geometry.spherical.computeDistanceBetween(userLocation, stationLocation);
+							
+							// If this is the closest station we've found so far, update the 'closest' object.
+							if (distance < closest.distance) {
+								closest.distance = distance;
+								closest.station = results[i];
+							}
+						}
 						
-						// Remove the non-train step and put the walking journey steps at its index position.
-						(trainJourney.steps).splice(i, 1, walkJourney.steps);
+						var stationLocation = closest.station.geometry.location.lat() + ', ' + closest.station.geometry.location.lng();
 						
-						// Flatten the list.
-						trainJourney.steps = $.map(trainJourney.steps, function(n){ return n; });
+						// If the address is the user's start location, we walk from the address to the station.
+						if (startLocation) {
+							var fromLocation = address;
+							var toLocation = stationLocation;
+						}
+						// If the address is not the user's start location, we walk from the station to the address.
+						else {
+							var fromLocation = stationLocation;
+							var toLocation = address;							
+						}
 						
-						// Update the trainResponse with the new trainJourney we've just created.
-						trainResponse.routes[0].legs[0] = trainJourney;
-						
-						// Call the function again (we can't just continue because the 'steps' length won't be correct anymore).
-						trainOnly(trainJourney);
+						// Measure how long it would take to walk to this station from the address.
+						directionsService.route({
+							origin: fromLocation,
+							destination: toLocation,
+							travelMode: google.maps.TravelMode.WALKING
+						}, function(response, status) {
+							// If directions were found, return the route as an object. Otherwise, show an error.
+							if (status === google.maps.DirectionsStatus.OK) {
+								var route = $.extend({}, response.routes[0].legs[0], closest.station);
+								dfd.resolve(route);
+							}
+						});
+								
+					// If we didn't find any train stations in the vicinity.
+					} else {
+						window.alert('Helaas! We konden geen treinstations vinden in de buurt van jouw bestemming.');
 					}
-					// If we couldn't find a walking journey, just continue and don't remove the non-train step (this will
-					// probably never happen, since walking journeys are possible everywhere throughout The Netherlands).
-					else {
-						loop();
-					}
-				});
-			}
-			// If this a step that we do 'allow', continue looping.
-			else {
-				loop();
-			}
+				}
+			);
 			
-		},
-		// If we've looped through all steps and they're all 'allowed'.
-		callback : function(){
-			// Update the duration (as text) using the duration (as an integer in seconds).
-			var durationSeconds = trainResponse.routes[0].legs[0].duration.value;
-			
-			// Only include hours if duration is more than an hour (so we get e.g. '48 min.' instead of '0 uur 48 min.').
-			if (durationSeconds < 3600) {
-				trainResponse.routes[0].legs[0].duration.text = moment().startOf('day').seconds(durationSeconds).format('m [min.]');				
-			}
-			else {
-				trainResponse.routes[0].legs[0].duration.text = moment().startOf('day').seconds(durationSeconds).format('H [uur] m [min.]');				
-			}
+		} else {
+			alert('Geocode was not successful for the following reason: ' + status);
 		}
 	});
-}
+	
+	return dfd.promise();
+};
 
 
 

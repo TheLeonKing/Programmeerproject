@@ -51,6 +51,7 @@ $gasPrices = $gas->fetchPrices($db);
 // TODO:
 // - Busreizen implementeren / workaround maken.
 // - Bug: naar Walibi.
+// - Bug: geen nummerbord --> dan wel --> nog steeds error.
 // - Zig-zaglijn toevoegen aan benzinegrafiek.
 // - Combined graph?
 // - http://databank.worldbank.org/data/reports.aspx?source=2&Topic=6.
@@ -84,10 +85,10 @@ $gasPrices = $gas->fetchPrices($db);
 
 	<div class="ui borderless main menu">
 		<div class="ui text container">
-			<div href="#" class="header item">
+			<a href="index.php"><div class="header item">
 				<img class="logo" src="images/logo.png" style="margin-right: 10px;">
 				Trein of Auto
-			</div>
+			</div></a>
 			<a href="#" class="item">Kosten</a>
 			<a href="#" class="item">Reis</a>
 			<a href="#" class="item">Milieu</a>
@@ -329,7 +330,7 @@ $gasPrices = $gas->fetchPrices($db);
 	</div>
 
 	
-	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=nl&libraries=places"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=nl&libraries=geometry,places"></script>
 	<script src="js/libs/d3.min.js"></script>
 	<script src="js/libs/d3.tip.min.js"></script>
 	<script src="js/libs/semantic.min.js"></script>
