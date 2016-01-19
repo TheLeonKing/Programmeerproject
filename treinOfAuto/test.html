@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+ }
+
+
+
+</style>
+<body>
+<script type="text/javascript" src="js/libs/jquery.js"></script>
+<script src="js/libs/d3.min.js"></script>
+
+<script>
+$(document).ready(function() {
+var data=[{"date":"20111001","No of enquiries":"4","No of Sales":"15","":""},{"date":"20111002","No of enquiries":"9","No of Sales":"0","":""},{"date":"20111003","No of enquiries":"1","No of Sales":"8","":""},{"date":"20111004","No of enquiries":"3","No of Sales":"0","":""},{"date":"20111005","No of enquiries":"10","No of Sales":"0"},{"date":"20111006","No of enquiries":"11","No of Sales":"5","":""},{"date":"20111007","No of enquiries":"9","No of Sales":"0"},{"date":"20111008","No of enquiries":"7","No of Sales":"0"},{"date":"20111009","No of enquiries":"2","No of Sales":"3","":""},{"date":"20111010","No of enquiries":"1","No of Sales":"11","":""}];
+    
+
+//var tip = d3.tip()
+              // .attr('class', 'd3-tip')
+               //.html(function(d) {
+                 //  alert(JSON.stringify(d)); return '<span>' + d.values + '</span>' });                   
+//
+               
+
+
+//d3.tsv("data.tsv", function(error, data) {
+
+
+var format = d3.time.format("%d-%m-%Y");    
+
+var margin = {top: 20, right: 80, bottom: 30, left: 50},
+    width = 620 - margin.left - margin.right,
+    height = 250 - margin.top - margin.bottom;
+
+var parseDate = d3.time.format("%Y%m%d").parse;
+
+
+var x = d3.time.scale()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var color = d3.scale.category10();    
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    //.ticks(d3.time.days, 1)
+    .orient("bottom");
+    
+    
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var line = d3.svg.line()
+             .interpolate("linear")
+            
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.temperature); });
+            
+            
+
+            
+var svg = d3.select(".sales_graph")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+    
+    $.ajax({
+            
+                            dataType: 'jsonp',
+                            jsonp: 'jsoncallback',
+                            url: 'sampl.php',
+                            success: function(res)
+                            {
+                            var data=[];
+                            for(var i=0;i<res.delivery_date.length;i++)
+                            {
+                                var inner = {};
+        inner['date']=res.delivery_date[i];
+        
+        inner['No of enquiries']=res.count_enquiry[i];
+        
+        inner['No of Sales']=res.sales_enquiry[i];
+        
+        data.push(inner);
+        
+                            }
+                            
+                            
+    
+  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+  
+
+
+  data.forEach(function(d) {
+    d.date = parseDate(d.date);
+    
+          
+  });
+  
+
+
+  var cities = color.domain().map(function(name) {
+    
+    return {
+      name: name,
+      values: data.map(function(d) {
+        return {  date: d.date, temperature: +d[name]};
+      
+      })
+    };
+  });
+
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  
+  
+  y.domain([
+    d3.min(cities, function(c) { return d3.min(c.values, function(v) { return v.temperature; }); }),
+    d3.max(cities, function(c) { return d3.max(c.values, function(v) { return v.temperature; }); })
+  ]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+      
+    
+            
+  
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("No of Sales or Enquiries ");
+      
+     //svg
+       //.call(tip); 
+
+  var city = svg.selectAll(".city")
+      .data(cities)
+    .enter().append("g")
+      .attr("class", "city");
+      
+     
+      
+
+  city.append("path")  
+      
+      .attr("class", "line")
+      .attr("d", function(d) {  return line(d.values); })
+      .style("stroke", function(d) {  return color(d.name); });
+     //.on('mouseover', tip.show)
+      //.on('mouseout', tip.hide);
+    
+    
+        var filtered = city
+      .filter(function(d){
+          return d.name == "No of Sales"
+      })
+
+    filtered           
+      .selectAll('circle')
+      
+      .data(function(d){return d.values}).enter().append('circle')
+      .attr({
+        cx: function(d,i){
+          return x(d.date)
+        },
+        cy: function(d,i){
+          return y(d.temperature)
+        },
+        r:  3
+      })
+      .style("fill", "orange")
+      .style("cursor", "pointer")
+      
+      .on('click', function(d,i){
+        console.log('clicked', d,i,this)
+      })
+      
+      
+      
+      .on('mouseover', function(d){
+         filtered.append("text")
+            .attr({
+                x: function(dd){
+                  return x(d.date)
+                },
+                y: function(dd){
+                  return y(d.temperature)
+                },
+                dx:-3,
+                dy:".35em",
+                "text-anchor":"end"
+            })
+           
+            
+            
+            .text(
+                function(dd){
+                  return 'Date: ' + format(d.date) + ', Sales: ' + d.temperature
+                }
+            )
+            
+            
+      })
+      .on('mouseout', function(d){
+          
+          
+         d3.select(this.parentElement)
+         .selectAll('text').remove()
+         city.append("text")
+                  .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+                  .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+                  .attr("x", 3)
+                  .attr("dy", ".35em")
+                  .text(function(d) { return d.name; });
+        
+
+       })
+       
+          city.append("text")
+                  .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+                  .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+                  .attr("x", 3)
+                  .attr("dy", ".35em")
+                  .text(function(d) { return d.name; });
+                
+                
+                    
+    var filtereds = city
+      .filter(function(d){
+          return d.name == "No of enquiries"
+      })
+        filtereds           
+      .selectAll('circle')
+       
+     
+      .data(
+        function(d){return d.values}                
+      ).enter().append('circle')
+      .attr({
+        cx: function(d,i){
+          return x(d.date)
+        },
+        cy: function(d,i){
+          return y(d.temperature)
+        },
+        r:  3
+      })
+      .style("fill", "#1f77b4")
+      .style("cursor", "pointer")
+      
+      
+      .on('click', function(d,i){
+        console.log('clicked', d,i,this)
+      })
+  
+      .on('mouseover', function(d){
+
+         filtereds.append("text")
+            .attr({
+                x: function(dd){
+                  return x(d.date)
+                },
+                y: function(dd){
+                  return y(d.temperature)
+                },
+                dx:-3,
+                dy:".35em",
+                "text-anchor":"end"
+                 
+                 })
+            
+            
+            
+            .text(
+                function(dd){
+                    
+                  return 'Date: ' + format(d.date) +', Enquiries: ' + d.temperature +' '
+                }
+            )
+            
+            
+            
+            
+      })
+      
+      .on('mouseout', function(d)
+      {
+          
+          
+         d3.select(this.parentElement)
+         .selectAll('text').remove()
+         city.append("text")
+                  .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+                  .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+                  .attr("x", 3)
+                  .attr("dy", ".35em")
+                  .text(function(d) { return d.name; });
+        
+
+       })
+       
+    
+}
+                            
+                            
+                            
+});
+});
+</script>
+<div class="sales_graph" style="background-color:#f1f1f2; width:50%;">
+
+</div>
+</body>
+</html>

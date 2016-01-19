@@ -134,7 +134,9 @@ function trainTravel(fromLocation, toLocation) {
 
 /* Recursively loops through all trainJourney steps and finds walking alternatives
    for all transit, non-train steps (e.g. walking alternative for bus journey). */
-function trainOnly(trainJourney, dfd) {
+function trainOnly(trainJourney) {
+	
+	var dfd = $.Deferred();
 	
 	var steps = trainJourney.steps;
 	
@@ -200,7 +202,7 @@ function trainOnly(trainJourney, dfd) {
 						trainResponse.routes[0].legs[0] = trainJourney;
 						
 						// Call the function again (we can't just continue because the 'steps' length won't be correct anymore).
-						trainOnly(trainJourney, dfd);
+						trainOnly(trainJourney);
 					}
 					// If we couldn't find a walking journey, just continue and don't remove the non-train step (this will
 					// probably never happen, since walking journeys are possible everywhere throughout The Netherlands).
@@ -237,6 +239,7 @@ function trainOnly(trainJourney, dfd) {
 			
 			// If journey contains car travel, return journey object. Otherwise, show error.
 			if (valid) {
+				console.log('resolve');
 				dfd.resolve(newTrainJourney);
 			}
 			else {
@@ -245,6 +248,7 @@ function trainOnly(trainJourney, dfd) {
 		}
 	});
 	
+	console.log('promise_down');
 	return dfd.promise();
 }
 

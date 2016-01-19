@@ -43,10 +43,6 @@
 	fill: #808080;
 }
 
-.x.axis path {
-	display: none;
-}
-
 .line {
 	fill: none;
 	stroke: #444;

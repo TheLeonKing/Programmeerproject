@@ -26,6 +26,7 @@ $('#amountOfPersons .item').click(function() {
 	updateEmission();
 });
 
+
 /* Draws the visualizations to the DOM. */
 function visualize(journey, userCar) {
 	
@@ -79,6 +80,8 @@ function visualize(journey, userCar) {
 	
 	emissionChart = drawSimpleBarChart('emissionChart', 'Jaarlijkse CO2-uitstoot (per persoon) autoreis vs. treinreis', 'CO2-uitstoot per persoon per jaar (gram)', 'CO2-uitstoot', 'gram', [journey.car.emission, journey.train.emission], defaultBarOptions);
 	visualizeTrees(journey.car.emission, journey.train.emission);
+	
+	regionChart();
 }
 
 
@@ -337,4 +340,183 @@ function addTrees(type, amountOfTrees) {
 	$('#trees_' + type + '_text').html(amountOfTrees.toFixed(2));
 	$('#trees_' + type + '_visualization').html(treesHTML);
 	
+}
+
+function regionChart() {
+	var geocoder = new google.maps.Geocoder;
+	
+	var latlng = { lat: carJourney.end_location.lat(), lng: carJourney.end_location.lng() };
+	geocoder.geocode({'location': latlng}, function(results, status) {
+		if (status === google.maps.GeocoderStatus.OK) {
+			if (results[1]) {
+				regionName = results[1].address_components[1].long_name;
+				
+				drawChart(new Array(regionName));
+				
+			} else {
+				window.alert('No results found');
+			}
+		} else {
+			window.alert('Geocoder failed due to: ' + status);
+		}
+	});
+}
+
+
+/* Called when value is added/removed from region chart. */
+function changeRegionChart(regionNames) {
+	// Fade out the region chart, empty it and fill it again.
+	$('#regionChart').fadeTo('slow', 0.0, function() {
+		$('#regionChart').html('');
+		drawChart(regionNames);
+	});
+}
+
+
+/* Draws a region chart with the regionNames's emission values. */
+function drawChart(regionNames) {
+
+	// Based on the example at http://bl.ocks.org/kramer/4745936.
+	var margin = { top: 50, right: 150, bottom: 50, left: 75 },
+		width = 650 - margin.left - margin.right,
+		height = 400 - margin.top - margin.bottom;
+
+	// Create variable to parse the date.
+	var parseDate = d3.time.format('%Y%m%d').parse;
+
+	// Set up x and y axis.
+	var x = d3.time.scale()
+		.range([0, width]);
+
+	var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient('bottom');
+
+	var y = d3.scale.linear()
+		.range([height, 0]);
+
+	var yAxis = d3.svg.axis()
+		.scale(y)
+		.orient('left');
+		
+	// Create a color scale (useful when comparing regions).
+	var color = d3.scale.category10();
+
+	// Set up line.
+	var line = d3.svg.line()
+		.interpolate('basis')
+		.x(function(d) { return x(d.date); })
+		.y(function(d) { return y(d.emission); });
+
+	// Add line chart to the div container.
+	var svg = d3.select('#regionChart').append('svg')
+		.attr('width', width + margin.left + margin.right)
+		.attr('height', height + margin.top + margin.bottom)
+		.append('g')
+		.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+	// Read emission data from CSV file.
+	d3.csv('data/co2_uitstoot.csv', function(error, data) {
+		if (error) throw error;
+
+		// Find all data values that are not the year (date), and that are of the user-specified regionName(s).
+		color.domain(d3.keys(data[0]).filter(function(key) { return (key !== 'date') && ($.inArray(key, regionNames) !== -1); }));
+
+		// Parse all years.
+		data.forEach(function(d) {
+			d.date = parseDate(d.date);
+		});
+		
+		// Create an array map for all regions we've found.
+		var regions = color.domain().map(function(name) {
+			return {
+				// Find the region name and all emission values associated with this region.
+				name: name,
+				values: data.map(function(d) {
+					return {date: d.date, emission: +d[name]};
+				})
+			};
+		});
+
+		// X's domain is the range of all dates.
+		x.domain(d3.extent(data, function(d) { return d.date; }));
+
+		// Y's domain is 0 to the highest value.
+		y.domain([
+			0, d3.max(regions, function(c) { return d3.max(c.values, function(v) { return v.emission; }); })
+		]);
+		
+		// Draw chart title.
+		svg.append('text')
+			.attr('x', (width / 2))             
+			.attr('y', 0 - (margin.top / 2))
+			.attr('class', 'chartTitle')
+			.text('CO2-uitstoot verkeer en vervoer (excl. railverkeer), per gemeente');
+		
+		// Add legend.
+		var legend = svg.selectAll('g')
+			.data(regions)
+			.enter()
+			.append('g')
+			.attr('class', 'legend');
+
+		// Add region rectangle.
+		legend.append('rect')
+			.attr('x', width + margin.right - 100)
+			.attr('y', function(d, i){ return i *  20;})
+			.attr('width', 10)
+			.attr('height', 10)
+			.style('fill', function(d) { 
+				return color(d.name);
+			});
+
+		// Add region name.
+		legend.append('text')
+			.attr('x', width + margin.right - 80)
+			.attr('y', function(d, i){ return (i *  20) + 9;})
+			.on('click', function(d){
+				// Create a new array that excludes the current place name.
+				var newRegionNames = jQuery.grep(regionNames, function(value) {
+										return value != d.name;
+									 });
+				changeChart(newRegionNames);
+			})
+			.text(function(d){ return d.name; });
+	
+		// Add the x axis.
+		svg.append('g')
+			.attr('class', 'x axis')
+			.attr('transform', 'translate(0,' + height + ')')
+			.call(xAxis)
+			.append('text')
+			.attr('transform', 'translate(' + (width / 2) + " ," + (margin.bottom-5) + ')')
+			.attr('class', 'axisLabel')
+			.style('text-anchor', 'middle')
+			.text('Tijdstip (in jaren)');
+
+		// Add the y axis.
+		svg.append('g')
+			.attr('class', 'y axis')
+			.call(yAxis)
+			.append('text')
+			.attr('transform', 'translate(' + (margin.bottom-110) + " ," + (height/2) + ') rotate(-90)')
+			.attr('class', 'axisLabel')
+			.style('text-anchor', 'middle')
+			.text('CO2-uitstoot (in tonnen)');
+
+		// Add the region's line.
+		var region = svg.selectAll('.region')
+			.data(regions)
+			.enter().append('g')
+			.attr('class', 'region');
+		
+		region.append('path')
+			.attr('class', 'line')
+			.attr('d', function(d) { return line(d.values); })
+			.attr('id', function(d) { return 'line_' + (d.name) } )
+			.style('stroke', function(d) { return color(d.name); });
+
+		// Fade in region chart.
+		$('#regionChart').fadeTo('slow', 1);
+	});
 }

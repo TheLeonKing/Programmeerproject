@@ -25,3 +25,9 @@ $('#customCheckbox').click(function() {
 		$('#customContainer').slideDown();		
 	}
 });
+
+
+/* When user clicks submit button, submit form. */
+$('.submit.button').click(function() {
+	$('#journeyForm').submit();
+});

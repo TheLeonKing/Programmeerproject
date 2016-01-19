@@ -1,48 +1,43 @@
 $(document).ready(function() {
 	
-	/* Synchronous form validation (check whether fields are empty). */
-	$('#journeyForm').form({
-		fields: {
-		fromLocation: {
-			identifier	: 'fromLocation',
-			rules: [
-			{
-				type	: 'empty',
-				prompt	: 'Vul a.u.b. een startlocatie in.'
-			}
-			]
-		},
-		toLocation: {
-			identifier	: 'toLocation',
-			rules: [
-			{
-				type	: 'empty',
-				prompt	: 'Vul a.u.b. een eindbestemming in.'
-			}
-			]
-		}
-		}
-	});
-	
 	
 	/* Asynchronous form validation (check whether license plate is valid). */
 	$("#journeyForm").submit(function( event ) {
 		event.preventDefault();
 		var journeyForm = this;
+		var error = false;
 		
-		// Don't submit if there are still open errors.
-		if ($('.ui.error.message').is(":visible")) {
-			return;
+		// Remove all existing errors.
+		$('.customError').remove();
+		
+		// If 'from' input is empty, show an error.
+		if (!$('#fromLocation').val()) {
+			addError('Vul uw startlocatie in.', '#fromLocationField');
+			error = true;
+		}
+		else {
+			$('#fromLocationField').removeClass('error');
+		}
+		
+		// If 'to' input is empty, show an error.
+		if (!$('#toLocation').val()) {
+			addError('Vul uw eindbestemming in.', '#toLocationField');
+			error = true;
+		}
+		else {
+			$('#toLocationField').removeClass('error');
 		}
 		
 		// If user specified custom usage details.
 		if ($('#customCheckbox').is(':checked')) {
-			var error = false;
 			
 			// If gas type dropdown is empty, show an error.
 			if ($('#customContainer #gasTypeDropdown .text').hasClass('default')) {
 				addError('Vul uw brandstoftype in.', '#gasTypeDropdown');
 				error = true;
+			}
+			else {
+				$('#gasTypeDropdown').removeClass('error');
 			}
 			
 			// If usage input is not a number (or empty), show an error.
@@ -50,14 +45,21 @@ $(document).ready(function() {
 				addError('Vul uw brandstofverbruik in (als cijfer).', '#usageInput');
 				error = true;
 			}
+			else {
+				$('#usageInput').removeClass('error');
+			}
 			
 			// If emission input is not a number (or empty), show an error.
 			if (!$.isNumeric($('#customContainer #emissionInput input').val().replace(',', '.'))) {
 				addError('Vul uw CO2-uitstoot in (als cijfer).', '#emissionInput');
 				error = true;
 			}
+			else {
+				$('#emissionInput').removeClass('error');
+			}
 			
-			// If there were no errors, submit the form.
+			
+			// If there are no more error messages.
 			if (error == false) {
 				journeyForm.submit()
 			}
@@ -81,8 +83,6 @@ $(document).ready(function() {
 						// Sometimes fuel statistics are in first element, sometimes they're in the second. Choose the right one.
 						response = (typeof responseArray[0].brandstofverbruik_gecombineerd === 'undefined') ? responseArray[1] : responseArray[0];
 						
-						console.log(response);
-						
 						var userCar = [];
 						userCar['gasType'] = response.brandstof_omschrijving.toLowerCase();
 					
@@ -95,12 +95,18 @@ $(document).ready(function() {
 						}
 					}
 					
-					// Only submit form if license plate is valid.
-					if (validLicense) {
-						journeyForm.submit()
+					// Show error if license is not valid.
+					if (!validLicense) {
+						addError('We konden geen gegevens vinden voor dit kenteken. Controleer uw invoer opnieuw, of geef hieronder zelf de gegevens op.', '#licensePlateField');
+						error = true;						
 					}
 					else {
-						addError('We konden geen gegevens vinden voor dit kenteken. Controleer uw invoer opnieuw, of geef hieronder zelf de gegevens op.', '#licensePlateField');
+						$('#licensePlateField').removeClass('error');						
+					}
+					
+					// Only submit form if license plate is valid and there are no other errors.
+					if (error == false) {
+						journeyForm.submit()
 					}
 					
 				}
@@ -108,6 +114,13 @@ $(document).ready(function() {
 		
 			xmlhttp.open('GET', url, true);
 			xmlhttp.send();
+			
+			
+			
+			// If there are no more error messages, submit the form.
+			if (error == false && !$('.ui.error.message').is(":visible")) {
+				journeyForm.submit()
+			}
 		}
 	});
 });
@@ -117,13 +130,15 @@ $(document).ready(function() {
 function addError(errorMessage, elementName) {
 	$(elementName).addClass('error');
 	
+	$('.ui.error.message').show();
+	
 	// If error message list is not yet visible, add it and add the error message item.
-	if ($('.ui.error.message').is(':empty')){
+	if ($('.ui.error.message').is(':empty')) {
 		$('.ui.error.message').show();
-		$('.ui.error.message').html('<ul class="list"><li>' + errorMessage + '</li></ul>');
+		$('.ui.error.message').html('<ul class="list"><li class="customError">' + errorMessage + '</li></ul>');
 	}
 	// If list is visible, just add the error message item to it.
 	else {
-		$('.ui.error.message .list').append('<li>' + errorMessage + '</li>');
+		$('.ui.error.message .list').append('<li class="customError">' + errorMessage + '</li>');
 	}
 }

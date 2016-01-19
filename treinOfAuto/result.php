@@ -49,13 +49,22 @@ $gas = new Gas();
 $gasPrices = $gas->fetchPrices($db);
 
 // TODO:
-// - Busreizen implementeren / workaround maken.
-// - Bug: naar Walibi.
-// - Bug: geen nummerbord --> dan wel --> nog steeds error.
-// - Zig-zaglijn toevoegen aan benzinegrafiek.
+// - http://www.klimaatmonitor.databank.nl/Jive/.
+// - https://data.overheid.nl/data/dataset/co2-emissiegegevens-nederlandse-emissieautoriteit.
+// - Domeinnaam aanvragen.
+// - NS offline fix verwijderen (REMOVE THIS RESOLVE) + kijken of die functie nog nodig is.
+// - Loading screen.
+// - Zig-zaglijn toevoegen aan benzinegrafiek - http://bl.ocks.org/mbostock/3884955?
 // - Combined graph?
+// - Chart: titel, eenheid toevoegen.
 // - http://databank.worldbank.org/data/reports.aspx?source=2&Topic=6.
+
+// AAN HET EIND;
+// - HTML + CSS + JS validator.
 // - Goed testen met verschillende routes.
+
+// KNOWN BUGS:
+// - Als Google Maps het niet kent (naar Walibi). Kan ik niets aan doen, wordt afgevangen.
 
 ?>
 <!doctype html>
@@ -228,8 +237,8 @@ $gasPrices = $gas->fetchPrices($db);
 				
 				<!-- Directions list -->
 				<div id="container">
-				<div class="ui relaxed divided list" id="directions_car"></div>
-				<div class="ui relaxed divided list" id="directions_train" style="display: none !important;"></div>
+					<div class="ui relaxed divided list" id="directions_car"></div>
+					<div class="ui relaxed divided list" id="directions_train" style="display: none !important;"></div>
 				</div>
 			</div>
 			
@@ -307,22 +316,28 @@ $gasPrices = $gas->fetchPrices($db);
 							</div>
 						</h4>
 						
+						<!-- Journey emission chart -->
 						<canvas id="emissionChart"></canvas>
 						
 						<div class="ui grid">
-						<!-- Car trees -->
-						<div class="eight wide column">
-							Er zijn <strong><span class="number" id="trees_car_text">?</span> bomen</strong> per persoon nodig om de uitstoot van deze autoreis op te absorberen.
-							<div id="trees_car_visualization" class="treeVisualization"></div>
+							<!-- Car trees -->
+							<div class="eight wide column">
+								Er zijn <strong><span class="number" id="trees_car_text">?</span> bomen</strong> per persoon nodig om de uitstoot van deze autoreis op te absorberen.
+								<div id="trees_car_visualization" class="treeVisualization"></div>
+							</div>
+							
+							<!-- Train trees -->
+							<div class="eight wide column">
+								<span class="treeStat">Er zijn <strong><span id="trees_train_text">?</span> bomen</strong> per persoon nodig om de uitstoot van deze treinreis te absorberen.
+								<div id="trees_train_visualization" class="treeVisualization"></div>
+							</div>
+							
 						</div>
 						
-						<!-- Train trees -->
-						<div class="eight wide column">
-							<span class="treeStat">Er zijn <strong><span id="trees_train_text">?</span> bomen</strong> per persoon nodig om de uitstoot van deze treinreis te absorberen.
-							<div id="trees_train_visualization" class="treeVisualization"></div>
-						</div>
+						<!-- Region emission chart -->
+						<button onclick="changeRegionChart(new Array('Heusden', 'Zaanstad'));">Test</button>
+						<div id="regionChart"></div>
 						
-						</div>
 					</div>
 				</div>
 			</div>
@@ -338,7 +353,7 @@ $gasPrices = $gas->fetchPrices($db);
 	<script src="js/libs/chart.min.js"></script>
 	<script src="js/libs/routeboxer.min.js"></script>
 	
-	<script src="js/results.js"></script>
+	<script src="js/result.js"></script>
 	<script src="js/car.js"></script>
 	<script src="js/train.js"></script>
 	<script src="js/googleMaps.js"></script>

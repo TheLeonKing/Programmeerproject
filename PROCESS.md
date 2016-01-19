@@ -164,3 +164,17 @@ Maandag 18 januari 2016
 
 ## Complicaties
 * Geen; vandaag heb ik zo'n beetje de grootste complicatie (dat er soms toch nog bus-stukken in de route terecht kwamen) juist verholpen!
+
+
+# Dag 12
+Dinsdag 19 januari 2016
+
+## Belangrijke besluiten
+* Ik heb besloten om een grafiek met uitstoot per gemeente toe te voegen.
+
+## Bereikte mijlpalen
+* Enkele bugs van gisteren gefixt.
+* Begin gemaakt aan de grafiek van 'uitstoot per gemeente'; was veel meer werk dan gedacht!
+
+## Complicaties
+* De grafiek is meer werk dan gedacht; hopelijk krijg ik alles op tijd af.

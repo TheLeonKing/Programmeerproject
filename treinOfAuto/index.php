@@ -35,20 +35,20 @@
 						// Split two-sentence error message by sentence.
 						$error = explode('. ', $_GET['error']);
 						print '<div class="ui negative message">
-						<div class="header">' . $error[0] . '</div>
+						<div class="header">' . $error[0] . '.</div>
 						<p>' . $error[1] . '</p>
 					</div>';
 					}
 					
 					?>
 					
-					<div class="field">
+					<div class="field" id="fromLocationField">
 						<div class="ui left icon input">
 							<i class="arrow up icon"></i>
 							<input type="text" name="from" id="fromLocation" placeholder="Van..." />
 						</div>
 					</div>
-					<div class="field">
+					<div class="field" id="toLocationField">
 						<div class="ui left icon input">
 							<i class="arrow down icon"></i>
 							<input type="text" name="to" id="toLocation" placeholder="Naar..." />

@@ -30,8 +30,7 @@ function findTrainStations(steps, fromLocation) {
 			dfd.resolve(journeyStations);
 		}
 		else {
-			console.log(journeyStations);
-			//dfd.reject('We konden de treinstations van uw reis niet vinden in de database. Contacteer alstublieft de webmaster.');
+			dfd.reject('We konden de treinstations van uw reis niet vinden in de database. Contacteer alstublieft de webmaster.');
 		};
 	});
 	
@@ -120,7 +119,9 @@ function fetchTrainTravelAdvice(journeyStations) {
 			dfd.resolve(travelAdvice);
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
-			dfd.reject('Kon geen reisadvies vinden.');
+			// REMOVE THIS RESOLVE.
+			dfd.resolve({});
+			dfd.reject('Kon geen reisadvies vinden. Waarschijnlijk zijn de NS-services momenteel offline voor onderhoud; probeer het later opnieuw.');
 		}
 	});
 	
