@@ -6,8 +6,10 @@ Contains all general JS functions (i.e. the ones not unique to the train or car 
 var gasType,
 	gasArray;
 
+	
 /* Initializes the accordion and dropdown. */
 $(document).ready(function() {
+	
 	$('.ui.accordion').accordion({
 		// Draw directions in Google Maps div when accordion opens (can't be done in advance because of resizing).
 		onOpen: function () {

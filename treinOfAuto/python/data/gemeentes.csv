@@ -1,0 +1,404 @@
+OBJECTID,GM_NAAM,GM_CODE
+1,Eemsmond,GM1651
+2,Schiermonnikoog,GM0088
+3,Ameland,GM0060
+4,Dongeradeel,GM0058
+5,Terschelling,GM0093
+6,Delfzijl,GM0010
+7,De Marne,GM1663
+8,Winsum,GM0053
+9,Loppersum,GM0024
+10,Ferwerderadiel,GM1722
+11,Kollumerland en Nieuwkruisland,GM0079
+12,het Bildt,GM0063
+13,Appingedam,GM0003
+14,Bedum,GM0005
+15,Oldambt,GM1895
+16,Zuidhorn,GM0056
+17,Dantumadiel,GM1891
+18,Vlieland,GM0096
+19,Ten Boer,GM0009
+20,Slochteren,GM0040
+21,Leeuwarderadeel,GM0081
+22,Tytsjerksteradiel,GM0737
+23,Achtkarspelen,GM0059
+24,Groningen,GM0014
+25,Franekeradeel,GM0070
+26,Grootegast,GM0015
+27,Menameradiel,GM1908
+28,Harlingen,GM0072
+29,Menterwolde,GM1987
+30,Leek,GM0022
+31,Texel,GM0448
+32,Noordenveld,GM1699
+33,Hoogezand-Sappemeer,GM0018
+34,Marum,GM0025
+35,Tynaarlo,GM1730
+36,Haren,GM0017
+37,Littenseradiel,GM0140
+38,Bellingwedde,GM0007
+39,Smallingerland,GM0090
+40,Veendam,GM0047
+41,Opsterland,GM0086
+42,Pekela,GM0765
+43,Aa en Hunze,GM1680
+44,Stadskanaal,GM0037
+45,Ooststellingwerf,GM0085
+46,Vlagtwedde,GM0048
+47,Assen,GM0106
+48,Den Helder,GM0400
+49,Midden-Drenthe,GM1731
+50,Borger-Odoorn,GM1681
+51,Weststellingwerf,GM0098
+52,Westerveld,GM1701
+53,Medemblik,GM0420
+54,Coevorden,GM0109
+55,Emmen,GM0114
+56,Steenwijkerland,GM1708
+57,Noordoostpolder,GM0171
+58,Enkhuizen,GM0388
+59,Hoogeveen,GM0118
+60,De Wolden,GM1690
+61,Meppel,GM0119
+62,Urk,GM0184
+63,Bergen (NH.),GM0373
+64,Opmeer,GM0432
+65,Langedijk,GM0416
+66,Heerhugowaard,GM0398
+67,Stede Broec,GM0532
+68,Drechterland,GM0498
+69,Koggenland,GM1598
+70,Staphorst,GM0180
+71,Lelystad,GM0995
+72,Hoorn,GM0405
+73,Alkmaar,GM0361
+74,Hardenberg,GM0160
+75,Zwartewaterland,GM1896
+76,Dronten,GM0303
+77,Schermer,GM0458
+78,Kampen,GM0166
+79,Heiloo,GM0399
+80,Beemster,GM0370
+81,Zeevang,GM0478
+82,Dalfsen,GM0148
+83,Ommen,GM0175
+84,Castricum,GM0383
+85,Zwolle,GM0193
+86,Almere,GM0034
+87,Graft-De Rijp,GM0365
+88,Uitgeest,GM0450
+89,Edam-Volendam,GM0385
+90,Wormerland,GM0880
+91,Heemskerk,GM0396
+92,Purmerend,GM0439
+93,Oldebroek,GM0269
+94,Zaanstad,GM0479
+95,Hattem,GM0244
+96,Beverwijk,GM0375
+97,Twenterand,GM1700
+98,Waterland,GM0852
+99,Velsen,GM0453
+100,Landsmeer,GM0415
+101,Tubbergen,GM0183
+102,Oostzaan,GM0431
+103,Dinkelland,GM1774
+104,Raalte,GM0177
+105,Elburg,GM0230
+106,Hellendoorn,GM0163
+107,Heerde,GM0246
+108,Olst-Wijhe,GM1773
+109,Zeewolde,GM0050
+110,Bloemendaal,GM0377
+111,Haarlemmerliede en Spaarnwoude,GM0393
+112,Haarlem,GM0392
+113,Wierden,GM0189
+114,Zandvoort,GM0473
+115,Nunspeet,GM0302
+116,Almelo,GM0141
+117,Epe,GM0232
+118,Losser,GM0168
+119,Muiden,GM0424
+120,Haarlemmermeer,GM0394
+121,Harderwijk,GM0243
+122,Heemstede,GM0397
+123,Diemen,GM0384
+124,Borne,GM0147
+125,Oldenzaal,GM0173
+126,Ouder-Amstel,GM0437
+127,Noordwijk,GM0575
+128,Voorst,GM0285
+129,Ermelo,GM0233
+130,Amsterdam,GM0363
+131,Amstelveen,GM0362
+132,Rijssen-Holten,GM1742
+133,Naarden,GM0425
+134,Huizen,GM0406
+135,Weesp,GM0457
+136,Deventer,GM0150
+137,Hengelo,GM0164
+138,Hillegom,GM0534
+139,Noordwijkerhout,GM0576
+140,Hof van Twente,GM1735
+141,Blaricum,GM0376
+142,Aalsmeer,GM0358
+143,De Ronde Venen,GM0736
+144,Enschede,GM0153
+145,Putten,GM0273
+146,Eemnes,GM0317
+147,Stichtse Vecht,GM1904
+148,Lisse,GM0553
+149,Bunschoten,GM0313
+150,Apeldoorn,GM0200
+151,Hilversum,GM0402
+152,Wijdemeren,GM1696
+153,Bussum,GM0381
+154,Laren,GM0417
+155,Nijkerk,GM0267
+156,Uithoorn,GM0451
+157,Teylingen,GM1525
+158,Lochem,GM0262
+159,Barneveld,GM0203
+160,Kaag en Braassem,GM1884
+161,Baarn,GM0308
+162,Nieuwkoop,GM0569
+163,Katwijk,GM0537
+164,Amersfoort,GM0307
+165,Haaksbergen,GM0158
+166,Oegstgeest,GM0579
+167,Soest,GM0342
+168,De Bilt,GM0310
+169,Wassenaar,GM0629
+170,Berkelland,GM1859
+171,Leiden,GM0546
+172,Leiderdorp,GM0547
+173,Zutphen,GM0301
+174,Zeist,GM0355
+175,Brummen,GM0213
+176,Woerden,GM0632
+177,Leusden,GM0327
+178,Voorschoten,GM0626
+179,Ede,GM0228
+180,Zoeterwoude,GM0638
+181,Utrecht,GM0344
+182,Bronckhorst,GM1876
+183,s-Gravenhage,GM0518
+184,Leidschendam-Voorburg,GM1916
+185,Bodegraven-Reeuwijk,GM1901
+186,Woudenberg,GM0351
+187,Scherpenzeel,GM0279
+188,Renswoude,GM0339
+189,Zoetermeer,GM0637
+190,Rheden,GM0275
+191,Utrechtse Heuvelrug,GM1581
+192,Montfoort,GM0335
+193,Bunnik,GM0312
+194,Rozendaal,GM0277
+195,Waddinxveen,GM0627
+196,Arnhem,GM0202
+197,Oost Gelre,GM1586
+198,Zuidplas,GM1892
+199,Westland,GM1783
+200,Rijswijk,GM0603
+201,Oudewater,GM0589
+202,Lansingerland,GM1621
+203,Nieuwegein,GM0356
+204,IJsselstein,GM0353
+205,Pijnacker-Nootdorp,GM1926
+206,Houten,GM0321
+207,Veenendaal,GM0345
+208,Winterswijk,GM0294
+209,Doesburg,GM0221
+210,Gouda,GM0513
+211,Delft,GM0503
+212,Wijk bij Duurstede,GM0352
+213,Lopik,GM0331
+214,Midden-Delfland,GM1842
+215,Renkum,GM0274
+216,Vlist,GM0623
+217,Rhenen,GM0340
+218,Zevenaar,GM0299
+219,Rotterdam,GM0599
+220,Ouderkerk,GM0644
+221,Vianen,GM0620
+222,Wageningen,GM0289
+223,Doetinchem,GM0222
+224,Bergambacht,GM0491
+225,Buren,GM0214
+226,Duiven,GM0226
+227,Oude IJsselstreek,GM1509
+228,Montferland,GM1955
+229,Westervoort,GM0293
+230,Aalten,GM0197
+231,Culemborg,GM0216
+232,Zederik,GM0707
+233,Overbetuwe,GM1734
+234,Schoonhoven,GM0608
+235,Capelle aan den IJssel,GM0502
+236,Schiedam,GM0606
+237,Lingewaard,GM1705
+238,Vlaardingen,GM0622
+239,Neder-Betuwe,GM1740
+240,Maassluis,GM0556
+241,Leerdam,GM0545
+242,Westvoorne,GM0614
+243,Brielle,GM0501
+244,Geldermalsen,GM0236
+245,Giessenlanden,GM0689
+246,Nederlek,GM0643
+247,Krimpen aan den IJssel,GM0542
+248,Tiel,GM0281
+249,Rijnwaarden,GM0196
+250,Ridderkerk,GM0597
+251,Druten,GM0225
+252,Beuningen,GM0209
+253,Nijmegen,GM0268
+254,West Maas en Waal,GM0668
+255,Lingewaal,GM0733
+256,Hellevoetsluis,GM0530
+257,Millingen aan de Rijn,GM0265
+258,Alblasserdam,GM0482
+259,Bernisse,GM0568
+260,Albrandswaard,GM0613
+261,Barendrecht,GM0489
+262,Ubbergen,GM0282
+263,Hendrik-Ido-Ambacht,GM0531
+264,Spijkenisse,GM0612
+265,Wijchen,GM0296
+266,Gorinchem,GM0512
+267,Neerijnen,GM0304
+268,Hardinxveld-Giessendam,GM0523
+269,Papendrecht,GM0590
+270,Zwijndrecht,GM0642
+271,Sliedrecht,GM0610
+272,Oud-Beijerland,GM0584
+273,Binnenmaas,GM0585
+274,Maasdriel,GM0263
+275,Oss,GM0828
+276,Groesbeek,GM0241
+277,Werkendam,GM0870
+278,Korendijk,GM0588
+279,Zaltbommel,GM0297
+280,Dordrecht,GM0505
+281,Woudrichem,GM0874
+282,Heumen,GM0252
+283,Schouwen-Duiveland,GM1676
+284,Cromstrijen,GM0611
+285,Strijen,GM0617
+286,Aalburg,GM0738
+287,Mook en Middelaar,GM0944
+288,Grave,GM0786
+289,Maasdonk,GM1671
+290,Landerd,GM1685
+291,Drimmelen,GM1719
+292,s-Hertogenbosch,GM0796
+293,Cuijk,GM1684
+294,Gennep,GM0907
+295,Heusden,GM0797
+296,Bernheze,GM1721
+297,Mill en Sint Hubert,GM0815
+298,Waalwijk,GM0867
+299,Moerdijk,GM1709
+300,Geertruidenberg,GM0779
+301,Boxmeer,GM0756
+302,Uden,GM0856
+303,Sint-Michielsgestel,GM0845
+304,Vught,GM0865
+305,Oosterhout,GM0826
+306,Sint Anthonis,GM1702
+307,Dongen,GM0766
+308,Bergen (L.),GM0893
+309,Loon op Zand,GM0809
+310,Haaren,GM0788
+311,Steenbergen,GM0851
+312,Tholen,GM0716
+313,Veere,GM0717
+314,Schijndel,GM0844
+315,Veghel,GM0860
+316,Breda,GM0758
+317,Tilburg,GM0855
+318,Etten-Leur,GM0777
+319,Boxtel,GM0757
+320,Halderberge,GM1655
+321,Vlissingen,GM0718
+322,Boekel,GM0755
+323,Noord-Beveland,GM1695
+324,Gilze en Rijen,GM0784
+325,Sint-Oedenrode,GM0846
+326,Oisterwijk,GM0824
+327,Gemert-Bakel,GM1652
+328,Bergen op Zoom,GM0748
+329,Roosendaal,GM1674
+330,Venray,GM0984
+331,Rucphen,GM0840
+332,Laarbeek,GM1659
+333,Goes,GM0664
+334,Kapelle,GM0678
+335,Alphen-Chaam,GM1723
+336,Oirschot,GM0823
+337,Zundert,GM0879
+338,Middelburg,GM0687
+339,Best,GM0753
+340,Reimerswaal,GM0703
+341,Hilvarenbeek,GM0798
+342,Son en Breugel,GM0848
+343,Goirle,GM0785
+344,"Nuenen, Gerwen en Nederwetten",GM0820
+345,Horst aan de Maas,GM1507
+346,Borsele,GM0654
+347,Venlo,GM0983
+348,Helmond,GM0794
+349,Deurne,GM0762
+350,Eindhoven,GM0772
+351,Woensdrecht,GM0873
+352,Eersel,GM0770
+353,Geldrop-Mierlo,GM1771
+354,Someren,GM0847
+355,Asten,GM0743
+356,Veldhoven,GM0861
+357,Bladel,GM1728
+358,Reusel-De Mierden,GM1667
+359,Hulst,GM0677
+360,Sluis,GM1714
+361,Heeze-Leende,GM1658
+362,Baarle-Nassau,GM0744
+363,Terneuzen,GM0715
+364,Waalre,GM0866
+365,Peel en Maas,GM1894
+366,Bergeijk,GM1724
+367,Valkenswaard,GM0858
+368,Cranendonck,GM1706
+369,Nederweert,GM0946
+370,Leudal,GM1640
+371,Beesel,GM0889
+372,Weert,GM0988
+373,Roermond,GM0957
+374,Maasgouw,GM1641
+375,Roerdalen,GM1669
+376,Echt-Susteren,GM1711
+377,Sittard-Geleen,GM1883
+378,Stein,GM0971
+379,Onderbanken,GM0881
+380,Schinnen,GM0962
+381,Brunssum,GM0899
+382,Beek,GM0888
+383,Meerssen,GM0938
+384,Heerlen,GM0917
+385,Landgraaf,GM0882
+386,Nuth,GM0951
+387,Maastricht,GM0935
+388,Kerkrade,GM0928
+389,Voerendaal,GM0986
+390,Valkenburg aan de Geul,GM0994
+391,Simpelveld,GM0965
+392,Eijsden-Margraten,GM1903
+393,Gulpen-Wittem,GM1729
+394,Vaals,GM0981
+395,Hollands Kroon,GM1911
+396,Schagen,GM0441
+397,Molenwaard,GM1927
+398,Goeree-Overflakkee,GM1924
+399,Heerenveen,GM0074
+400,Súdwest-Fryslân,GM1900
+401,Leeuwarden,GM0080
+402,De Friese Meren,GM1921
+403,Alphen aan den Rijn,GM0484

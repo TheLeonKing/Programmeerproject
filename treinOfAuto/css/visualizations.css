@@ -43,7 +43,7 @@
 	fill: #808080;
 }
 
-.line {
+.line, .averageLine {
 	fill: none;
 	stroke: #444;
 	stroke-width: 2px;
@@ -91,3 +91,107 @@ svg text {
 	top: 100%;
 	left: 0;
 }
+
+
+
+/* Regions ("gemeentes") map */
+.region {
+	stroke: #000;
+}
+
+.region:hover {
+	cursor: pointer;
+	stroke-width: 2px;
+}
+
+.legendBlock {
+	stroke: black;
+	stroke-width: 1;
+}
+
+.q0-8 {
+	fill: #f7fbff;
+	background-color: #f7fbff;
+}
+
+.q1-8 {
+	fill: #deebf7;
+	background-color: #deebf7;
+}
+
+.q2-8 {
+	fill: #c6dbef;
+	background-color: #c6dbef;
+}
+
+.q3-8 {
+	fill: #9ecae1;
+	background-color: #9ecae1;
+}
+
+.q4-8 {
+	fill: #6baed6;
+	background-color: #6baed6;
+}
+
+.q5-8 {
+	fill: #4292c6;
+	background-color: #4292c6;
+}
+
+.q6-8 {
+	fill: #2171b5;
+	background-color: #2171b5;
+}
+
+.q7-8 {
+	fill: #084594;background-color: #084594;
+}
+
+
+/* Regions ("gemeentes") chart */
+.chartLegendItem {
+	cursor: pointer;
+}
+
+.chartLegendItem:hover {
+	fill: rgb(238, 17, 17);
+	text-decoration: line-through;
+}
+
+
+
+
+.barTooltip {
+  position:absolute;
+  text-align: center;
+  width: 200px;
+  height:auto;
+  background-color: #EDE3D1;
+  border-radius: 10px;
+  color: #787777;
+  padding: 6px 12px;
+  z-index:3;
+}
+ 
+.barTooltip:after {
+  box-sizing: border-box;
+  display: inline;
+  width: 100%;
+  line-height: 1;
+  color: #EDE3D1;
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+  margin: -3px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+ 
+.barTooltip span {
+    display: block;
+    text-align: center;
+    width: 200px;
+    height: auto;
+    margin: 5px auto;
+  }

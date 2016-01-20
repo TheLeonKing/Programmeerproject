@@ -112,3 +112,7 @@ h3 .fa {
 .treeContainer img {
 	width: 30px;
 }
+
+#regionVisualizations h3 {
+	margin: 0;
+}

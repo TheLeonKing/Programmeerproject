@@ -10,7 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="css/libs/semantic.min.css">
 	<link rel="stylesheet" href="css/main.css" />
 	
-	<script src="js/libs/jquery.js"></script>
+	<script src="js/libs/jquery.min.js"></script>
 	
 	<!--[if IE]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>

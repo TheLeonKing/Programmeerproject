@@ -7,7 +7,9 @@ var amountOfJourneys = 1,
 	journeyFrequency = 'jaar',
 	amountOfPersons = 1,
 	defaultBarOptions = {},
-	emissionChart;
+	running = false,
+	emissionChart,
+	regionNames;
 
 
 // If the user changes a dropdown value, update the emission stats.
@@ -81,6 +83,7 @@ function visualize(journey, userCar) {
 	emissionChart = drawSimpleBarChart('emissionChart', 'Jaarlijkse CO2-uitstoot (per persoon) autoreis vs. treinreis', 'CO2-uitstoot per persoon per jaar (gram)', 'CO2-uitstoot', 'gram', [journey.car.emission, journey.train.emission], defaultBarOptions);
 	visualizeTrees(journey.car.emission, journey.train.emission);
 	
+	regionMap();
 	regionChart();
 }
 
@@ -152,11 +155,13 @@ function drawGasStationsChart(distance, userCar) {
 	
 	// Based on the Simple Bar Chart from the D3.JS wiki: http://bl.ocks.org/mbostock/3885304.
 
-	var margin = {top: 25, right: 0, bottom: 40, left: 70},
+	var margin = {top: 25, right: 0, bottom: 70, left: 70},
 		width = 400 - margin.left - margin.right,
 		height = 300 - margin.top - margin.bottom;
 		
 	var formatEuro = d3.format('.2f');
+	
+	var axisBreakSpace = 30;
 
 	var x = d3.scale.ordinal()
 		.rangeRoundBands([0, width], .1);
@@ -218,24 +223,48 @@ function drawGasStationsChart(distance, userCar) {
 	// Draw X axis.
 	svg.append('g')
 		.attr('class', 'x axis')
-		.attr('transform', 'translate(0,' + height + ')')
+		.attr('transform', 'translate(0,' + (height + axisBreakSpace) + ')')
 		.call(xAxis)
 		.append('text')
-		.attr('transform', 'translate(' + (width / 2) + " ," + (margin.bottom-5) + ')')
+		.attr('transform', 'translate(' + (width / 2) + " ," + (margin.bottom / 2) + ')')
 		.attr('class', 'axisLabel')
         .style('text-anchor', 'middle')
 		.text('Benzinestation');
 
 	// Draw Y axis.
-	svg.append('g')
+	var yG = svg.append('g')
 		.attr('class', 'y axis')
-		.call(yAxis)
-		.append('text')
+		.call(yAxis);
+	
+	// Draw Y axis label.
+	yG.append('text')
 		.attr('transform', 'rotate(-90)')
 		.attr('y', 6)
 		.attr('dy', '-5em')
 		.attr('class', 'axisLabel')
 		.text('Prijs ' + gasType + ' (in euro\'s)');
+	
+	// Add zig-zag line to Y axis (credits to http://stackoverflow.com/questions/34811041/d3-js-zig-zag-line-on-y-axis-between-zero-and-start-value/34889500#34889500).
+	yG.append('path')
+		.attr('d', function(){
+			// Define the number of zig-zags and calculate the distance between each zig-zag.
+			var numZags = 4,
+				zagDist = (axisBreakSpace - 5) / numZags;
+
+			// Calculate the dimensions of the zig-zag.
+			var curZig = height,
+				d = 'M0,' + curZig;
+			
+			// Add all zig-zags to the DOM.
+			for (var i = 0; i < numZags; i++){
+				curZig += zagDist;
+				d += (i % 2 === 0) ? ' L10,' + curZig : ' L-10,' + curZig;
+			}
+			
+			d += ' L0,' + (height + axisBreakSpace);
+			
+			return d;
+		});
 
 	// Draw the bars.
 	svg.selectAll('.bar')
@@ -262,7 +291,7 @@ function drawGasStationsChart(distance, userCar) {
 	// Add the average price line.
 	svg.append('path')
 		.datum(data)
-		.attr('class', 'line')
+		.attr('class', 'averageLine')
 		.attr('d', averageLine)
 		.attr('id', 'averageLine');
 		
@@ -342,16 +371,39 @@ function addTrees(type, amountOfTrees) {
 	
 }
 
+
+/* Calls the functions necessary to draw the region chart. */
 function regionChart() {
-	var geocoder = new google.maps.Geocoder;
+	// Find region ("gemeente") of start location.
+	findRegion({ lat: carJourney.start_location.lat(), lng: carJourney.start_location.lng() }, new Array()).done(function(regions) {
+		// Find region ("gemeente") of end location.
+		findRegion({ lat: carJourney.end_location.lat(), lng: carJourney.end_location.lng() }, regions).done(function(regions) {
+			// Draw the region chart.
+			regionNames = regions;
+			drawRegionChart();
+		});
+	});
+}
+
+
+/* Finds the region ("gemeente") corresponding to the lat/lang coordinates. */
+function findRegion(latlng, regions) {
 	
-	var latlng = { lat: carJourney.end_location.lat(), lng: carJourney.end_location.lng() };
+	var dfd = $.Deferred();
+	
+	var geocoder = new google.maps.Geocoder;
+
+	// Create a geocoder request for the lat/lang coordinates.
 	geocoder.geocode({'location': latlng}, function(results, status) {
 		if (status === google.maps.GeocoderStatus.OK) {
+			// If we found results, return the region name.
 			if (results[1]) {
-				regionName = results[1].address_components[1].long_name;
+				// Sometimes the region name is in the second element, sometimes in the third.
+				// Push both to be sure.
+				regions.push(results[1].address_components[1].long_name);
+				regions.push(results[1].address_components[2].long_name);
 				
-				drawChart(new Array(regionName));
+				dfd.resolve(regions);
 				
 			} else {
 				window.alert('No results found');
@@ -360,24 +412,38 @@ function regionChart() {
 			window.alert('Geocoder failed due to: ' + status);
 		}
 	});
+	
+	return dfd.promise();
 }
 
 
 /* Called when value is added/removed from region chart. */
-function changeRegionChart(regionNames) {
-	// Fade out the region chart, empty it and fill it again.
-	$('#regionChart').fadeTo('slow', 0.0, function() {
-		$('#regionChart').html('');
-		drawChart(regionNames);
-	});
+function changeRegionChart(regionName) {
+	// Only add/remove region when this function isn't currently running (prevent
+	// strange behavior when user goes crazy-clicking regions).
+	if (!running) {
+		
+		running = true;
+		
+		// If region name is currently in array of chart region names, remove it.
+		($.inArray(regionName, regionNames) !== -1) ? regionNames.splice( $.inArray(regionName, regionNames), 1 ) : regionNames.push(regionName);
+		
+		// Draw region chart using new chartRegionNames.
+		$('#regionChart').fadeTo('fast', 0.0, function() {
+			$('#regionChart').html('');
+			drawRegionChart();
+		});
+		
+		running = false;
+	}
 }
 
 
 /* Draws a region chart with the regionNames's emission values. */
-function drawChart(regionNames) {
+function drawRegionChart() {
 
 	// Based on the example at http://bl.ocks.org/kramer/4745936.
-	var margin = { top: 50, right: 150, bottom: 50, left: 75 },
+	var margin = { top: 50, right: 150, bottom: 50, left: 95 },
 		width = 650 - margin.left - margin.right,
 		height = 400 - margin.top - margin.bottom;
 
@@ -462,7 +528,7 @@ function drawChart(regionNames) {
 
 		// Add region rectangle.
 		legend.append('rect')
-			.attr('x', width + margin.right - 100)
+			.attr('x', width + margin.right - 120)
 			.attr('y', function(d, i){ return i *  20;})
 			.attr('width', 10)
 			.attr('height', 10)
@@ -472,14 +538,12 @@ function drawChart(regionNames) {
 
 		// Add region name.
 		legend.append('text')
-			.attr('x', width + margin.right - 80)
+			.attr('x', width + margin.right - 100)
 			.attr('y', function(d, i){ return (i *  20) + 9;})
+			.attr('class', 'chartLegendItem')
+			// When user clicks legend item, remove it from the chart.
 			.on('click', function(d){
-				// Create a new array that excludes the current place name.
-				var newRegionNames = jQuery.grep(regionNames, function(value) {
-										return value != d.name;
-									 });
-				changeChart(newRegionNames);
+				changeRegionChart(d.name);
 			})
 			.text(function(d){ return d.name; });
 	
@@ -489,7 +553,7 @@ function drawChart(regionNames) {
 			.attr('transform', 'translate(0,' + height + ')')
 			.call(xAxis)
 			.append('text')
-			.attr('transform', 'translate(' + (width / 2) + " ," + (margin.bottom-5) + ')')
+			.attr('transform', 'translate(' + (width / 2) + ' ,' + (margin.bottom-5) + ')')
 			.attr('class', 'axisLabel')
 			.style('text-anchor', 'middle')
 			.text('Tijdstip (in jaren)');
@@ -499,7 +563,7 @@ function drawChart(regionNames) {
 			.attr('class', 'y axis')
 			.call(yAxis)
 			.append('text')
-			.attr('transform', 'translate(' + (margin.bottom-110) + " ," + (height/2) + ') rotate(-90)')
+			.attr('transform', 'translate(' + (margin.bottom-110) + ' ,' + (height/2) + ') rotate(-90)')
 			.attr('class', 'axisLabel')
 			.style('text-anchor', 'middle')
 			.text('CO2-uitstoot (in tonnen)');
@@ -516,7 +580,206 @@ function drawChart(regionNames) {
 			.attr('id', function(d) { return 'line_' + (d.name) } )
 			.style('stroke', function(d) { return color(d.name); });
 
+		// Credits to http://stackoverflow.com/questions/34886070/d3-js-multiseries-line-chart-with-mouseover-tooltip/34887578#34887578 for the tooltip script below.
+		var mouseG = svg.append('g')
+			.attr('class', 'mouse-over-effects');
+
+		// Add vertical mouse line.
+		mouseG.append('path')
+			.attr('class', 'mouse-line')
+			.style('stroke', 'black')
+			.style('stroke-width', '1px')
+			.style('opacity', '0');
+
+		// Get all lines in  the chart.
+		var lines = document.getElementsByClassName('line');
+
+		var mousePerLine = mouseG.selectAll('.mouse-per-line')
+			.data(regions)
+			.enter()
+			.append('g')
+			.attr('class', 'mouse-per-line');
+
+		mousePerLine.append('circle')
+			.attr('r', 7)
+			.style('stroke', function(d) {
+				return color(d.name);
+			})
+			.style('fill', 'none')
+			.style('stroke-width', '1px')
+			.style('opacity', '0');
+
+		mousePerLine.append('text')
+			.attr('transform', 'translate(10,3)');
+
+		// Add rectangle that tracks mouse movements on canvas.
+		mouseG.append('svg:rect')
+			.attr('width', width)
+			.attr('height', height)
+			.attr('fill', 'none')
+			.attr('pointer-events', 'all')
+			// When mouse leaves canvas, hide line, circles and tooltip text.
+			.on('mouseout', function() {
+				d3.select('.mouse-line')
+				.style('opacity', '0');
+				d3.selectAll('.mouse-per-line circle')
+				.style('opacity', '0');
+				d3.selectAll('.mouse-per-line text')
+				.style('opacity', '0');
+			})
+			// When mouse enters canvas, add line, circles and tooltip text.
+			.on('mouseover', function() {
+				d3.select('.mouse-line')
+				.style('opacity', '1');
+				d3.selectAll('.mouse-per-line circle')
+				.style('opacity', '1');
+				d3.selectAll('.mouse-per-line text')
+				.style('opacity', '1');
+			})
+			// When mouse moves, update line, circles and tooltip text.
+			.on('mousemove', function() {
+				var mouse = d3.mouse(this);
+				d3.select('.mouse-line')
+				.attr('d', function() {
+					var d = 'M' + mouse[0] + ',' + height;
+					d += ' ' + mouse[0] + ',' + 0;
+					return d;
+				});
+
+			
+			// Position the tooltip's circle and tooltip text.
+			d3.selectAll('.mouse-per-line')
+				.attr('transform', function(d, i) {
+					// Extract date.
+					var xDate = x.invert(mouse[0]),
+					bisect = d3.bisector(function(d) { return d.date; }).right;
+					idx = bisect(d.values, xDate);
+
+					var beginning = 0,
+					end = lines[i].getTotalLength(),
+					target = null;
+
+					// Find the position of the line.
+					while (true){
+						target = Math.floor((beginning + end) / 2);
+						pos = lines[i].getPointAtLength(target);
+						
+						// Stop if position is found.
+						if ((target === end || target === beginning) && pos.x !== mouse[0]) {
+							break;
+						}
+						
+						// Match te line and mouse position.
+						if (pos.x > mouse[0])		end = target;
+						else if (pos.x < mouse[0])	beginning = target;
+						// We found the position.
+						else						break;
+					}
+
+					// Add tooltip to line.
+					d3.select(this).select('text')
+						.text(y.invert(pos.y).toFixed(2));
+
+					// Return the position.
+					return 'translate(' + mouse[0] + ',' + pos.y +')';
+				});
+		});
+		
 		// Fade in region chart.
-		$('#regionChart').fadeTo('slow', 1);
+		$('#regionChart').fadeTo('fast', 1)
 	});
+}
+
+
+/* Creates a map of The Netherlands with the emission for all regions ("gemeentes"). */
+function regionMap() {
+	
+	// Create map and set up its dimensions.
+	var regionMap = d3.map();
+
+	var width = 600,
+		height = 600;
+
+	// Divide the data into eight quantiles.
+	var quantile = d3.scale.quantile()
+		.range(d3.range(8).map(function(i) { return 'region q' + i + '-8'; }));
+
+	// Set up how the map should be displayed.
+	var projection = d3.geo.mercator()
+		.center([5.3, 52.2])
+		.scale([7000])
+		.translate([width/2, height/2]);
+
+	var path = d3.geo.path().projection(projection);
+
+	// Add the map to the DOM.
+	var svg = d3.select('#regionMap').append('svg')
+		.attr('width', width)
+		.attr('height', height);
+
+	// Read the TopoJSON file with the regions and the CSV file with the emission values.
+	queue()
+		.defer(d3.json, 'data/gemeentes2016.json')
+		.defer(d3.csv, 'data/co2_uitstoot_id.csv', function(d) { regionMap.set(d.id, +d[2013]); })
+		.await(ready);
+
+	// When all data is loaded...
+	function ready(error, shape) {
+		if (error) throw error;
+
+		// Set up the quantile domain with the values.
+		quantile.domain(regionMap.values());
+
+		// Add The Netherlands to the map.
+		svg.append('g')
+			.attr({'transform': 'scale(1) translate(0,0)'})
+			.attr('class', 'counties')
+			.selectAll('path')
+			// Add regions ("gemeentes") to map.
+			.data(topojson.feature(shape, shape.objects.nederlandGemeenteGeo).features)
+			.enter().append('path')
+			.attr('class', function(d) { return quantile(regionMap.get(d.properties.gemeenteID)); })
+			.attr('d', path)
+			// When user clicks on region, add it to the chart.
+			.on('click', function(d) {
+				changeRegionChart(d.properties.gemeenteNaam);
+			})
+			// Add hover title to region on map.
+			.append('svg:title')
+			.text(function(d){
+				return d.properties.gemeenteNaam + '\nCO2-uitstoot in 2013: ' + regionMap.get(d.properties.gemeenteID) + ' ton';
+			});
+		
+		// Add legend.
+		var legend = svg.selectAll('g.legendEntry')
+			.data(quantile.range().reverse())
+			.enter()
+			.append('g').attr('class', 'legendEntry');
+
+		legend
+			.append('rect')
+			.attr('x', 20)
+			.attr('y', function(d, i) {
+				return 180 - i * 20;
+			})
+			.attr('class', function(d, i) {
+				return 'legendBlock ' + d;
+			})
+			.attr('width', 10)
+			.attr('height', 10);
+
+		legend
+			.append('text')
+			.attr('x', 40)
+			.attr('y', function(d, i) {
+				return 40 + i * 20;
+			})
+			.attr('dy', '0.8em')
+			.text(function(d,i) {
+				var extent = quantile.invertExtent(d);
+				var format = d3.format(',');
+				return format(+extent[0]).replace(/,/g, '.') + ' - ' + format(+extent[1]).replace(/,/g, '.') + ' ton';
+			});	
+	}
+	
 }

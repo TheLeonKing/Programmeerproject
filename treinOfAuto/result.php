@@ -83,7 +83,7 @@ $gasPrices = $gas->fetchPrices($db);
 	<link rel="stylesheet" href="css/result.css" />
 	<link rel="stylesheet" href="css/visualizations.css" />
 	
-	<script src="js/libs/jquery.js"></script>
+	<script src="js/libs/jquery.min.js"></script>
 	<script type='text/javascript' src="http://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.1/jquery.xdomainrequest.min.js"></script>
 	
 	<!--[if IE]>
@@ -244,7 +244,7 @@ $gasPrices = $gas->fetchPrices($db);
 			
 			<!-- Environment -->
 			<div class="title">
-				<i class="dropdown icon"></i> Milieu
+				<i class="dropdown icon"></i> Milieu (reis)
 			</div>
 			<div class="content">
 				
@@ -334,13 +334,33 @@ $gasPrices = $gas->fetchPrices($db);
 							
 						</div>
 						
-						<!-- Region emission chart -->
-						<button onclick="changeRegionChart(new Array('Heusden', 'Zaanstad'));">Test</button>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="title">
+				<i class="dropdown icon"></i> Milieu (algemeen)
+			</div>
+			<div class="content">
+				
+				<div class="ui center grid">
+					
+					<div class="sixteen wide column" id="regionVisualizations">
+						
+						<h3>CO2-uitstoot verkeer en vervoer (excl. railverkeer), per gemeente</h3>
+						
+						<!-- Region emission map -->
+						<div id="regionMap"></div>
+						
+						<!-- Region emission map -->
 						<div id="regionChart"></div>
 						
 					</div>
 				</div>
 			</div>
+			
+			
 		</div>
 	</div>
 
@@ -348,6 +368,8 @@ $gasPrices = $gas->fetchPrices($db);
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=nl&libraries=geometry,places"></script>
 	<script src="js/libs/d3.min.js"></script>
 	<script src="js/libs/d3.tip.min.js"></script>
+	<script src="js/libs/queue.v1.min.js"></script>
+	<script src="js/libs/topojson.v1.min.js"></script>
 	<script src="js/libs/semantic.min.js"></script>
 	<script src="js/libs/moment.min.js"></script>
 	<script src="js/libs/chart.min.js"></script>

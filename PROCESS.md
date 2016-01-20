@@ -178,3 +178,21 @@ Dinsdag 19 januari 2016
 
 ## Complicaties
 * De grafiek is meer werk dan gedacht; hopelijk krijg ik alles op tijd af.
+
+
+# Dag 13
+Woensdag 20 januari 2016
+
+## Belangrijke besluiten
+* Ik heb besloten om de uitstoot per gemeente ook op een kaart te visualiseren.
+
+## Bereikte mijlpalen
+* Heel veel. Ik heb vandaag ontzettend lang gewerkt, maar ook grote stappen gezet.
+* Kaart met uitstoot per gemeente toegevoegd. Dit was erg veel werk, vooral omdat de meest recente TopoJSON-gemeentekaart van Nederland die ik kon vinden, stamde uit 2014. Inmiddels zijn veel gemeenten veranderd en deze moest ik er dus allemaal zelf opnieuw intekenen.
+* Python-script geschreven om bestand met gemeente ID's en bestand met uitstoot per gemeente met elkaar te verbinden.
+* Kaart verbonden met grafiek.
+* Grafiek verder geoptimaliseerd.
+* Zig-zaglijn toegevoegd aan grafiek benzineprijzen.
+
+## Complicaties
+* De kaartvisualisatie me een jaar van mijn leven heeft gekost (wat een frustraties...), maar verder waren er vandaag geen complicaties.
