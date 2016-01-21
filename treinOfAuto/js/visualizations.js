@@ -11,6 +11,21 @@ var amountOfJourneys = 1,
 	emissionChart,
 	regionNames;
 
+// I've created a Dutch D3 locale to correctly format my numbers.
+var locale = d3.locale({
+	'decimal': ',',
+	'thousands': '.',
+	'grouping': [3],
+	'currency': ['€', ''],
+	'dateTime': '%A, %e %B %Y г. %X',
+	'date': '%d-%m-%Y',
+	'time': '%H:%M:%S',
+	'periods': ['AM', 'PM'],
+	'days': ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'],
+	'shortDays': ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'],
+	'months': ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'],
+	'shortMonths': ['Jan', 'Feb', 'Maa', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec']
+});
 
 // If the user changes a dropdown value, update the emission stats.
 $('#amountOfJourneys .item').click(function() {
@@ -75,21 +90,23 @@ function visualize(journey, userCar) {
 	};
 	
 	
-	drawSimpleBarChart('priceChart', 'Prijs autoreis vs. treinreis', "Prijs (in euro's)", 'Prijs reis', '€', [journey.car.price, journey.train.price], defaultBarOptions);
-	drawSimpleBarChart('durationChart', 'Reisduur autoreis vs. treinreis', 'Reisduur (in minuten)', 'Reisduur', 'minuten', [parseInt(journey.car.duration.value/60), parseInt(journey.train.duration.value/60)], defaultBarOptions);
+	drawSimpleBarChart('priceChart', 'Prijs autoreis vs. treinreis', "Prijs (in euro's)", 'Prijs reis', '€', 2, [journey.car.price, journey.train.price], defaultBarOptions);
+	drawSimpleBarChart('durationChart', 'Reisduur autoreis vs. treinreis', 'Reisduur (in minuten)', 'Reisduur', 'minuten', 0, [parseInt(journey.car.duration.value/60), parseInt(journey.train.duration.value/60)], defaultBarOptions);
 
 	drawGasStationsChart(journey.car.distance.total, userCar);
 	
-	emissionChart = drawSimpleBarChart('emissionChart', 'Jaarlijkse CO2-uitstoot (per persoon) autoreis vs. treinreis', 'CO2-uitstoot per persoon per jaar (gram)', 'CO2-uitstoot', 'gram', [journey.car.emission, journey.train.emission], defaultBarOptions);
+	emissionChart = drawSimpleBarChart('emissionChart', 'Jaarlijkse CO2-uitstoot (per persoon) autoreis vs. treinreis *', 'CO2-uitstoot per persoon per jaar (gram)', 'CO2-uitstoot', 'gram', 0, [journey.car.emission, journey.train.emission], defaultBarOptions);
 	visualizeTrees(journey.car.emission, journey.train.emission);
 	
 	regionMap();
 	regionChart();
+	
+	removeLoadingScreen();
 }
 
 
 /* Draws a simple bar chart, with only a 'Car' and a 'Train' bar (avoids code repetition). */
-function drawSimpleBarChart(chartID, title, yLabel, tooltipLabel, tooltipSuffix, chartData, defaultBarOptions) {
+function drawSimpleBarChart(chartID, title, yLabel, tooltipLabel, tooltipSuffix, tooltipDecimals, chartData, defaultBarOptions) {
 	// Chart data.
 	var chartData = {
 		labels: ['Auto', 'Trein'],
@@ -106,14 +123,17 @@ function drawSimpleBarChart(chartID, title, yLabel, tooltipLabel, tooltipSuffix,
 		tooltips: {
 			callbacks: {
 				label: function(tooltipItem, data) {
-					return tooltipItem.xLabel + ': ' + tooltipItem.yLabel + ' ' + tooltipSuffix;
+					return tooltipItem.xLabel + ': ' + thousandsSeparators((tooltipItem.yLabel).toFixed(tooltipDecimals).toString().replace(/\./g, ',')) + ' ' + tooltipSuffix;
 				}
 			}
 		},
 		scales:{
 			yAxes:[{
 					ticks:{
-						beginAtZero: true
+						beginAtZero: true,
+						callback: function(value) {
+							return thousandsSeparators(value);
+						}
 					},
 					scaleLabel: {
 						labelString: yLabel
@@ -144,7 +164,7 @@ function drawSimpleBarChart(chartID, title, yLabel, tooltipLabel, tooltipSuffix,
 function drawGasStationsChart(distance, userCar) {
 	
 	var data = [];
-	
+
 	// Convert object to list with nested arrays (e.g. 'bp: 15.24' to '{ gasStation: bp, price: 15.24 }')
 	$.each(gasArray, function(key, value) {
 		// Exclude the average price from the bar chart.
@@ -159,7 +179,7 @@ function drawGasStationsChart(distance, userCar) {
 		width = 400 - margin.left - margin.right,
 		height = 300 - margin.top - margin.bottom;
 		
-	var formatEuro = d3.format('.2f');
+	var formatEuro = locale.numberFormat(',.2f');
 	
 	var axisBreakSpace = 30;
 
@@ -189,7 +209,7 @@ function drawGasStationsChart(distance, userCar) {
 		.attr('class', 'tooltip')
 		.offset([-10, 0])
 		.html(function(d) {
-			return '<strong>Prijs <span class="gasStation">' + d.gasStation + '</span>:</strong> <span class="price">&#8364;' + (d.price).toString().replace('.', ',') + '</span>';
+			return '<span class="attr">Prijs ' + d.gasStation + ':</span> <span class="value">&#8364;' + formatEuro(d.price) + '</span>';
 		})
 
 	var svg = d3.select('#gasPricesChart').append('svg')
@@ -302,8 +322,13 @@ function drawGasStationsChart(distance, userCar) {
 		.append('textPath')
 		.attr('xlink:href', '#averageLine')
 		.attr('class', 'averageLineLabel')
-		.text('Gemiddeld: €' + (priceTotal/data.length).toFixed(2).toString().replace('.', ','));
+		.text('Gemiddeld: €' + formatEuro((priceTotal/data.length).toFixed(2)));
 
+}
+
+// Adds thousands separators to a number; credits to http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript.
+function thousandsSeparators(number) {
+	return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
 
@@ -320,6 +345,14 @@ function updateEmission() {
 		var amountOfJourneysYear = amountOfJourneys;
 	}
 	
+	// Use singular or plural form, depending on the number of journeys.
+	if (amountOfJourneys > 1) {
+		$('.reisreizen').html('reizen');
+	}
+	else {
+		$('.reisreizen').html('reis');		
+	}
+	
 	// Calculate new emission numbers.
 	var newCarEmission = parseInt((journey.car.emission/amountOfPersons)*amountOfJourneysYear);
 	var newTrainEmission = parseInt(journey.train.emission*amountOfJourneysYear);
@@ -327,8 +360,8 @@ function updateEmission() {
 	// Update statistics on DOM.
 	emissionWinner = findWinner(newCarEmission, newTrainEmission, 'emission');
 	setElement('emission_winner', emissionWinner);
-	setElement('emission_car', newCarEmission);
-	setElement('emission_train', newTrainEmission);
+	setElement('emission_car', thousandsSeparators(newCarEmission));
+	setElement('emission_train', thousandsSeparators(newTrainEmission));
 	
 	// Update chart.
 	emissionChart.data.datasets[0].data[0] = newCarEmission;
@@ -366,7 +399,7 @@ function addTrees(type, amountOfTrees) {
 		'<div class="treeContainer" style="width: ' + 30 * remainder + 'px;"><img src="images/tree.png" /></div>';
 	
 	// Add tree text and symbols to DOM.
-	$('#trees_' + type + '_text').html(amountOfTrees.toFixed(2));
+	$('#trees_' + type + '_text').html(amountOfTrees.toFixed(2).toString().replace(/\./g, ','));
 	$('#trees_' + type + '_visualization').html(treesHTML);
 	
 }
@@ -378,8 +411,14 @@ function regionChart() {
 	findRegion({ lat: carJourney.start_location.lat(), lng: carJourney.start_location.lng() }, new Array()).done(function(regions) {
 		// Find region ("gemeente") of end location.
 		findRegion({ lat: carJourney.end_location.lat(), lng: carJourney.end_location.lng() }, regions).done(function(regions) {
-			// Draw the region chart.
 			regionNames = regions;
+			
+			// Loop over the region names and make them active in the region map.
+			for (var i = 0, l = regionNames.length; i < l; i++) {
+				$('#' + regionNames[i].replace(/ /g, '_')).attr('class', 'regionOverlay active');
+			}
+			
+			// Draw the region chart.
 			drawRegionChart();
 		});
 	});
@@ -404,12 +443,13 @@ function findRegion(latlng, regions) {
 				regions.push(results[1].address_components[2].long_name);
 				
 				dfd.resolve(regions);
-				
+			
+			// These errors are logged to the console, because they are not directly relevant to the user.
 			} else {
-				window.alert('No results found');
+				console.log('Geocoder kon de gemeente van de volgende bestemming niet vinden: ' + latlng)
 			}
 		} else {
-			window.alert('Geocoder failed due to: ' + status);
+			console.log('Foutmelding Geocoder: ' + status);
 		}
 	});
 	
@@ -426,7 +466,15 @@ function changeRegionChart(regionName) {
 		running = true;
 		
 		// If region name is currently in array of chart region names, remove it.
-		($.inArray(regionName, regionNames) !== -1) ? regionNames.splice( $.inArray(regionName, regionNames), 1 ) : regionNames.push(regionName);
+		if ($.inArray(regionName, regionNames) !== -1) {
+			regionNames.splice( $.inArray(regionName, regionNames), 1 );
+			$('#' + regionName.replace(/ /g, '_')).attr('class', 'regionOverlay');
+		}
+		// If region name isn't in array of chart region names, add it.
+		else {
+			regionNames.push(regionName);
+			$('#' + regionName.replace(/ /g, '_')).attr('class', 'regionOverlay active');
+		}
 		
 		// Draw region chart using new chartRegionNames.
 		$('#regionChart').fadeTo('fast', 0.0, function() {
@@ -446,7 +494,9 @@ function drawRegionChart() {
 	var margin = { top: 50, right: 150, bottom: 50, left: 95 },
 		width = 650 - margin.left - margin.right,
 		height = 400 - margin.top - margin.bottom;
-
+	
+	var format = locale.numberFormat(',.');
+	
 	// Create variable to parse the date.
 	var parseDate = d3.time.format('%Y%m%d').parse;
 
@@ -460,10 +510,11 @@ function drawRegionChart() {
 
 	var y = d3.scale.linear()
 		.range([height, 0]);
-
+	
 	var yAxis = d3.svg.axis()
 		.scale(y)
-		.orient('left');
+		.orient('left')
+		.tickFormat(format);
 		
 	// Create a color scale (useful when comparing regions).
 	var color = d3.scale.category10();
@@ -503,6 +554,13 @@ function drawRegionChart() {
 				})
 			};
 		});
+		
+		// If user removed all regions from chart, don't draw an empty chart, but show an error (error handling).
+		if (regions.length < 1) {
+			$('#regionChart').fadeTo('fast', 1)
+			$('#regionChart').html('Selecteer a.u.b. een gemeente op de kaart hierboven.');
+			return;
+		}
 
 		// X's domain is the range of all dates.
 		x.domain(d3.extent(data, function(d) { return d.date; }));
@@ -678,7 +736,7 @@ function drawRegionChart() {
 
 					// Add tooltip to line.
 					d3.select(this).select('text')
-						.text(y.invert(pos.y).toFixed(2));
+						.text(parseInt(y.invert(pos.y)));
 
 					// Return the position.
 					return 'translate(' + mouse[0] + ',' + pos.y +')';
@@ -694,8 +752,11 @@ function drawRegionChart() {
 /* Creates a map of The Netherlands with the emission for all regions ("gemeentes"). */
 function regionMap() {
 	
+	// Based on http://bl.ocks.org/mbostock/8ca036b3505121279daf.
+	
 	// Create map and set up its dimensions.
 	var regionMap = d3.map();
+	var format = locale.numberFormat(',.');
 
 	var width = 600,
 		height = 600;
@@ -729,13 +790,24 @@ function regionMap() {
 
 		// Set up the quantile domain with the values.
 		quantile.domain(regionMap.values());
+		
+		// Tooltip.
+		var tooltip = d3.tip()
+			.attr('class', 'tooltip')
+			.offset([-10, 0])
+			.html(function(d) {
+				return '<span class="attr">Uitstoot ' + d.properties.gemeenteNaam + ':</span> <span class="value">' + format(regionMap.get(d.properties.gemeenteID)) + ' ton</span>';
+			})
 
+
+		svg.call(tooltip);
+		
 		// Add The Netherlands to the map.
 		svg.append('g')
 			.attr({'transform': 'scale(1) translate(0,0)'})
 			.attr('class', 'counties')
-			.selectAll('path')
 			// Add regions ("gemeentes") to map.
+			.selectAll('path')
 			.data(topojson.feature(shape, shape.objects.nederlandGemeenteGeo).features)
 			.enter().append('path')
 			.attr('class', function(d) { return quantile(regionMap.get(d.properties.gemeenteID)); })
@@ -744,11 +816,32 @@ function regionMap() {
 			.on('click', function(d) {
 				changeRegionChart(d.properties.gemeenteNaam);
 			})
-			// Add hover title to region on map.
-			.append('svg:title')
-			.text(function(d){
-				return d.properties.gemeenteNaam + '\nCO2-uitstoot in 2013: ' + regionMap.get(d.properties.gemeenteID) + ' ton';
-			});
+			// Add tooltip.
+			.on('mouseover', tooltip.show)
+			.on('mouseout', tooltip.hide);
+		
+		// Add each region again, but this time with the class 'overlay'.
+		// This overlay will become active once the region is clicked.
+		svg.append('g')
+			.attr({'transform': 'scale(1) translate(0,0)'})
+			.attr('class', 'counties')
+			.selectAll('path')
+			.data(topojson.feature(shape, shape.objects.nederlandGemeenteGeo).features)
+			.enter().append('path')
+			.attr('class', 'regionOverlay')
+			.attr('id', function(d) {
+				if (typeof d.properties.gemeenteNaam != 'undefined') {
+					return (d.properties.gemeenteNaam).replace(/ /g, '_');
+				}
+			})
+			.attr('d', path)
+			// When user clicks on region, add it to the chart.
+			.on('click', function(d) {
+				changeRegionChart(d.properties.gemeenteNaam);
+			})
+			// Add tooltip.
+			.on('mouseover', tooltip.show)
+			.on('mouseout', tooltip.hide);
 		
 		// Add legend.
 		var legend = svg.selectAll('g.legendEntry')
@@ -756,8 +849,7 @@ function regionMap() {
 			.enter()
 			.append('g').attr('class', 'legendEntry');
 
-		legend
-			.append('rect')
+		legend.append('rect')
 			.attr('x', 20)
 			.attr('y', function(d, i) {
 				return 180 - i * 20;
@@ -768,8 +860,7 @@ function regionMap() {
 			.attr('width', 10)
 			.attr('height', 10);
 
-		legend
-			.append('text')
+		legend.append('text')
 			.attr('x', 40)
 			.attr('y', function(d, i) {
 				return 40 + i * 20;
@@ -777,9 +868,20 @@ function regionMap() {
 			.attr('dy', '0.8em')
 			.text(function(d,i) {
 				var extent = quantile.invertExtent(d);
-				var format = d3.format(',');
-				return format(+extent[0]).replace(/,/g, '.') + ' - ' + format(+extent[1]).replace(/,/g, '.') + ' ton';
-			});	
+				return format(+extent[0]) + ' - ' + format(+extent[1]) + ' ton';
+			});
+		
+		// Add diagonal hatch fill pattern; credits to http://stackoverflow.com/questions/17776641/fill-rect-with-pattern.
+		svg.append('defs')
+			.append('pattern')
+			.attr('id', 'diagonalHatch')
+			.attr('patternUnits', 'userSpaceOnUse')
+			.attr('width', 4)
+			.attr('height', 4)
+			.append('path')
+			.attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
+			.attr('stroke', '#000000')
+			.attr('stroke-width', 1);
 	}
 	
 }

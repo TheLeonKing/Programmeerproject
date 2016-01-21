@@ -196,3 +196,19 @@ Woensdag 20 januari 2016
 
 ## Complicaties
 * De kaartvisualisatie me een jaar van mijn leven heeft gekost (wat een frustraties...), maar verder waren er vandaag geen complicaties.
+
+
+# Dag 14
+Woensdag 20 januari 2016
+
+## Belangrijke besluiten
+* Geen.
+
+## Bereikte mijlpalen
+* Kaartvisualisatie afgemaakt.
+* Tooltips geïmplementeerd in kaartvisualisatie en uitstootgrafiek.
+* Laadscherm toegevoegd.
+* Menu werkende gemaakt.
+
+## Complicaties
+* Vandaag was een complicatieloze dag!

@@ -29,6 +29,25 @@ $(document).ready(function() {
 });
 
 
+/* When user clicks menu item, open the right accordion part. */
+$('.menu .item').click(function() {
+	// Open accordion element at index defined at anchor's data-href.
+	var index = parseFloat($(this).attr('data-href'));
+	$('.ui.accordion').accordion('open', index);
+	
+	// Scroll to the accordion element we've just opened.
+	$('html, body').animate({
+		scrollTop: $('.title.active').offset().top
+	}, 1000);
+});
+
+
+/* Shake disclaimer when user clicks asterisk. */
+$('.asterisk').click(function() {
+	$('#disclaimer').transition('shake');
+});
+
+
 /* Shows the appropriate direction instructions when the button is clicked. */
 $('.step').click(function() {
 	// Set the right button as active.
@@ -67,33 +86,29 @@ function travel(fromLocation, toLocation, licensePlate, customGas, gasPrices) {
 				trainOnly(trainJourney, $.Deferred()).done(function(trainJourney) {
 					// Extract the beginning and end station from the train route, calculate the price based on these stations.
 					findTrainStations(trainJourney.steps, fromLocation).done(function(journeyStations) {
-						fetchTrainTravelAdvice(journeyStations).done(function(trainTravelAdvice) {
-							findTrainPrice(journeyStations).done(function(trainPrice) {
-								
-								// Calculate gas price of car journey.
-								carPrice = calculateGasPrice(carJourney.distance.value / 1000, gasPrices[userCar['gasType']]['average'], userCar);
-								
-								// Calculate CO2 emission of both car and train journey.
-								carEmission = totalCarEmission(carJourney.distance.value/1000, userCar['co2Emission']);
-								trainEmission = totalTrainEmission(trainJourney.distance.value/1000);
-								
-								// Create a 'journey' object containing all the information we've just gathered.
-								journey = {
-									car: { duration: { text: carJourney.duration.text, value: carJourney.duration.value }, distance: { total: (carJourney.distance.value/1000) }, start: { lat: carJourney.start_location.lat(), lng: carJourney.start_location.lng() }, end: { lat: carJourney.end_location.lat(), lng: carJourney.end_location.lng() }, price: carPrice, emission: carEmission },
-									train: { duration: { text: trainJourney.duration.text, value: trainJourney.duration.value }, distance: { total: (trainJourney.distance.value/1000), train: totalTrainDistance(trainJourney.steps) }, start: { lat: trainJourney.start_location.lat(), lng: trainJourney.start_location.lng() }, end: { lat: trainJourney.end_location.lat(), lng: trainJourney.end_location.lng() }, price: trainPrice, emission: trainEmission }
-								};
-								
-								// Print results to page.
-								printStats(journey);
-								printTravelAdvice(carJourney, trainJourney);
-								findGasType(userCar['gasType'], gasPrices);
-								findGasStations(boxes, 0);
-								visualize(journey, userCar);
-								
-							});
-						})
-						// If 'fetchTrainTravelAdvice' failed (i.e. no train travel advice was found).
-						.fail(function(error) { launchError(error); });
+						findTrainPrice(journeyStations).done(function(trainPrice) {
+							
+							// Calculate gas price of car journey.
+							carPrice = calculateGasPrice(carJourney.distance.value / 1000, gasPrices[userCar['gasType']]['average'], userCar);
+							
+							// Calculate CO2 emission of both car and train journey.
+							carEmission = totalCarEmission(carJourney.distance.value/1000, userCar['co2Emission']);
+							trainEmission = totalTrainEmission(trainJourney.distance.value/1000);
+							
+							// Create a 'journey' object containing all the information we've just gathered.
+							journey = {
+								car: { duration: { text: carJourney.duration.text, value: carJourney.duration.value }, distance: { total: (carJourney.distance.value/1000) }, start: { lat: carJourney.start_location.lat(), lng: carJourney.start_location.lng() }, end: { lat: carJourney.end_location.lat(), lng: carJourney.end_location.lng() }, price: carPrice, emission: carEmission },
+								train: { duration: { text: trainJourney.duration.text, value: trainJourney.duration.value }, distance: { total: (trainJourney.distance.value/1000), train: totalTrainDistance(trainJourney.steps) }, start: { lat: trainJourney.start_location.lat(), lng: trainJourney.start_location.lng() }, end: { lat: trainJourney.end_location.lat(), lng: trainJourney.end_location.lng() }, price: trainPrice, emission: trainEmission }
+							};
+							
+							// Print results to page.
+							printStats(journey);
+							printTravelAdvice(carJourney, trainJourney);
+							findGasType(userCar['gasType'], gasPrices);
+							findGasStations(boxes, 0);
+							visualize(journey, userCar);
+							
+						});
 					})
 					// If 'findTrainStations' failed (i.e. one or both train station(s) couldn't be found).
 					.fail(function(error) { launchError(error); });
@@ -135,8 +150,8 @@ function printStats(journey) {
 	
 	emissionWinner = findWinner(journey.car.emission, journey.train.emission, 'emission');
 	setElement('emission_winner', emissionWinner);
-	setElement('emission_car', journey.car.emission);
-	setElement('emission_train', journey.train.emission);
+	setElement('emission_car', thousandsSeparators(journey.car.emission));
+	setElement('emission_train', thousandsSeparators(journey.train.emission));
 }
 
 
@@ -296,4 +311,10 @@ function isValid(steps, travelType) {
 	}
 	
 	return false;
+}
+
+
+/* Removes the loading screen after all important visualizations are on the DOM. */
+function removeLoadingScreen() {
+	$('#loadOverlay').hide();
 }

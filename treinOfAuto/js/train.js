@@ -10,7 +10,7 @@ function findTrainStations(steps, fromLocation) {
 	var dfd = $.Deferred();
 	
 	// Extract the beginning and end train station.
-	journeyStations = extractStations(steps, fromLocation);
+	journeyStations = extractStations(steps);
 	
 	// Find abbreviations of station names: read 'stations' CSV file with D3.
 	d3.csv('data/ns_stations.csv', function(stations) {
@@ -24,6 +24,7 @@ function findTrainStations(steps, fromLocation) {
 				journeyStations['toCode'] = stations[i]['code'];
 			}
 		}
+	
 		
 		// Show an error if we couldn't find the matching station codes.
 		if (journeyStations.hasOwnProperty('fromCode') && journeyStations.hasOwnProperty('toCode')) {
@@ -39,7 +40,7 @@ function findTrainStations(steps, fromLocation) {
 
 
 /* Extracts the beginning and the end train stations from a steps object. */
-function extractStations(steps, fromLocation) {
+function extractStations(steps) {
 	
 	// Create new array with just the instructions that start with "Trein".
 	var stepsFiltered = steps.filter(
@@ -47,10 +48,19 @@ function extractStations(steps, fromLocation) {
 	);
 	
 	// Extract beginning station from first transit step and end station from last transit step.
-	fromStation = stepsFiltered[0]['transit']['departure_stop']['name'];
-	toStation = $(stepsFiltered).get(-1)['transit']['arrival_stop']['name'];
+	fromStation = cleanStationName(stepsFiltered[0]['transit']['departure_stop']['name']);
+	toStation = cleanStationName($(stepsFiltered).get(-1)['transit']['arrival_stop']['name']);
 	
 	return {'from': fromStation, 'to': toStation};
+}
+
+
+/* Cleans the station name. */
+function cleanStationName(stationName) {
+	// Split the station name (sometimes the station's location is included in the name, e.g. 'Amsterdam, Amstelstation').
+	var parts = stationName.split(',');
+	// Take the part after the last comma and remove 'station' if present (e.g. 'Amsterdam, Amstelstation' to 'Amstel').
+	return parts[parts.length-1].replace('station','');
 }
 
 
@@ -102,29 +112,4 @@ function totalTrainDistance(steps) {
 function totalTrainEmission(distance) {
 	// Number '30.1' based on an official report by NS from 2013: http://goo.gl/kYZJms.
 	return parseInt(distance * 30.1);
-}
-
-
-/* Fetches the first possible travel advice from the NS API. */
-function fetchTrainTravelAdvice(journeyStations) {	
-	
-	var dfd = $.Deferred();
-	
-	$.ajax({
-		url: 'trainTravelAdvice.php',
-		data: { 'from': journeyStations.fromCode, 'to': journeyStations.toCode },
-		type: 'POST',
-		dataType: 'json',
-		success: function (travelAdvice) {
-			dfd.resolve(travelAdvice);
-		},
-		error: function (xhr, ajaxOptions, thrownError) {
-			// REMOVE THIS RESOLVE.
-			dfd.resolve({});
-			dfd.reject('Kon geen reisadvies vinden. Waarschijnlijk zijn de NS-services momenteel offline voor onderhoud; probeer het later opnieuw.');
-		}
-	});
-	
-	return dfd.promise();
-	
 }

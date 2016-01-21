@@ -2,6 +2,42 @@ body {
 	background-color: #FFFFFF;
 }
 
+
+/* Page loading */
+#loadOverlay {
+	display: table;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	position: fixed;
+	background-color: #fff;
+	z-index: 99;
+	text-align: center;
+}
+
+#loadOverlay #loadContainer {
+	display: table-cell;
+	min-height: 1em;
+	vertical-align: middle;
+}
+
+#loadOverlay span {
+	display: block;
+}
+
+#loadOverlay #loadTitle {
+	font-weight: bold;
+	font-size: 4em;
+	line-height: 1.5em;
+}
+
+#loadOverlay #loadText {
+	font-size: 2em;
+	line-height: 2em;
+}
+
+/* Page */
 .ui.center {
 	text-align: center;
 }
@@ -94,6 +130,12 @@ h3 .fa {
 	border-bottom-left-radius: 0;
 }
 
+.asterisk {
+	display: inline-block;
+	cursor: pointer;
+	font-weight: bold;
+}
+
 .treeVisualization {
 	margin-top: 10px;
 }
@@ -111,6 +153,10 @@ h3 .fa {
 
 .treeContainer img {
 	width: 30px;
+}
+
+.warning.message {
+	font-size: 0.8em;
 }
 
 #regionVisualizations h3 {

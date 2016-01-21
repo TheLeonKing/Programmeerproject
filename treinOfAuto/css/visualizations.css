@@ -73,6 +73,10 @@ svg text {
 	border-radius: 2px;
 }
 
+.tooltip .attr {
+	font-weight: bold;
+}
+
 /* Adds a small arrow at the tooltip's bottom; credits to http://bl.ocks.org/Caged/6476579. */
 .tooltip:after {
 	box-sizing: border-box;
@@ -87,7 +91,7 @@ svg text {
 }
 
 .tooltip.n:after {
-	margin: -1px 0 0 0;
+	margin: -2.5px 0 0 0;
 	top: 100%;
 	left: 0;
 }
@@ -107,6 +111,15 @@ svg text {
 .legendBlock {
 	stroke: black;
 	stroke-width: 1;
+}
+
+.regionOverlay {
+	fill: none;
+}
+
+.regionOverlay.active {
+	cursor: pointer;
+	fill: url(#diagonalHatch);
 }
 
 .q0-8 {

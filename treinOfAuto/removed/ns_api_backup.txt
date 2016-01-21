@@ -1,0 +1,27 @@
+
+
+
+/* Fetches the first possible travel advice from the NS API. */
+function fetchTrainTravelAdvice(journeyStations) {	
+	
+	var dfd = $.Deferred();
+	
+	$.ajax({
+		url: 'trainTravelAdvice.php',
+		data: { 'from': journeyStations.fromCode, 'to': journeyStations.toCode },
+		type: 'POST',
+		dataType: 'json',
+		success: function (travelAdvice) {
+			console.log(travelAdvice);
+			dfd.resolve(travelAdvice);
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			// REMOVE THIS RESOLVE.
+			dfd.resolve({});
+			dfd.reject('Kon geen reisadvies vinden. Waarschijnlijk zijn de NS-services momenteel offline voor onderhoud; probeer het later opnieuw.');
+		}
+	});
+	
+	return dfd.promise();
+	
+}

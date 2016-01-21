@@ -49,15 +49,10 @@ $gas = new Gas();
 $gasPrices = $gas->fetchPrices($db);
 
 // TODO:
-// - http://www.klimaatmonitor.databank.nl/Jive/.
-// - https://data.overheid.nl/data/dataset/co2-emissiegegevens-nederlandse-emissieautoriteit.
 // - Domeinnaam aanvragen.
-// - NS offline fix verwijderen (REMOVE THIS RESOLVE) + kijken of die functie nog nodig is.
-// - Loading screen.
-// - Zig-zaglijn toevoegen aan benzinegrafiek - http://bl.ocks.org/mbostock/3884955?
-// - Combined graph?
-// - Chart: titel, eenheid toevoegen.
-// - http://databank.worldbank.org/data/reports.aspx?source=2&Topic=6.
+// - Zodra domeinnaam is aangevraagd: plannen van updateGasPrices.php.
+// - Menu fixen.
+// - Schiphol bug.
 
 // AAN HET EIND;
 // - HTML + CSS + JS validator.
@@ -76,7 +71,6 @@ $gasPrices = $gas->fetchPrices($db);
 	
 	<title>Trein of Auto: Wat is goedkoper en sneller?</title>
 	
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/libs/semantic.min.css">
 	<link rel="stylesheet" type="text/css" href="css/libs/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="css/libs/ionicons.min.css">
@@ -91,22 +85,29 @@ $gasPrices = $gas->fetchPrices($db);
 	<![endif]-->	
 </head>
 <body>
-
 	<div class="ui borderless main menu">
 		<div class="ui text container">
 			<a href="index.php"><div class="header item">
 				<img class="logo" src="images/logo.png" style="margin-right: 10px;">
 				Trein of Auto
 			</div></a>
-			<a href="#" class="item">Kosten</a>
-			<a href="#" class="item">Reis</a>
-			<a href="#" class="item">Milieu</a>
+			<a data-href="0" class="item">Kosten</a>
+			<a data-href="1" class="item">Reis</a>
+			<a data-href="2" class="item">Milieu (reis)</a>
+			<a data-href="3" class="item">Milieu (algemeen)</a>
+		</div>
+	</div>
+	
+	<!-- Shown when visualizations are being loaded -->
+	<div id="loadOverlay">
+		<div id="loadContainer">
+			<img src="images/beancar.gif" />
+			<span id="loadTitle">Even geduld...</span>
+			<span id="loadText">We halen uw reisgegevens op.</span>
 		</div>
 	</div>
 
-
-	<div class="ui text container">
-	
+	<div class="ui text container">	
 		<div class="ui center top grid">
 			<!-- Price overview -->
 			<div class="eight wide column">			
@@ -160,7 +161,7 @@ $gasPrices = $gas->fetchPrices($db);
 			<div class="title">
 				<i class="dropdown icon"></i> Kosten
 			</div>
-			<div class="content">
+			<div class="content" id="kosten">
 				<div id="mapContainer">
 					<div id="gasMap"></div>
 				</div>
@@ -255,17 +256,17 @@ $gasPrices = $gas->fetchPrices($db);
 					
 					<!-- Car CO2 -->
 					<div class="eight wide column" id="emission_car_container">
-						<h3><i class="fa fa-car"></i> <span id="emission_car"></span> gram</h3>
+						<h3><i class="fa fa-car"></i> <span id="emission_car"></span> gram <div class="asterisk">*</div></h3>
 					</div>
 					
 					<!-- Train CO2 -->
 					<div class="eight wide column" id="emission_train_container">
-						<h3><i class="fa fa-train"></i> <span id="emission_train"></span> gram</h3>
+						<h3><i class="fa fa-train"></i> <span id="emission_train"></span> gram <div class="asterisk">*</div></h3>
 					</div>
 					
 					<!-- CO2 chart -->
 					<div class="sixteen wide column">
-						<div class="ui info message">Toelichting.</div>
+						<div class="ui info message">Door een autorit met meerdere mensen te maken (dit noemen we "carpoolen"), neemt de gemiddelde uitstoot per persoon af. Zo kan een autorit in sommige gevallen milieuvriendelijker worden dan een treinreis!</div>
 						
 						<h4 class="ui header">
 							<i class="users icon"></i>
@@ -322,16 +323,21 @@ $gasPrices = $gas->fetchPrices($db);
 						<div class="ui grid">
 							<!-- Car trees -->
 							<div class="eight wide column">
-								Er zijn <strong><span class="number" id="trees_car_text">?</span> bomen</strong> per persoon nodig om de uitstoot van deze autoreis op te absorberen.
+								Er zijn <strong><span class="number" id="trees_car_text">?</span> bomen</strong> per persoon nodig om de uitstoot van deze auto<span class="reisreizen">reis</span> op te absorberen. <div class="asterisk">*</div>
 								<div id="trees_car_visualization" class="treeVisualization"></div>
 							</div>
 							
 							<!-- Train trees -->
 							<div class="eight wide column">
-								<span class="treeStat">Er zijn <strong><span id="trees_train_text">?</span> bomen</strong> per persoon nodig om de uitstoot van deze treinreis te absorberen.
+								<span class="treeStat">Er zijn <strong><span id="trees_train_text">?</span> bomen</strong> per persoon nodig om de uitstoot van deze trein<span class="reisreizen">reis</span> te absorberen. <div class="asterisk">*</div>
 								<div id="trees_train_visualization" class="treeVisualization"></div>
 							</div>
 							
+							<!-- Disclaimer -->
+							<div class="sixteen wide column">
+								<div class="ui warning message shake-hard" id="disclaimer">Disclaimer (*): de cijfers op deze pagina zijn ruwe schattingen gebaseerd op gemiddeldes en de informatie die de fabrikant van uw auto aanbiedt. De ware uitstoot kan variëren door factoren als weersomstandigheden, gewichtsbelasting en rijstijl. De "bomenberekening" is gebaseerd op cijfers van de NC State University en berekent hoeveel bomen er naar schatting <strong>jaarlijks</strong> nodig zijn om de CO2 van de aangegeven reis/reizen te absorberen.</div>
+							</div>
+
 						</div>
 						
 					</div>
@@ -348,7 +354,7 @@ $gasPrices = $gas->fetchPrices($db);
 					
 					<div class="sixteen wide column" id="regionVisualizations">
 						
-						<h3>CO2-uitstoot verkeer en vervoer (excl. railverkeer), per gemeente</h3>
+						<h3>CO2-uitstoot verkeer en vervoer in 2013 (excl. railverkeer), per gemeente</h3>
 						
 						<!-- Region emission map -->
 						<div id="regionMap"></div>

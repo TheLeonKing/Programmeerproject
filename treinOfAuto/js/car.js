@@ -100,7 +100,7 @@ function findBestGasStation(pricesArray) {
 	}
 	// Loop over all gas stations we've found (backwards, so we start with the stations)
 	// closest to the user) and return the first one of the cheapest company type (e.g. 'BP').
-	for (var i = gasStations.length-1; i >= 0; --i) {
+	for (var i = 0, l = gasStations.length; i < l; i++) {
 		stationName = (gasStations[i]['name']).toLowerCase();
 		if ((stationName).indexOf(cheapest.name) >= 0) {
 			lat = gasStations[i].geometry.location.lat();
