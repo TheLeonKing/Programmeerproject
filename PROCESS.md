@@ -199,7 +199,7 @@ Woensdag 20 januari 2016
 
 
 # Dag 14
-Woensdag 20 januari 2016
+Donderdag 21 januari 2016
 
 ## Belangrijke besluiten
 * Geen.
@@ -212,3 +212,18 @@ Woensdag 20 januari 2016
 
 ## Complicaties
 * Vandaag was een complicatieloze dag!
+
+
+# Dag 15
+Vrijdag 22 januari 2016
+
+## Belangrijke besluiten
+* Vandaag heb ik de beta-versie afgerond en dus besloten hoe de (vrijwel) definitieve versie van mijn applicatie eruit ziet!
+
+## Bereikte mijlpalen
+* Code veel beter gestructureerd (o.a. d.m.v. object literals).
+* Code opgeschoond (ongebruikte functies verwijderd, placeholders vervangen, etc.).
+* Bugs met Google Maps API en visualisaties gelost.
+
+## Complicaties
+* Ik kwam er vandaag achter dat de prijsmatrix van de NS niet voor ieder station compleet is. Dat kan ik zelf niet oplossen, helaas.

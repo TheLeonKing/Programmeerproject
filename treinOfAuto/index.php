@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<title>Trein of Auto: Wat is goedkoper en sneller?</title>
@@ -20,11 +20,11 @@
 	
 	<div class="ui middle aligned center aligned grid">
 		<div class="column">
-			<h2 class="ui teal image header">
+			<div class="ui teal image header">
 				<div class="content">
 					<h1>Trein of Auto?</h1>
 				</div>
-			</h2>
+			</div>
 			<form action="result.php" method="get" name="search" class="ui large form" id="journeyForm">
 				<div class="ui segment">
 					
@@ -109,8 +109,8 @@
 	<script src="js/googleMaps.js"></script>
 	<script src="js/form.js"></script>
 	<script>
-		addressBar('fromLocation');
-		addressBar('toLocation');
+		GoogleMaps.addressBar('fromLocation');
+		GoogleMaps.addressBar('toLocation');
 	</script>
 </body>
 </html>

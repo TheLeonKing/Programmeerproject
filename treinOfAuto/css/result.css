@@ -3,7 +3,7 @@ body {
 }
 
 
-/* Page loading */
+/* Loading screen */
 #loadOverlay {
 	display: table;
 	width: 100%;
@@ -37,7 +37,8 @@ body {
 	line-height: 2em;
 }
 
-/* Page */
+
+/* Page content */
 .ui.center {
 	text-align: center;
 }
@@ -50,6 +51,8 @@ h3 .fa {
 	margin-right: 5px;
 }
 
+
+/* Accordion */
 .ui.accordion {
 	margin-bottom: 1em;
 }
@@ -66,6 +69,8 @@ h3 .fa {
 	width: 100% !important;
 }
 
+
+/* "Kosten" tab */
 #gasPrices {
 	margin-top: 1em;
 }
@@ -75,9 +80,11 @@ h3 .fa {
 }
 
 #cheapestStation .content {
-    padding: .5em 1em;
+	padding: .5em 1em;
 }
 
+
+/* "Route" tab */
 #mapContainer {
 	width: 100%;
 }
@@ -130,6 +137,12 @@ h3 .fa {
 	border-bottom-left-radius: 0;
 }
 
+
+/* "Milieu (reis)" tab */
+.content h3 {
+	display: inline-block;
+}
+
 .asterisk {
 	display: inline-block;
 	cursor: pointer;
@@ -159,6 +172,8 @@ h3 .fa {
 	font-size: 0.8em;
 }
 
+
+/* "Milieu (algemeen)" tab */
 #regionVisualizations h3 {
 	margin: 0;
 }

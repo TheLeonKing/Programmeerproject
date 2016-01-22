@@ -1,5 +1,10 @@
+/*
+FORM.JS
+Contains all JS functions that are needed for the form validation on the main page.
+Note: since there is just one named function, I didn't create a separate object literal.
+*/
+
 $(document).ready(function() {
-	
 	
 	/* Asynchronous form validation (check whether license plate is valid). */
 	$("#journeyForm").submit(function( event ) {
@@ -14,8 +19,7 @@ $(document).ready(function() {
 		if (!$('#fromLocation').val()) {
 			addError('Vul uw startlocatie in.', '#fromLocationField');
 			error = true;
-		}
-		else {
+		} else {
 			$('#fromLocationField').removeClass('error');
 		}
 		
@@ -23,8 +27,7 @@ $(document).ready(function() {
 		if (!$('#toLocation').val()) {
 			addError('Vul uw eindbestemming in.', '#toLocationField');
 			error = true;
-		}
-		else {
+		} else {
 			$('#toLocationField').removeClass('error');
 		}
 		
@@ -35,8 +38,7 @@ $(document).ready(function() {
 			if ($('#customContainer #gasTypeDropdown .text').hasClass('default')) {
 				addError('Vul uw brandstoftype in.', '#gasTypeDropdown');
 				error = true;
-			}
-			else {
+			} else {
 				$('#gasTypeDropdown').removeClass('error');
 			}
 			
@@ -44,8 +46,7 @@ $(document).ready(function() {
 			if (!$.isNumeric($('#customContainer #usageInput input').val().replace(',', '.'))) {
 				addError('Vul uw brandstofverbruik in (als cijfer).', '#usageInput');
 				error = true;
-			}
-			else {
+			} else {
 				$('#usageInput').removeClass('error');
 			}
 			
@@ -53,15 +54,14 @@ $(document).ready(function() {
 			if (!$.isNumeric($('#customContainer #emissionInput input').val().replace(',', '.'))) {
 				addError('Vul uw CO2-uitstoot in (als cijfer).', '#emissionInput');
 				error = true;
-			}
-			else {
+			} else {
 				$('#emissionInput').removeClass('error');
 			}
 			
 			
 			// If there are no more error messages.
-			if (error == false) {
-				journeyForm.submit()
+			if (error === false) {
+				journeyForm.submit();
 			}
 		}
 		// If user specified a license plate, check if it is valid.
@@ -76,22 +76,18 @@ $(document).ready(function() {
 			xmlhttp.onreadystatechange = function() {
 				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 					var responseArray = JSON.parse(xmlhttp.responseText);
-					if (responseArray.length === 0) {
-						var validLicense = false;
-					}
-					else {
+					var validLicense = false;
+					
+					if (responseArray.length > 0) {
 						// Sometimes fuel statistics are in first element, sometimes they're in the second. Choose the right one.
 						response = (typeof responseArray[0].brandstofverbruik_gecombineerd === 'undefined') ? responseArray[1] : responseArray[0];
 						
 						var userCar = [];
-						userCar['gasType'] = response.brandstof_omschrijving.toLowerCase();
+						userCar.gasType = response.brandstof_omschrijving.toLowerCase();
 					
 						// If the fuel type is invalid (e.g. 'Niet geregistreerd' or a faulty value), set 'validLicense' to 'false'.
-						if (userCar['gasType'] !== 'benzine' && userCar['gasType'] !== 'diesel' && userCar['gasType'] !== 'lpg') {
-							var validLicense = false;
-						}
-						else {
-							var validLicense = true;
+						if (!(userCar.gasType !== 'benzine' && userCar.gasType !== 'diesel' && userCar.gasType !== 'lpg')) {
+							validLicense = true;
 						}
 					}
 					
@@ -99,27 +95,24 @@ $(document).ready(function() {
 					if (!validLicense) {
 						addError('We konden geen gegevens vinden voor dit kenteken. Controleer uw invoer opnieuw, of geef hieronder zelf de gegevens op.', '#licensePlateField');
 						error = true;						
-					}
-					else {
+					} else {
 						$('#licensePlateField').removeClass('error');						
 					}
 					
 					// Only submit form if license plate is valid and there are no other errors.
-					if (error == false) {
-						journeyForm.submit()
+					if (error === false) {
+						journeyForm.submit();
 					}
 					
 				}
-			}
+			};
 		
 			xmlhttp.open('GET', url, true);
 			xmlhttp.send();
 			
-			
-			
 			// If there are no more error messages, submit the form.
-			if (error == false && !$('.ui.error.message').is(":visible")) {
-				journeyForm.submit()
+			if (error === false && !$('.ui.error.message').is(":visible")) {
+				journeyForm.submit();
 			}
 		}
 	});
@@ -129,16 +122,14 @@ $(document).ready(function() {
 /* Add error message (avoids code repetition). */
 function addError(errorMessage, elementName) {
 	$(elementName).addClass('error');
-	
 	$('.ui.error.message').show();
 	
 	// If error message list is not yet visible, add it and add the error message item.
 	if ($('.ui.error.message').is(':empty')) {
 		$('.ui.error.message').show();
 		$('.ui.error.message').html('<ul class="list"><li class="customError">' + errorMessage + '</li></ul>');
-	}
 	// If list is visible, just add the error message item to it.
-	else {
+	} else {
 		$('.ui.error.message .list').append('<li class="customError">' + errorMessage + '</li>');
 	}
 }

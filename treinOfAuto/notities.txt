@@ -1,0 +1,44 @@
+- Structuur JavaScript-code visualiseren.
+- Alle stappen die het programma doorloopt visualiseren.
+- Visualisatiekeuzes verklaren (waarom bar chart i.p.v. pie of donut chart).
+
+- Uitleggen waarom ik zoveel gebruik maak van JQuery's '$.Deferred();'.
+- Error handling.
+
+- Alle JS gevalideerd met http://www.javascriptlint.com/ (noot: bij visualize.js onterechte waarschuwing "unexpected end of line; it is ambiguous whether these lines are part of the same statement").
+- Alle kleuren zijn kleurenblinden-vriendelijk.
+- Voor kaart: maximaal acht kleuren, meer niet goed (literatuur).
+
+## Duidelijk gestructureerde code
+"Trein of Auto" combineert data van maar liefst X verschillende bronnen. Deze data moet ook verwerkt en opgeschoond worden. Hier heb ik de afgelopen drie weken veel code voor moeten schrijven. Dit heeft ertoe geleid dat de applicatie uiteindelijk bestaat uit X regels code.
+
+Ik heb mijn uiterste best gedaan de code te structuren, om het nakijken ervan zo eenvoudig mogelijk te maken. Enkele maatregelen die ik daarvoor heb getroffen:
+* Elke "distinct" taak heeft een eigen functie.
+* Wanneer dezelfde code twee keer of vaker herhaald werd, heb ik deze in een losse functie geplaatst. Dit voorkomt de herhaling van code.
+* JavaScript ondersteunt helaas geen classes, maar wel "object literals" (Wikipedia-link invoegen!). Hoewel de techniek hierachter verschilt, werkt dit in de praktijk grotendeels hetzelfde. Object literals zijn in mijn code eenvoudig te herkennen, aangezien ze beginnen met een hoofdletter (terwijl functie- en variabelenamen met een kleine letter beginnen, omdat ik daarbij CamelCase hanteer). De JavaScript-code van Trein of Auto is gegroepeerd in vijf object literals:
+** Car: Alle functies die enkel gebruikt worden voor de autoreis.
+** Train: Alle functies die enkel gebruikt worden voor de treinreis.
+** Result: Alle algemene functies, die gedeeld worden door de auto- en treinreis.
+** GoogleMaps: Alle functies die gebruikmaken van de Google Maps API.
+** Visualize: Alle functies die betrekking hebben op een grafiek, kaart of andere visualisatie.
+
+
+## Deferred
+In mijn functies maak ik regelmatig gebruik van JQuery's `$.Deferred();`. De reden hiervoor is simpel: veel van mijn functies halen data op van een externe bron (Google Maps API, RDW API, CSV-bestanden in de `data`-folder, etc) en het ophalen van deze data vindt plaats op asynchrone wijze. Echter, in veel gevallen hebben latere functies de resultaten van deze asynchrone requests wel nodig.
+
+In dergelijke gevallen gebruik ik `$.Deferred();` om te wachten tot de asynchrone actie voltooid is (`.done()`), of een gebruiksvriendelijke foutmelding te retourneren als de asynchrone actie mislukte (`.fail()`). Op die manier wordt de rest van de code pas uitgevoerd wanneer alle benodigde variabelen een waarde hebben. Meer informatie over `$.Deferred();` is te vinden op de officiële JQuery-website (link invoegen!).
+
+
+## Valid
+Al mijn code is volledig valide volgens de officiële richtlijnen:
+* HTML-code gevalideerd met [W3 Markup Validation Service] (https://validator.w3.org/).
+* CSS-code gevalideerd met [W3 CSS Validation Service] (https://jigsaw.w3.org/css-validator/validator).
+* JS-code gevalideerd met [JavaScript Lint] (http://www.javascriptlint.com/online_lint.php).
+** Noot: deze validator geeft bij `visualize.js` ten onrechte de error `unexpected end of line` bij sommige D3-code; dit is een fout in de validator.
+* PHP-code gevalideerd met [PHP Code Checker] (http://phpcodechecker.com/).
+
+
+## Belangrijke terminologie
+Ik heb geprobeerd de variabelenamen zo duidelijk mogelijk te maken, zodat er geen domeinkennis nodig is om de code te begrijpen. Toch wil ik graag de term "step" nog even toelichten. Hier wordt vaak over gesproken i.r.t. Google Maps-objecten. Een "step" is één stap van een Google Maps-routebeschrijving. De Google Maps API kan bijvoorbeeld een Directions-object retourneren dat bestaat uit drie steps: "Loop naar Amsterdam Centraal", "Trein naar Amsterdam Science Park", "Loop naar Science Park 402".
+
+De rest van de termen worden uitgelegd in de code, indien nodig.

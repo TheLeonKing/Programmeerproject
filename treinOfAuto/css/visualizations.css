@@ -1,3 +1,4 @@
+/* Gas prices bar chart */
 #gasPricesChart svg {
 	display: block;
 	margin: 0 auto;
@@ -9,14 +10,13 @@
 	font-weight: bold;
 }
 
-.axis path,
-.axis line {
+.axis path, .axis line {
 	fill: none;
 	stroke: #000;
 	shape-rendering: crispEdges;
 }
 
-/* Bar colors: verified color blind safe */
+/* Note: bar colors are verified color blind safe */
 
 /* BP */
 .bar:nth-of-type(1) {
@@ -97,7 +97,6 @@ svg text {
 }
 
 
-
 /* Regions ("gemeentes") map */
 .region {
 	stroke: #000;
@@ -122,6 +121,7 @@ svg text {
 	fill: url(#diagonalHatch);
 }
 
+/* Colors for the eight emission classes; verified color blind safe! */
 .q0-8 {
 	fill: #f7fbff;
 	background-color: #f7fbff;
@@ -171,40 +171,3 @@ svg text {
 	fill: rgb(238, 17, 17);
 	text-decoration: line-through;
 }
-
-
-
-
-.barTooltip {
-  position:absolute;
-  text-align: center;
-  width: 200px;
-  height:auto;
-  background-color: #EDE3D1;
-  border-radius: 10px;
-  color: #787777;
-  padding: 6px 12px;
-  z-index:3;
-}
- 
-.barTooltip:after {
-  box-sizing: border-box;
-  display: inline;
-  width: 100%;
-  line-height: 1;
-  color: #EDE3D1;
-  content: "\25BC";
-  position: absolute;
-  text-align: center;
-  margin: -3px 0 0 0;
-  top: 100%;
-  left: 0;
-}
- 
-.barTooltip span {
-    display: block;
-    text-align: center;
-    width: 200px;
-    height: auto;
-    margin: 5px auto;
-  }
