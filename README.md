@@ -6,20 +6,23 @@ We kennen het allemaal: met half dichtgeknepen oogjes kruip je 's ochtends uit b
 
 Of misschien heb je wel een dure maand gehad. Na de kerstcadeautjes voor je familie en die wintervoorraad drank voor oud en nieuw, moet je concluderen dat je nog heel veel maand overhebt an het einde van je geld. Waar kies je voor als budgetbewuste reiziger: de trein of de auto?
 
-De webapplicatie "Trein of Auto" is bedoeld om antwoord te geven op deze vragen. Je geeft je beginlocatie en eindbestemming op en op basis van de huidige benzineprijzen en NS-gegevens berekent de applicatie automatisch wat goedkoper en/of sneller is: de auto of de trein.
+De webapplicatie "Trein of Auto" is bedoeld om antwoord te geven op deze vragen. Je geeft je beginlocatie en eindbestemming op en door verschillende databronnen te combineren, berekent de applicatie automatisch wat goedkoper en/of sneller is: de auto of de trein.
 
+## Delen van de applicatie
+De applicatie bestaat uit drie delen:
+* Het **startscherm**, waarin de gebruiker zijn beginbestemming, eindlocatie en nummerbord opgeeft. Ook kan de gebruiker hier desgewenst zelf de verbruiksgegevens van zijn auto invoeren, bijvoorbeeld als hij het nummerbord van zijn auto niet weet.
+* Het **resultatenscherm**, dat onderverdeeld is in een stuk met "algemene" informatie en vier detailtabs. Omdat deze pagina uit meerdere delen bestaat en veel visualisaties bevat, heb ik deze hieronder gevisualiseerd in een overzichtelijk diagram. 
+
+<img src="doc/charts/result.png" />
 
 ## Wireframes
-Hieronder volgen wireframes van de drie pagina's, zoals beschreven in de paragraaf "Delen van de applicatie".
+Hieronder volgen wireframes van de twee pagina's, zoals beschreven in de paragraaf "Delen van de applicatie".
 
 ### Startscherm
 <img src="doc/wireframes/start.png" />
 
 ### Resultatenscherm
 <img src="doc/wireframes/resultaten.png" />
-
-### Detailscherm
-<img src="doc/wireframes/detail.png" />
 
 
 ## Benodigde datasets
@@ -30,13 +33,6 @@ Benodigde API's:
 Benodigde datasets:
 * [Fuel Economy Data] (https://www.fueleconomy.gov/feg/download.shtml): Officiële verzameling datasets van de Amerikaanse overheid. Toont van vrijwel elk voertuig in de wereld het brandstofverbruik in "miles per gallon" (kan omgerekend worden naar "liter per 100 km") en het type benzine. Ik zal de verschillende datasets (ze zijn gescheden per jaar) combineren en uitlezen met PHP.
 * [United Consumers] (https://www.unitedconsumers.com/tanken/informatie/brandstof-prijzen.asp): Helaas is er voor Nederland geen dataset of API waarmee de huidige brandstofprijs opgehaald kan worden. Daarom ben ik genoodzaakt deze prijs te crawlen van een webpagina. Voor mijn applicatie gebruik ik de pagina van United Consumers, omdat die de meest uitgebreide informatie toont (namelijk ook de prijzen per benzinestation).
-
-
-## Delen van de applicatie
-De applicatie bestaat uit drie delen:
-* Het **startscherm**, waarin de gebruiker zijn beginbestemming en eindlocatie opgeeft.
-* Het **resultatenscherm**, die in één oogopslag toont welke optie het goedkoopst is en welke het snelst is.
-* Het **detailscherm**, met daarin visualisaties van de reisduur, de prijs en eventueel de route.
 
 
 ## Platform en API's

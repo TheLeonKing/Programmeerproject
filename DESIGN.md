@@ -13,12 +13,18 @@ Leon Kempers, 10626646.
 Deze sectie beschrijft het framework van mijn applicatie.
 
 ## Classes
-Ik zal een "Gas" PHP class gebruiken voor alle functies die betrekking hebben op de benzine(prijzen) en een “Database” PHP class om verbinding te maken met de MYSQL database. Ik weet nog niet of ik Javascript classes zal gebruiken.
+Ik zal een "Gas" PHP class gebruiken voor alle functies die betrekking hebben op de benzine(prijzen) en een "Database" PHP class om verbinding te maken met de MYSQL database. Ik weet nog niet of ik Javascript classes zal gebruiken.
 
 ## UI-schetsen
-<img src="doc/sketches/start.jpg" />
 
-<img src="doc/sketches/result.jpg" />
+### Startpagina
+<img src="doc/sketches/start.png" />
+
+### Resultatenpagina
+<img src="doc/sketches/result.png" />
+
+### Resultatenpagina (incl. functies en classes)
+<img src="doc/sketches/result_annotated.png" />
 
 ## Frameworks and API's
 “Trein of auto” gebruikt de volgende frameworks:

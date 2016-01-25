@@ -227,3 +227,17 @@ Vrijdag 22 januari 2016
 
 ## Complicaties
 * Ik kwam er vandaag achter dat de prijsmatrix van de NS niet voor ieder station compleet is. Dat kan ik zelf niet oplossen, helaas.
+
+
+# Dag 16
+Maandag 25 januari 2016
+
+* Noot: vanaf vandaag beschrijf ik geen "Belangrijke besluiten" meer, omdat ik deze (nu mijn beta-versie is voltooid) niet meer zal maken.
+
+## Bereikte mijlpalen
+* Nog enkele verbeterpunten voor mijn visualisatie vastgesteld (o.a. qua kleurgebruik en klasse-grenzen).
+* Wireframes en schetsen gemaakt van definitieve design.
+* Readme- en Design-documenten bijgewerkt.
+
+## Complicaties
+* Vandaag waren er geen grote complicaties.
