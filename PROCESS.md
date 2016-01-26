@@ -232,12 +232,19 @@ Vrijdag 22 januari 2016
 # Dag 16
 Maandag 25 januari 2016
 
-* Noot: vanaf vandaag beschrijf ik geen "Belangrijke besluiten" meer, omdat ik deze (nu mijn beta-versie is voltooid) niet meer zal maken.
+* Noot: vanaf vandaag beschrijf ik geen "Belangrijke besluiten" meer, omdat ik deze (nu mijn beta-versie is voltooid) niet meer zal maken. Om dezelfde reden beschrijf ik geen "Complicaties" meer.
 
 ## Bereikte mijlpalen
 * Nog enkele verbeterpunten voor mijn visualisatie vastgesteld (o.a. qua kleurgebruik en klasse-grenzen).
 * Wireframes en schetsen gemaakt van definitieve design.
 * Readme- en Design-documenten bijgewerkt.
 
-## Complicaties
-* Vandaag waren er geen grote complicaties.
+
+# Dag 17
+Dinsdag 26 januari 2016
+
+## Bereikte mijlpalen
+* Readme en Design-document volledig geüpdatet om de recente staat van de applicatie te reflecteren.
+* Verslag grotendeels afgemaakt.
+* Theoretische achtergrond uitgebreid gedocumenteerd.
+* De beta-versie van de site (ik moet morgen nog enkele dingen aanpassen) staat nu live op [TreinOfAuto.nl] (http://treinofauto.nl)!
