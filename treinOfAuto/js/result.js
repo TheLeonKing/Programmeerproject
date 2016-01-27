@@ -112,7 +112,7 @@ var Result = {
 					GoogleMaps.trainOnly(trainJourney, $.Deferred()).done(function(trainJourney) {
 						// Extract the beginning and end station from the train route, then calculate the price based on these stations.
 						Train.findStations(trainJourney.steps, fromLocation).done(function(journeyStations) {
-							Train.findPrice(journeyStations).done(function(trainPrice) {
+							Train.findPrice(journeyStations, $.Deferred(), false).done(function(trainPrice) {
 								
 								// Calculate gas price based of car journey.
 								carPrice = Car.calculateGasPrice(carJourney.distance.value / 1000, gasPrices[userCar.gasType].average, userCar);

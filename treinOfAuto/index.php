@@ -4,6 +4,7 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Wat is goedkoper en sneller: de trein of de auto? Welke benzinestations en parkeerplaatsen zitten er op de route? Hoe beïnvloedt mijn reis het milieu?">
 	
 	<title>Trein of Auto: Wat is goedkoper en sneller?</title>
 	

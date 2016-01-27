@@ -48,6 +48,13 @@ Ik ben veel uitdagingen tegengekomen tijdens het maken van **Trein of Auto**. De
 De visualisaties is **Trein of Auto** zijn gebaseerd op uitgebreid literatuuronderzoek. De belangrijkste conclusies vat ik samen in [THEORY.md] (https://github.com/TheLeonKing/Programmeerproject/blob/master/THEORY.md).
 
 
+## Bekende bugs
+Ik heb mijn best gedaan om **Trein of Auto** zo bug-vrij mogelijk te maken. Toch bevat de applicatie nog een drietal bugs, die ik helaas niet op kan lossen:
+* De Google Maps Directions API bevat een vreemde bug. Wanneer je 'Schiphol' als eindbestemming opgeeft en kiest voor een OV-route, retourneert de API geen routes, terwijl hij dat op [http://maps.google.com] (http://maps.google.com) wel doet. Als ik 'Schiphol' als beginbestemming instel, retourneert hij wel gewoon routes. Ik heb deze bug reeds gerapporteerd bij Google en ze doen er momenteel onderzoek naar. Ik heb deze bug afgevangen met een duidelijke foutmelding.
+* Google Maps kan geen OV-route bepalen tussen sommige locaties, vooral wanneer deze erg ver van elkaar liggen. Tussen bijvoorbeeld 'Zaandam' en 'Walibi' kan Google Maps geen OV-routes vinden (ook niet op [http://maps.google.com] (http://maps.google.com)). Dit is een tekortkoming in Google Maps en ik kan hier dus niets aan doen. Ik heb deze bug wel gewoon netjes afgevangen, zodat de applicatie in dergelijke gevallen niet vastloopt.
+* Sommige tariefeenheden in de NS Prijsmatrix ontbreken. Voor bijvoorbeeld alle reizen van en naar het station 'Buitenpost' zijn geen prijzen gedefinieerd. Na veel zoeken vond ik een oude versie van de prijsmatrix (uit 2014), die voor veel meer stations het aantal tariefeenheden bevat. Echter, omdat deze voor sommige stations iets verouderd is (we praten hier doorgaans over 10 of 20 cent), geef ik de voorkeur aan het nieuwe bestand. Deze wordt eerst doorzocht. Als daar het aantal tariefeenheden ontbreekt, wordt de oude doorzocht. Als ook die geen aantal tariefeenheden bevat, kan ik echt niks meer doen en toon ik een foutmelding (zodat de applicatie tenminste niet vastloopt).
+
+
 ## Error handling
 "Trein of Auto" combineert data van zeven verschillende bronnen. Hoewel ik hard mijn best heb gedaan om deze aansluiting zo naadloos en bug-vrij mogelijk te maken, kan het zijn dat er hierin soms iets fout gaat, bijvoorbeeld als Google Maps een andere stationsbenaming gebruikt dan de NS of als de NS voor een bepaalde reis geen tariefeenheden heeft gedefinieerd.
 

@@ -49,24 +49,12 @@ $gas = new Gas();
 $gasPrices = $gas->fetchPrices($db);
 
 // TODO:
-// - Domeinnaam fixen.
-// - Zodra domeinnaam is ingesteld: plannen van updateGasPrices.php.
-
-// BUGS TO FIX:
-// - Schiphol bug.
-
-// NOG OVER NADENKEN:
-// - Kleuren bars wijzigen?
-// - Klassegrenzen kaart wijzigen?
-// - Tooltip grafiek verwijderen?
-
-// AAN HET EIND:
-// - HTML + CSS + JS validator.
-// - Goed testen met verschillende routes.
+// - Emission chart: tooltip verbeteren.
 
 // KNOWN BUGS:
+// - Schiphol bug.
 // - Als Google Maps het niet kent (naar Walibi). Kan ik niets aan doen, wordt afgevangen.
-// - Sommige prijzen in NS prijsmatrix ontbreken (Buitenpost). Wordt afgevangen.
+// - Sommige prijzen in NS prijsmatrix ontbreken (Buitenpost). Kijk in oude / wordt afgevangen.
 
 ?>
 <!doctype html>
@@ -398,7 +386,7 @@ $gasPrices = $gas->fetchPrices($db);
 	<script src="js/googleMaps.js"></script>
 	<script src="js/visualize.js"></script>
 	<script>
-		Result.travel('<?php print $from; ?>', '<?php print $to; ?>', '<?php print $licensePlate; ?>', <?php print json_encode($customGas); ?>, <?php print json_encode($gasPrices); ?>);
+		Result.travel("<?php print $from; ?>", "<?php print $to; ?>", '<?php print $licensePlate; ?>', <?php print json_encode($customGas); ?>, <?php print json_encode($gasPrices); ?>);
 	</script>
 	
 </body>

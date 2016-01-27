@@ -248,3 +248,12 @@ Dinsdag 26 januari 2016
 * Verslag grotendeels afgemaakt.
 * Theoretische achtergrond uitgebreid gedocumenteerd.
 * De beta-versie van de site (ik moet morgen nog enkele dingen aanpassen) staat nu live op [TreinOfAuto.nl] (http://treinofauto.nl)!
+
+
+# Dag 18
+Woensdag 27 januari 2016
+
+## Bereikte mijlpalen
+* Kleurgebruik benzineprijzenvisualisatie verbeterd.
+* Tooltip line chart zo veranderd dat hij geen valse indrukken meer werkt.
+* Verschillende bugs in het reisplanner-gedeelte gefixt.

@@ -109,11 +109,6 @@ $(document).ready(function() {
 		
 			xmlhttp.open('GET', url, true);
 			xmlhttp.send();
-			
-			// If there are no more error messages, submit the form.
-			if (error === false && !$('.ui.error.message').is(":visible")) {
-				journeyForm.submit();
-			}
 		}
 	});
 });

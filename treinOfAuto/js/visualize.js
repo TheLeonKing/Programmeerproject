@@ -531,7 +531,6 @@ var Visualize = {
 
 		// Set up line.
 		var line = d3.svg.line()
-			.interpolate('basis')
 			.x(function(d) { return x(d.date); })
 			.y(function(d) { return y(d.emission); });
 
@@ -541,6 +540,16 @@ var Visualize = {
 			.attr('height', height + margin.top + margin.bottom)
 			.append('g')
 			.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+			
+		// Set up tootlip.
+		var tooltip = d3.tip()
+			.attr('class', 'tooltip')
+			.offset([-10, 0])
+			.html(function (d) {
+				return '<strong>Uitstoot ' + (d.date).getFullYear() + ':</strong> ' + format(d.emission) + ' ton';
+			});
+
+		svg.call(tooltip);
 
 		// Read emission data from CSV file.
 		d3.csv('data/co2_uitstoot.csv', function(error, data) {
@@ -648,116 +657,21 @@ var Visualize = {
 				.attr('id', function(d) { return 'line_' + (d.name); } )
 				.style('stroke', function(d) { return color(d.name); });
 
-			// Credits to http://stackoverflow.com/questions/34886070/d3-js-multiseries-line-chart-with-mouseover-tooltip/34887578#34887578 for the tooltip script below.
-			var mouseG = svg.append('g')
-				.attr('class', 'mouse-over-effects');
-
-			// Add vertical mouse line.
-			mouseG.append('path')
-				.attr('class', 'mouse-line')
-				.style('stroke', 'black')
-				.style('stroke-width', '1px')
-				.style('opacity', '0');
-
-			// Get all lines in the chart.
-			var lines = document.getElementsByClassName('line');
-
-			// Create a tooltip container for each line.
-			var mousePerLine = mouseG.selectAll('.mouse-per-line')
-				.data(regions)
+			// Add tooltip.
+			region.selectAll('.circle')
+				.data( function(d) { return(d. values); } )
 				.enter()
-				.append('g')
-				.attr('class', 'mouse-per-line');
-
-			// Draw the crosshair and text for each line.
-			mousePerLine.append('circle')
-				.attr('r', 7)
-				.style('stroke', function(d) {
-					return color(d.name);
+				.append('svg:circle')
+				.attr('class', 'circle')
+				.attr('cx', function (d, i) {
+					return x(d.date);
 				})
-				.style('fill', 'none')
-				.style('stroke-width', '1px')
-				.style('opacity', '0');
-
-			mousePerLine.append('text')
-				.attr('transform', 'translate(10,3)');
-
-			// Add rectangle that tracks mouse movements on canvas.
-			mouseG.append('svg:rect')
-				.attr('width', width)
-				.attr('height', height)
-				.attr('fill', 'none')
-				.attr('pointer-events', 'all')
-				
-				// When mouse leaves canvas, hide line, circles and tooltip text.
-				.on('mouseout', function() {
-					d3.select('.mouse-line')
-					.style('opacity', '0');
-					d3.selectAll('.mouse-per-line circle')
-					.style('opacity', '0');
-					d3.selectAll('.mouse-per-line text')
-					.style('opacity', '0');
+				.attr('cy', function (d, i) {
+					return y(d.emission);
 				})
-				
-				// When mouse enters canvas, add line, circles and tooltip text.
-				.on('mouseover', function() {
-					d3.select('.mouse-line')
-					.style('opacity', '1');
-					d3.selectAll('.mouse-per-line circle')
-					.style('opacity', '1');
-					d3.selectAll('.mouse-per-line text')
-					.style('opacity', '1');
-				})
-				
-				// When mouse moves, update line, circles and tooltip text.
-				.on('mousemove', function() {
-					var mouse = d3.mouse(this);
-					d3.select('.mouse-line')
-					.attr('d', function() {
-						var d = 'M' + mouse[0] + ',' + height;
-						d += ' ' + mouse[0] + ',' + 0;
-						return d;
-					});
-
-				
-				// Position the tooltip's circle and tooltip text.
-				d3.selectAll('.mouse-per-line')
-					.attr('transform', function(d, i) {
-						
-						// Extract date.
-						var xDate = x.invert(mouse[0]),
-						bisect = d3.bisector(function(d) { return d.date; }).right;
-						idx = bisect(d.values, xDate);
-
-						var beginning = 0,
-						end = lines[i].getTotalLength(),
-						target = null;
-
-						// Find the position of the line.
-						while (true){
-							target = Math.floor((beginning + end) / 2);
-							pos = lines[i].getPointAtLength(target);
-							
-							// Stop if position is found.
-							if ((target === end || target === beginning) && pos.x !== mouse[0]) {
-								break;
-							}
-							
-							// Match the line and mouse position.
-							if (pos.x > mouse[0])		end = target;
-							else if (pos.x < mouse[0])	beginning = target;
-							// We've found the position.
-							else						break;
-						}
-
-						// Add tooltip to line.
-						d3.select(this).select('text')
-							.text(parseInt(y.invert(pos.y), 10));
-
-						// Return the position.
-						return 'translate(' + mouse[0] + ',' + pos.y +')';
-					});
-			});
+				.attr('r', 5)
+				.on('mouseover', tooltip.show)
+				.on('mouseout', tooltip.hide);
 			
 			// Fade in region chart.
 			$('#regionChart').fadeTo('fast', 1);
@@ -888,7 +802,8 @@ var Visualize = {
 				.attr('dy', '0.8em')
 				.text(function(d,i) {
 					var extent = quantile.invertExtent(d);
-					return format(+extent[0]) + ' - ' + format(+extent[1]) + ' ton';
+					// Use Math.ceil to round class boundaries to highest thousand.
+					return format(Math.ceil((+extent[0])/1000)*1000) + ' - ' + format(Math.ceil((+extent[1])/1000)*1000) + ' ton';
 				});
 			
 			// Add diagonal hatch fill pattern; credits to http://stackoverflow.com/questions/17776641/fill-rect-with-pattern.

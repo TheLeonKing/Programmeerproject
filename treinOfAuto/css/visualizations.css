@@ -16,31 +16,9 @@
 	shape-rendering: crispEdges;
 }
 
-/* Note: bar colors are verified color blind safe */
-
-/* BP */
-.bar:nth-of-type(1) {
-	fill: #a6cee3;
-}
-
-/* Esso */
-.bar:nth-of-type(2) {
-	fill: #1f78b4;
-}
-
-/* Shell */
-.bar:nth-of-type(3) {
-	fill: #b2df8a;
-}
-
-/* Texaco */
-.bar:nth-of-type(4) {
-	fill: #33a02c;
-}
-
-/* Total */
-.bar:nth-of-type(5) {
-	fill: #808080;
+/* Note: bar color is verified color blind safe */
+.bar {
+	fill: #998ec3;
 }
 
 .line, .averageLine {
@@ -162,7 +140,21 @@ svg text {
 }
 
 
-/* Regions ("gemeentes") chart */
+/* Regions ("gemeentes") line chart */
+.circle {
+	fill: #fff;
+	-webkit-transition: all 0.25s ease-out;
+	-moz-transition: all 0.25s ease-out;
+	-o-transition: all 0.25s ease-out;
+	transition: all 0.25s ease-out;
+}
+
+circle:hover {
+	r: 10;
+	fill: rgba(255, 255, 255, 0);
+	stroke-width: 5px;
+}
+
 .chartLegendItem {
 	cursor: pointer;
 }

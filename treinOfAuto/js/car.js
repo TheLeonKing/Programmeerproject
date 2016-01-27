@@ -28,10 +28,17 @@ var Car = {
 			// Fetch the fuel type and usage statistics from the RDW.
 			xmlhttp.onreadystatechange = function() {
 				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					
 					var responseArray = JSON.parse(xmlhttp.responseText);
+					
+					// If we didn't get a response for this license plate.
+					if (responseArray.length === 0) {
+						dfd.reject('We konden geen gebruiksgegevens vinden voor dit kenteken. Gelieve deze hieronder zelf op te geven.');						
+					}
 					
 					// Sometimes fuel statistics are in the first element, sometimes they're in the second. Choose the right one.
 					response = (typeof responseArray[0].brandstofverbruik_gecombineerd === 'undefined') ? responseArray[1] : responseArray[0];
+					
 					userCar.gasType = response.brandstof_omschrijving.toLowerCase();
 					userCar.gasUsage = parseFloat(response.brandstofverbruik_gecombineerd);
 					userCar.co2Emission = parseFloat(response.co2_uitstoot_gecombineerd);

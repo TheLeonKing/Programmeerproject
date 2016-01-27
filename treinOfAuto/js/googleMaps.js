@@ -243,7 +243,7 @@ var GoogleMaps = {
 				if (valid) {
 					dfd.resolve(newTrainJourney);
 				} else {
-					dfd.reject('We konden geen treinroute vinden voor deze reis. Waarschijnlijk liggen de locaties te dicht bij (of ver van) elkaar.');		
+					dfd.reject('We konden geen treinroute vinden voor deze reis. Waarschijnlijk liggen de locaties zo dicht bij (of ver van) elkaar dat er geen treinroute mogelijk is.');		
 				}
 			}
 		});

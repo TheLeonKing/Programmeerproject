@@ -30,7 +30,7 @@ var Train = {
 			if (journeyStations.hasOwnProperty('fromCode') && journeyStations.hasOwnProperty('toCode')) {
 				dfd.resolve(journeyStations);
 			} else {
-				dfd.reject('We konden de treinstations van uw reis niet vinden in de database. Contacteer alstublieft de webmaster.');
+				dfd.reject('We konden de treinstations van uw reis niet vinden in de database. Contacteer alstublieft de webmaster via bugs@treinofauto.nl.');
 			}
 		});
 		
@@ -65,12 +65,13 @@ var Train = {
 
 
 	/* Find the price of a train journey between two stations. */
-	findPrice: function(journeyStations) {
+	findPrice: function(journeyStations, dfd, old) {
 		
-		var dfd = $.Deferred();
+		// Check if we should read the old or the new tariff units file.
+		tariffUnitsFile = (old) ? 'data/ns_tariefeenheden_oud.csv' : 'data/ns_tariefeenheden.csv';
 		
 		// Read 'ns_tariefeenheden.csv', a matrix that contains the amount of tariff units between two stations.
-		d3.csv('data/ns_tariefeenheden.csv', function(matrix) {
+		d3.csv(tariffUnitsFile, function(matrix) {
 			
 			// Find the value at the coordinate (fromCode, toCode) in the price matrix.
 			for (var i = 0, l = matrix.length; i < l; i++) {
@@ -79,10 +80,22 @@ var Train = {
 				}
 			}
 			
-			// Some columns in the matrix contain a '?'. This is an error on NS's
-			// side. I can't fix that error, but I can gracefully handle it.
-			if (tariffUnit == '?') {
-				dfd.reject('We konden geen prijs vinden voor een reis tussen deze stations. Neem contact op met de webmaster');
+			// If the recent price matrix has no price defined for the journey
+			// between these two stations, check if the old one does.
+			if (tariffUnit == '?' && old == false) {
+				Train.findPrice(journeyStations, dfd, true);
+			
+			// If the old one doesn't have a price either, there is simply no price defined for this journey.
+			// This is an error in the dataset. I can't fix it, but I can handle the error gracefully.
+			} else if (tariffUnit == '?' && old) {
+				console.log(journeyStations);
+				return;
+				dfd.reject('We konden geen prijs vinden voor een reis tussen deze stations. Neem alstublieft contact op met de webmaster via bugs@treinofauto.nl.');
+			
+			// Due to a bug in the CSV file, the 'tariff unit' is sometimes
+			// above 250. However, this is not possible, so fix it.
+			} else if (tariffUnit > 250) {
+				tariffUnit = 250;
 			}
 			
 			// Read 'ns_tarieven.csv', which contains the price for each amount of tariff units.
@@ -94,6 +107,7 @@ var Train = {
 						dfd.resolve(tariffs[i].tweede_klas_vol_tarief);
 					}
 				}
+				
 			});
 		});
 		
