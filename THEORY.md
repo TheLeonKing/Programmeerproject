@@ -29,7 +29,7 @@ Borland & Taylor (2007) deden onderzoek naar het kleurgebruik bij een sequentië
 
 Bij mijn gemeentekaart gebruikte ik aanvankelijk klassen die even grote intervallen hadden, maar omdat er een klein aantal hoge outliers in de data zat, viel hierbij het overgrote deel van de data in de laagste klassen. Dit resulteerde in een zeer lichte kaart waarop geen effectieve vergelijkingen mogelijk waren. Ik heb daarom (met behulp van D3) de data onderverdeeld in acht even grote kwantielen en de grenzen van deze kwantielen heb ik uiteindelijk afgerond. Dit resulteert in acht (vrijwel) even grote klassen, die bovendien goed te begrijpen zijn en geen valse indrukken wekken!
 
-
+Tot slot wilde ik door middel van visuele feedback aangeven welke gemeenten op de kaart momenteel "actief" zijn in de line chart. Het leek me onverstandig om dit te doen door middel van een kleurverandering. De kleur is namelijk precies de waarde-indicator in de kaartvisualisatie, dus als ik die zou veranderen, zou de visualisatie zijn meerwaarde verliezen. Ik heb er uiteindelijk voor gekozen de "actieve" gemeentes te arceren. Dit is op het eerste gezicht niet het duidelijkst, maar wel het correctst en minst misleidend.
 
 
 ## Tufte's designprincipes
