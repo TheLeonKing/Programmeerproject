@@ -435,7 +435,7 @@ var Visualize = {
 				
 				// Loop over the region names and make them active in the region map.
 				for (var i = 0, l = chartRegionNames.length; i < l; i++) {
-					$('#' + chartRegionNames[i].replace(/ /g, '_')).attr('class', 'regionOverlay active');
+					$('#' + chartRegionNames[i].replace(/ /g, '_').replace("'", '')).attr('class', 'regionOverlay active');
 				}
 				
 				// Draw the region chart.
@@ -458,11 +458,11 @@ var Visualize = {
 			// If region name is currently in array of chart region names, remove it.
 			if ($.inArray(regionName, chartRegionNames) !== -1) {
 				chartRegionNames.splice( $.inArray(regionName, chartRegionNames), 1 );
-				$('#' + regionName.replace(/ /g, '_')).attr('class', 'regionOverlay');
+				$('#' + regionName.replace(/ /g, '_').replace("'", '')).attr('class', 'regionOverlay');
 			// If region name isn't in array of chart region names, add it.
 			} else {
 				chartRegionNames.push(regionName);
-				$('#' + regionName.replace(/ /g, '_')).attr('class', 'regionOverlay active');
+				$('#' + regionName.replace(/ /g, '_').replace("'", '')).attr('class', 'regionOverlay active');
 			}
 			
 			// Draw region chart using new chartRegionNames.

@@ -30,6 +30,8 @@ Borland & Taylor (2007) deden onderzoek naar het kleurgebruik bij een sequentië
 Bij mijn gemeentekaart gebruikte ik aanvankelijk klassen die even grote intervallen hadden, maar omdat er een klein aantal hoge outliers in de data zat, viel hierbij het overgrote deel van de data in de laagste klassen. Dit resulteerde in een zeer lichte kaart waarop geen effectieve vergelijkingen mogelijk waren. Ik heb daarom (met behulp van D3) de data onderverdeeld in acht even grote kwantielen en de grenzen van deze kwantielen heb ik uiteindelijk afgerond. Dit resulteert in acht (vrijwel) even grote klassen, die bovendien goed te begrijpen zijn en geen valse indrukken wekken!
 
 
+
+
 ## Tufte's designprincipes
 Tijdens het ontwerpen van mijn visualisaties heb ik te allen tijde rekening gehouden met Tufte"s designprincipes. Hieronder een korte toelichting.
 
