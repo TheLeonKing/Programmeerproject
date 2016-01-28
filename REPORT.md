@@ -50,10 +50,11 @@ De visualisaties is **Trein of Auto** zijn gebaseerd op uitgebreid literatuurond
 
 
 ## Bekende bugs
-Ik heb mijn best gedaan om **Trein of Auto** zo bug-vrij mogelijk te maken. Toch bevat de applicatie nog een drietal bugs, die ik helaas niet op kan lossen:
+Ik heb mijn best gedaan om **Trein of Auto** zo bug-vrij mogelijk te maken. Toch bevat de applicatie nog een viertal bugs, die ik helaas niet op kan lossen:
 * De Google Maps Directions API bevat een vreemde bug. Wanneer je 'Schiphol' als eindbestemming opgeeft en kiest voor een OV-route, retourneert de API geen routes, terwijl hij dat op [http://maps.google.com] (http://maps.google.com) wel doet. Als ik 'Schiphol' als beginbestemming instel, retourneert hij wel gewoon routes. Ik heb deze bug reeds gerapporteerd bij Google en het bedrijf heeft me laten weten dat het de fout onderzoekt. In de tussentijd heb ik deze bug afgevangen met een duidelijke foutmelding.
 * Google Maps kan geen OV-route bepalen tussen sommige locaties, vooral wanneer deze erg ver van elkaar liggen. Tussen bijvoorbeeld 'Zaandam' en 'Walibi' kan Google Maps geen OV-routes vinden (ook niet op [http://maps.google.com] (http://maps.google.com)). Dit is een tekortkoming in Google Maps en ik kan hier dus niets aan doen. Ik heb deze bug wel gewoon netjes afgevangen, zodat de applicatie in dergelijke gevallen niet vastloopt.
 * Sommige tariefeenheden in de NS Prijsmatrix ontbreken. Voor bijvoorbeeld alle reizen van en naar het station 'Buitenpost' zijn geen prijzen gedefinieerd. Na veel zoeken vond ik een oude versie van de prijsmatrix (uit 2014), die voor veel meer stations het aantal tariefeenheden bevat. Echter, omdat deze voor sommige stations iets verouderd is (we praten hier doorgaans over 10 of 20 cent in prijsverschil), geef ik de voorkeur aan het nieuwe bestand. Deze wordt eerst doorzocht. Als daar het aantal tariefeenheden ontbreekt, wordt de oude doorzocht. Als ook die geen aantal tariefeenheden bevat, kan ik echt niks meer doen en toon ik een foutmelding (zodat de applicatie tenminste niet vastloopt).
+* De Google Maps API retourneert soms treinreizen die de Thalys (een hogesnelheidstrein) bevatten, maar daar kan ik geen prijzen voor opvragen. Ik heb dit opgelost door meerdere reisadviezen op te vragen en vervolgens al deze reisadviezen te doorzoeken. Als het reisadvies een hogesnelheidstrein bevat, verwerp ik hem en controleer ik de volgende. Zo blijf ik net zolang zoeken totdat ik een reisadvies vind zonder hogesnelheidstrein. Echter, in heel zeldzame gevallen worden enkel reisadviezen geretourneerd die een hogesnelheidstrein bevatten. In dat geval zoek ik simpelweg een wandelalternatief hiervoor. Het is niet ideaal, maar het beste wat ik (gezien de omstandigheden) kan doen.
 
 
 ## Error handling
@@ -82,7 +83,7 @@ In mijn functies maak ik regelmatig gebruik van JQuery's `$.Deferred()`. De rede
 In dergelijke situaties gebruik ik `$.Deferred()` om te wachten tot de asynchrone actie voltooid is (`.done()`), of een gebruiksvriendelijke foutmelding te tonen als de asynchrone actie mislukte (`.fail()`). Op die manier wordt de rest van de code pas uitgevoerd wanneer alle benodigde variabelen een waarde hebben. Meer informatie over `$.Deferred()` is te vinden op de [officiële JQuery-website] (https://api.jquery.com/category/deferred-object/).
 
 
-## Valid
+## Gevalideerde code
 Al mijn code is volledig valide volgens de officiële richtlijnen:
 * HTML-code gevalideerd met [W3 Markup Validation Service] (https://validator.w3.org/).
 * CSS-code gevalideerd met [W3 CSS Validation Service] (https://jigsaw.w3.org/css-validator/validator).

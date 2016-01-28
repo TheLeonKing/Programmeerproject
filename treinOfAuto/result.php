@@ -48,14 +48,6 @@ $db = $database->connect();
 $gas = new Gas();
 $gasPrices = $gas->fetchPrices($db);
 
-// TODO:
-// - Emission chart: tooltip verbeteren.
-
-// KNOWN BUGS:
-// - Schiphol bug.
-// - Als Google Maps het niet kent (naar Walibi). Kan ik niets aan doen, wordt afgevangen.
-// - Sommige prijzen in NS prijsmatrix ontbreken (Buitenpost). Kijk in oude / wordt afgevangen.
-
 ?>
 <!doctype html>
 <html lang="en">

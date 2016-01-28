@@ -2,7 +2,7 @@
 Leon Kempers, 10626646.
 
 # Minimum Viable Product
-"Trein of auto" kan bijna eindeloos uitgebreid worden en voor dit project zal ik proberen zoveel mogelijk features toe te voegen als mogelijk is in drie weken. Ik wil me echter eerst op de basis focussen. Voor het Minimum Viable Product van deze applicatie zijn de volgende features vereist:
+**Trein of Auto** kan bijna eindeloos uitgebreid worden en voor dit project zal ik proberen zoveel mogelijk features toe te voegen als mogelijk is in drie weken. Ik wil me echter eerst op de basis focussen. Voor het Minimum Viable Product van deze applicatie zijn de volgende features vereist:
 * Een scherm waarin de gebruiker zijn begin- en eindbestemming kan ingeven (liefst verbonden met Google Maps).
 * Code die de prijs van zowel de trein- als autoreis bepaalt.
 * Code die de reistijd van zowel de trein- als autoreis bepaalt.
@@ -30,7 +30,7 @@ Ik zal een "Gas" PHP class gebruiken voor alle functies die betrekking hebben op
 * [Google Maps API] (JS) (https://developers.google.com/maps/): Om de afstand en duur van de auto- en treinroute op te halen.
 
 ## Databronnen
-"Trein of Auto" combineert data van de volgende bronnen:
+**Trein of Auto** combineert data van de volgende bronnen:
 * [RDW] (https://www.rdw.nl/Zakelijk/Paginas/Open-data.aspx): Toont de verbruiksgegevens (benzinetype, aantal liter benzineverbruik per 100 km, etc.) van alle in Nederland geregistreerde auto's.
 * [United Consumers] (https://www.unitedconsumers.com/tanken/informatie/brandstof-prijzen.asp): toont de gemiddelde brandstofprijs per type benzene, evenals de prijs per tankstation.
 * [OpenOV - NS-stations] (http://data.openov.nl/ns/): Hiermee kan ik de officiële afkorting van een stationsnaam ophalen.

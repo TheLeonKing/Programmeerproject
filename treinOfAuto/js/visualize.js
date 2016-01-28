@@ -10,7 +10,8 @@ var amountOfJourneys = 1,
 	defaultBarOptions = {},
 	running = false,
 	emissionChart,
-	chartRegionNames;
+	chartRegionNames,
+	lineChartTooltip;
 
 
 // I've created a Dutch D3 locale to correctly format my numbers.
@@ -421,9 +422,9 @@ var Visualize = {
 	/* Calls the functions necessary to draw the region chart. */
 	regionChart: function() {
 		// Find region ("gemeente") of start location.
-		Visualize.findRegion({ lat: carJourney.start_location.lat(), lng: carJourney.start_location.lng() }, []).done(function(regions) {
+		GoogleMaps.findRegion({ lat: carJourney.start_location.lat(), lng: carJourney.start_location.lng() }, []).done(function(regions) {
 			// Find region ("gemeente") of end location.
-			Visualize.findRegion({ lat: carJourney.end_location.lat(), lng: carJourney.end_location.lng() }, regions).done(function(regions) {
+			GoogleMaps.findRegion({ lat: carJourney.end_location.lat(), lng: carJourney.end_location.lng() }, regions).done(function(regions) {
 				chartRegionNames = regions;
 				
 				// Loop over the region names and make them active in the region map.
@@ -438,36 +439,7 @@ var Visualize = {
 	},
 
 
-	/* Finds the region ("gemeente") corresponding to the lat/lng coordinates. */
-	findRegion: function(latlng, regions) {
-		
-		var dfd = $.Deferred();
-		
-		var geocoder = new google.maps.Geocoder();
-
-		// Create a geocoder request for the lat/lng coordinates.
-		geocoder.geocode({'location': latlng}, function(results, status) {
-			if (status === google.maps.GeocoderStatus.OK) {
-				// If we found results, return the region name.
-				if (results[1]) {
-					// Sometimes the region name is in the second element, sometimes in the third.
-					// Push both to be sure.
-					regions.push(results[1].address_components[1].long_name);
-					regions.push(results[1].address_components[2].long_name);
-					
-					dfd.resolve(regions);
-				
-				// These errors are logged to the console, because they are not directly relevant to the user.
-				} else {
-					console.log('Geocoder kon de gemeente van de volgende bestemming niet vinden: ' + latlng);
-				}
-			} else {
-				console.log('Foutmelding Geocoder: ' + status);
-			}
-		});
-		
-		return dfd.promise();
-	},
+	
 
 
 	/* Called when value is added/removed from region chart. */
@@ -502,7 +474,7 @@ var Visualize = {
 	drawRegionChart: function() {
 
 		// Based on the example at http://bl.ocks.org/kramer/4745936.
-		var margin = { top: 50, right: 150, bottom: 50, left: 95 },
+		var margin = { top: 50, right: 140, bottom: 50, left: 95 },
 			width = 650 - margin.left - margin.right,
 			height = 400 - margin.top - margin.bottom;
 		
@@ -540,17 +512,17 @@ var Visualize = {
 			.attr('height', height + margin.top + margin.bottom)
 			.append('g')
 			.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-			
-		// Set up tootlip.
+		
+		// Set up tooltip.
 		var tooltip = d3.tip()
 			.attr('class', 'tooltip')
 			.offset([-10, 0])
 			.html(function (d) {
-				return '<strong>Uitstoot ' + (d.date).getFullYear() + ':</strong> ' + format(d.emission) + ' ton';
+				return lineChartTooltip;
 			});
 
 		svg.call(tooltip);
-
+		
 		// Read emission data from CSV file.
 		d3.csv('data/co2_uitstoot.csv', function(error, data) {
 			if (error) throw error;
@@ -609,6 +581,7 @@ var Visualize = {
 				.attr('y', function(d, i){ return i * 20;})
 				.attr('width', 10)
 				.attr('height', 10)
+				.attr('class', 'chartLegendItemBox')
 				.style('fill', function(d) { 
 					return color(d.name);
 				});
@@ -617,7 +590,7 @@ var Visualize = {
 			legend.append('text')
 				.attr('x', width + margin.right - 100)
 				.attr('y', function(d, i){ return (i * 20) + 9;})
-				.attr('class', 'chartLegendItem')
+				.attr('class', 'chartLegendItemText')
 				// When user clicks legend item, remove it from the chart.
 				.on('click', function(d){
 					Visualize.changeRegionChart(d.name);
@@ -640,7 +613,7 @@ var Visualize = {
 				.attr('class', 'y axis')
 				.call(yAxis)
 				.append('text')
-				.attr('transform', 'translate(' + (margin.bottom-110) + ' ,' + (height/2) + ') rotate(-90)')
+				.attr('transform', 'translate(' + (-margin.left+15) + ' ,' + (height/2) + ') rotate(-90)')
 				.attr('class', 'axisLabel')
 				.style('text-anchor', 'middle')
 				.text('CO2-uitstoot (in tonnen)');
@@ -659,7 +632,7 @@ var Visualize = {
 
 			// Add tooltip.
 			region.selectAll('.circle')
-				.data( function(d) { return(d. values); } )
+				.data( function(d) { return(d.values); } )
 				.enter()
 				.append('svg:circle')
 				.attr('class', 'circle')
@@ -670,7 +643,47 @@ var Visualize = {
 					return y(d.emission);
 				})
 				.attr('r', 5)
-				.on('mouseover', tooltip.show)
+				.on('mouseover', function(d) {
+					var circles = d3.selectAll("circle")[0];
+					var emissionArray = [];
+					
+					// Loop over all tooltip circles.
+					for (var i = 0; i < circles.length; i++) {
+						// If the tooltip circle is at the same x position as the current one, it
+						// represents the same year. Save its emission value in 'emissionArray'.
+						if (circles[i].attributes.cx.value == x(d.date)) {
+							var year = (circles[i].__data__.date).getFullYear();
+							emissionArray.push(circles[i].__data__.emission);
+						}
+					}
+					
+					// Initialize the tooltip text with a title.
+					lineChartTooltip = '<strong>Uitstoot ' + year + '</strong>';
+					
+					var legendItemBoxes = d3.selectAll(".chartLegendItemBox")[0];
+					var styleArray = [];
+					
+					// Loop over all legend boxes and extract their style.
+					for (i = 0; i < legendItemBoxes.length; i++) {
+						var style = legendItemBoxes[i].attributes.style.value;
+						// Replace 'fill' by 'color', because text has no fill, but a color.
+						styleArray.push(style.replace('fill', 'color'));
+					}
+					
+					var legendItemTexts = d3.selectAll(".chartLegendItemText")[0];
+					
+					// Loop over all legend labels and extract the label text.
+					for (i = 0; i < legendItemTexts.length; i++) {
+						var regionName = legendItemTexts[i].innerHTML;
+						
+						// Add the region's name and value to the tooltip, and give it the same
+						// color as the box (and therefore the line).
+						lineChartTooltip = lineChartTooltip + '<br><span style="' + styleArray[i] + '">' + regionName + ' - ' + format(emissionArray[i]) + ' ton</span>';
+					}
+					
+					// Show the tooltip.
+					tooltip.show(d);
+				})
 				.on('mouseout', tooltip.hide);
 			
 			// Fade in region chart.

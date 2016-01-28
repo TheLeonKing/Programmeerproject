@@ -40,7 +40,7 @@ var GoogleMaps = {
 		gasMap = new google.maps.Map(document.getElementById('gasMap'), mapOptions);
 		
 		// Set up the renderers and services needed for the car journey, train journey and places.
-		directionsService = new google.maps.DirectionsService();
+		directionsService = new google.maps.DirectionsService;
 		
 		carDirectionsRenderer = new google.maps.DirectionsRenderer({
 			map: routeMap,
@@ -92,7 +92,7 @@ var GoogleMaps = {
 				// If journey doesn't contain car travel, show error. Otherwise, return journey object.
 				if (valid === false) {
 					dfd.reject('We konden geen autoroute vinden voor deze reis. Waarschijnlijk liggen de locaties te dicht bij elkaar.');		
-				} else {			
+				} else {
 					dfd.resolve(carJourney);
 				
 					// Use RouteBoxer to create boxes around 0.5 km of the route.
@@ -112,21 +112,20 @@ var GoogleMaps = {
 
 
 	/* Calculates the train travel route (including distance, travel time, etc.) between two addresses. */
-	trainRoute: function(fromLocation, toLocation) {
+	trainRoute: function(fromLocation, toLocation, dfd) {
 		
-		var dfd = $.Deferred();
-
 		// Create a new route request with travel mode 'transit', and stress that Google should focus on train routes.
 		directionsService.route({
 			origin: fromLocation,
 			destination: toLocation,
 			travelMode: google.maps.TravelMode.TRANSIT,
-			transitOptions: { modes: [google.maps.TransitMode.TRAIN] }
+			transitOptions: { modes: [google.maps.TransitMode.TRAIN] },
+			provideRouteAlternatives: true
 		}, function(response, status) {
 			// If directions were found, return the first available route as an object. Otherwise, show an error.
 			if (status === google.maps.DirectionsStatus.OK) {
 				trainResponse = response;
-				trainJourney = response.routes[0].legs[0];
+				trainJourney = GoogleMaps.noHighSpeedTrain(response.routes);
 				dfd.resolve(trainJourney);
 			
 			// If Google Maps didn't return transit routes, shown an error stating this (error handling).
@@ -136,6 +135,33 @@ var GoogleMaps = {
 		});
 		
 		return dfd.promise();
+	},
+	
+	
+	/* Finds the first available route that doesn't contain travel in a high-speed train. */
+	noHighSpeedTrain: function(routes) {
+		// Take the steps from the first route.
+		var steps = routes[0].legs[0].steps;
+		
+		// Loop over all steps.
+		for (var i = 0; i < steps.length; i++) {
+			
+			// If this is a 'high-speed train instruction', remove this route from the array
+			// and recursively call the function to examine the next available route.
+			if ((steps[i].instructions).match("^Hogesnelheidstrein")) {
+				if (routes.length > 1) {
+					routes.splice(0, 1);
+					this.noHighSpeedTrain(routes);
+				// If this is the last route and it still contains high-speed train travel,
+				// return it anyway; better to have a long route than no route at all.
+				} else {
+					return routes[0].legs[0];
+				}
+			}
+		}
+		
+		return routes[0].legs[0];
+		
 	},
 
 
@@ -327,6 +353,39 @@ var GoogleMaps = {
 			infoWindow.setContent('<strong>' + place.name + '</strong><br>' + place.vicinity);
 			infoWindow.open(map, this);
 		});
+	},
+	
+	
+	/* Finds the region ("gemeente") corresponding to the lat/lng coordinates. */
+	findRegion: function(latlng, regions) {
+		
+		var dfd = $.Deferred();
+		
+		var geocoder = new google.maps.Geocoder();
+
+		// Create a geocoder request for the lat/lng coordinates.
+		geocoder.geocode({'location': latlng}, function(results, status) {
+			if (status === google.maps.GeocoderStatus.OK) {
+				// If we found results, return the region name.
+				if (results[1]) {
+					// Sometimes the region name is in the second element, sometimes in
+					// the third or fourth. Push all to be sure.
+					regions.push(results[1].address_components[1].long_name);
+					regions.push(results[1].address_components[2].long_name);
+					regions.push(results[1].address_components[3].long_name);
+					
+					dfd.resolve(regions);
+				
+				// These errors are logged to the console, because they are not directly relevant to the user.
+				} else {
+					console.log('Geocoder kon de gemeente van de volgende bestemming niet vinden: ' + latlng);
+				}
+			} else {
+				console.log('Foutmelding Geocoder: ' + status);
+			}
+		});
+		
+		return dfd.promise();
 	},
 
 

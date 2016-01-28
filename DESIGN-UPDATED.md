@@ -43,9 +43,9 @@ Ik heb mijn designschetsen tijdens het ontwikkelproces steeds bijgewerkt. De def
 **Trein of Auto** gebruikt de volgende frameworks:
 
 ### CSS
-* **Semantic-UI (http://semantic-ui.com/)**: Een Bootstrap-achtig framework met ingebouwde stijlen voor DOM-elementen.
+* **[Semantic-UI] (http://semantic-ui.com/)**: Een Bootstrap-achtig framework met ingebouwde stijlen voor DOM-elementen.
 ** Noot: vereist tevens een JavaScript-bestand (`semantic.min.js`) voor enkele JS-functies.
-* **Font-Awesome (https://fortawesome.github.io/Font-Awesome/)** en **Ionicons (http://ionicons.com/)**: Omdat duidelijke iconen veel effectiever werken dan tekst, gebruik waar mogelijk iconen in mijn applicatie. Deze iconen zijn afkomstig van Font-Awesome en Ionicons.
+* **[Font-Awesome] (https://fortawesome.github.io/Font-Awesome/)** en **[Ionicons] (http://ionicons.com/)**: Omdat duidelijke iconen veel effectiever werken dan tekst, gebruik waar mogelijk iconen in mijn applicatie. Deze iconen zijn afkomstig van Font-Awesome en Ionicons.
 
 ### JavaScript
 * **[JQuery] (https://jquery.com/)**: Het bekende JavaScript framework, gebruikt om de code korter en overzichtelijker te maken.

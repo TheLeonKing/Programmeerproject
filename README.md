@@ -14,13 +14,14 @@ De webapplicatie **Trein of Auto** is bedoeld om antwoord te geven op deze vrage
 
 ## Screenshots
 
-<img src="doc/screenshots/1_start.png" style="width: 45%;" /> <img src="doc/screenshots/2_start_autofill.png" style="width: 45%; float: right;" />
-
-<img src="doc/screenshots/3_start_filled.png" style="width: 45%;" /> <img src="doc/screenshots/4_result_main.png" style="width: 45%; float: right;" />
-
-<img src="doc/screenshots/5_result_costs.png" style="width: 45%;" /> <img src="doc/screenshots/6_result_journey.png" style="width: 45%; float: right;" />
-
-<img src="doc/screenshots/7_result_environment_journey.png" style="width: 45%;" /> <img src="doc/screenshots/8_result_environment_general.png" style="width: 45%; float: right;" />
+<img src="doc/screenshots/1_start.png" />
+<img src="doc/screenshots/2_start_autofill.png" />
+<img src="doc/screenshots/3_start_filled.png" />
+<img src="doc/screenshots/4_result_main.png" />
+<img src="doc/screenshots/5_result_costs.png" />
+<img src="doc/screenshots/6_result_journey.png" />
+<img src="doc/screenshots/7_result_environment_journey.png" />
+<img src="doc/screenshots/8_result_environment_general.png" />
 
 
 ## Copyright statement

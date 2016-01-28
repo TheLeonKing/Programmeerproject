@@ -6,20 +6,20 @@ We kennen het allemaal: met half dichtgeknepen oogjes kruip je 's ochtends uit b
 
 Of misschien heb je wel een dure maand gehad. Na de kerstcadeautjes voor je familie en die wintervoorraad drank voor oud en nieuw, moet je concluderen dat je nog heel veel maand overhebt an het einde van je geld. Waar kies je voor als budgetbewuste reiziger: de trein of de auto?
 
-De webapplicatie "Trein of Auto" is bedoeld om antwoord te geven op deze vragen. Je geeft je beginlocatie en eindbestemming op en op basis van de huidige benzineprijzen en NS-gegevens berekent de applicatie automatisch wat goedkoper en/of sneller is: de auto of de trein.
+De webapplicatie **Trein of Auto** is bedoeld om antwoord te geven op deze vragen. Je geeft je beginlocatie en eindbestemming op en op basis van de huidige benzineprijzen en NS-gegevens berekent de applicatie automatisch wat goedkoper en/of sneller is: de auto of de trein.
 
 
 ## Wireframes
 Hieronder volgen wireframes van de drie pagina's, zoals beschreven in de paragraaf "Delen van de applicatie".
 
 ### Startscherm
-<img src="doc/wireframes/start.png" />
+<img src="doc/wireframes/start_original.png" />
 
 ### Resultatenscherm
-<img src="doc/wireframes/resultaten.png" />
+<img src="doc/wireframes/resultaten_original.png" />
 
 ### Detailscherm
-<img src="doc/wireframes/detail.png" />
+<img src="doc/wireframes/detail_original.png" />
 
 
 ## Benodigde API's en datasets
@@ -48,9 +48,9 @@ Ik verwacht dat ik het grootste deel van de applicatie zal schrijven in PHP, al 
 ## Potentiële problemen
 Ik voorzie momenteel twee potentiële problemen:
 * **Het gebruik van de NS API.** Ik heb nog nooit gewerkt met een API als deze, dus hier zal ik veel uitzoekwerk voor moeten uitvoeren.
-** *Opmerking achteraf: omdat bleek dat het prijzencomponent van de NS API een contract vereist (dat een lange aanvraagperiode heeft), heb ik de NS API niet gebruikt. Omdat ik er toch mee wilde oefenen, heb ik wel code geschreven waarmee ik succesvol reisinformatie uit de NS API kan opvragen; deze is te vinden in eerdere commits (van begin week 3). Omdat ik uiteindelijk Google Maps heb gebruikt voor deze reisinformatie, zijn de NS API-functies niet in de uiteindelijke code te vinden.*
+  * *Opmerking achteraf: omdat bleek dat het prijzencomponent van de NS API een contract vereist (dat een lange aanvraagperiode heeft), heb ik de NS API niet gebruikt. Omdat ik er toch mee wilde oefenen, heb ik wel code geschreven waarmee ik succesvol reisinformatie uit de NS API kan opvragen; deze is te vinden in eerdere commits (van begin week 3). Omdat ik uiteindelijk Google Maps heb gebruikt voor deze reisinformatie, zijn de NS API-functies niet in de uiteindelijke code te vinden.*
 * **Het ophalen van de brandstofgegevens per auto en deze combineren met de brandstofprijzen.** In de dataset van de Amerikaanse overheid staan duizenden auto's en van al deze auto's is ontzettend veel informatie opgeslagen. Ik zal deze dataset dus flink moeten opschonen en het wordt waarschijnlijk ook een uitdaging om deze gegevens te combineren met de real-time brandstofprijzen. Echter, als ik blijf proberen en indien nodig hulp vraag, verwacht ik dat ik er wel uit moet komen.
-** *Opmerking achteraf: ik heb uiteindelijk niet de dataset van de Amerikaanse overheid gebruikt omdat de gegevens van de RDW veel relevanter waren voor een Nederlandse website. Het was inderdaad een uitdaging om de autogegevens te combineren met de brandstofprijzen, maar zoals ik zelf al aangaf: na veel proberen en doorzetten is het me toch gelukt.*
+  * *Opmerking achteraf: ik heb uiteindelijk niet de dataset van de Amerikaanse overheid gebruikt omdat de gegevens van de RDW veel relevanter waren voor een Nederlandse website. Het was inderdaad een uitdaging om de autogegevens te combineren met de brandstofprijzen, maar zoals ik zelf al aangaf: na veel proberen en doorzetten is het me toch gelukt.*
 
 
 ## Gelijksoortige applicaties

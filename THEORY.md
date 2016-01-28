@@ -13,6 +13,10 @@ Carpendale (2003) en Cleveland & McGill (1984) stelden dat een bar chart goed ge
 ## Line chart
 Een line chart is een zeer geschikte visualisatiemethode voor zogenaamde "time-series"-data (sets van waarden die mettertijd veranderen; Heer et al., 2010). Een line graph is bovendien zeer handig wanneer je veranderingen over de tijd wilt vergelijken tussen verschillende groepen. Omdat dat precies is wat ik doe in mijn visualisatie (ik vergelijk gemeenten, over een bepaalde tijdsperiode), heb ik hierbij een line chart gebruikt. De Vaus (2013) benadrukt dat de onafhankelijke variabele ordinaal moet zijn bij een line chart en mijn data voldoet aan deze eis.
 
+Met de tooltip voor de line chart heb ik lang geworsteld. Aanvankelijk werd de muiscursor van de gebruiker gevolgd door een verticale lijn, die voor elke gemeente de uitstootwaarde op dat punt in de grafiek toonde. Echter, het probleem hiervan was dat deze tooltip ook geïnterpoleerde waardes tussen datapunten gaf, terwijl dit geen officiële metingen waren.
+
+Ik ben vervolgens uitgebreid op zoek gegaan naar alternatieven, maar deze hadden allemaal één probleem: als ik bij elk datapunt op de huidige x-waarde een tooltip zou tonen, zouden de tooltips over elkaar heen vallen (en dus onleesbaar worden) als de lijnen dicht bij elkaar liggen. Daarom heb ik er uiteindelijk voor gekozen om alle waarden samen te vatten in één tooltip, die wordt getoond op het punt waar de gebruiker zijn muis momenteel houdt. Hierbij heb ik ook gebruikgemaakt van kleuren om het matchen met de lijnen gemakkelijk te maken. Dit is naar mijn mening de beste oplossing: de gebruiker ziet in één oogsopslag alle waarden voor dat specifieke jaar, zonder dat hij op verschillende plekken moet kijken of dat tekst onleesbaar wordt.
+
 
 ## Choropleth
 Om de uitstoot per gemeente te visualiseren, heb ik gekozen voor een choropleth. Ik heb hierbij gebruikgemaakt van een sequentiële kleurenschaal, die incrementeel toeneemt in *hue* en *luminance*.

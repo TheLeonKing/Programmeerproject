@@ -232,7 +232,7 @@ Vrijdag 22 januari 2016
 # Dag 16
 Maandag 25 januari 2016
 
-* Noot: vanaf vandaag beschrijf ik geen "Belangrijke besluiten" meer, omdat ik deze (nu mijn beta-versie is voltooid) niet meer zal maken. Om dezelfde reden beschrijf ik geen "Complicaties" meer.
+*Noot: vanaf vandaag beschrijf ik geen "Belangrijke besluiten" meer, omdat ik deze (nu mijn beta-versie is voltooid) niet meer zal maken. Om dezelfde reden beschrijf ik geen "Complicaties" meer.*
 
 ## Bereikte mijlpalen
 * Nog enkele verbeterpunten voor mijn visualisatie vastgesteld (o.a. qua kleurgebruik en klassegrenzen).
@@ -257,3 +257,13 @@ Woensdag 27 januari 2016
 * Kleurgebruik benzineprijzenvisualisatie verbeterd.
 * Tooltip line chart zo veranderd dat hij geen valse indrukken meer werkt.
 * Verschillende bugs in het reisplanner-gedeelte gefixt.
+
+
+# Dag 19
+Donderdag 28 januari 2016
+
+## Bereikte mijlpalen
+* Last-minute bugs voor treinreis opgelost (o.a. m.b.t. hogesnelheidstrein; zie REPORT.md).
+* Tooltip van line chart verbeterd.
+* Verslagen nog eens doorgelezen en waar nodig verbeterd en aangepast.
+* Last, but not least: de uiteindelijke versie van **Trein of Auto** ingeleverd! Hoera!

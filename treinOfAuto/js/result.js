@@ -108,7 +108,7 @@ var Result = {
 		GoogleMaps.carRoute(fromLocation, toLocation).done(function(carJourney) {
 			Car.fetchStats(customStats, licensePlate).done(function(userCar) {
 				// Find train route and validate/fix it.
-				GoogleMaps.trainRoute(fromLocation, toLocation).done(function(trainJourney) {
+				GoogleMaps.trainRoute(fromLocation, toLocation, $.Deferred()).done(function(trainJourney) {
 					GoogleMaps.trainOnly(trainJourney, $.Deferred()).done(function(trainJourney) {
 						// Extract the beginning and end station from the train route, then calculate the price based on these stations.
 						Train.findStations(trainJourney.steps, fromLocation).done(function(journeyStations) {
@@ -200,6 +200,11 @@ var Result = {
 
 	/* Finds out which scores better (=lower): car or train (avoids code repetition). */
 	findWinner: function(car, train, type) {
+		// Parse both to floating-point values.
+		car = parseFloat(car);
+		train = parseFloat(train);
+		
+		// Find out which scores the lowest.
 		if (car == train) {
 			winner = 'EVEN SNEL';
 		} else if (car > train) {

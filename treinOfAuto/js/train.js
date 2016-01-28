@@ -19,9 +19,9 @@ var Train = {
 			
 			// Loop over each station, find the codes of the 'from' and 'to' stations.
 			for (var i = 0, l = stations.length; i < l; i++) {
-				if (stations[i].korte_naam == journeyStations.from || stations[i].middel_naam == journeyStations.from || stations[i].naam == journeyStations.from) {
+				if (stations[i].korte_naam.toLowerCase() == journeyStations.from || stations[i].middel_naam.toLowerCase() == journeyStations.from || stations[i].naam.toLowerCase() == journeyStations.from || stations[i].friendly.toLowerCase() == journeyStations.from) {
 					journeyStations.fromCode = stations[i].code;
-				} else if (stations[i].korte_naam == journeyStations.to || stations[i].middel_naam == journeyStations.to || stations[i].naam == journeyStations.to) {
+				} else if (stations[i].korte_naam.toLowerCase() == journeyStations.to || stations[i].middel_naam.toLowerCase() == journeyStations.to || stations[i].naam.toLowerCase() == journeyStations.to || stations[i].friendly.toLowerCase() == journeyStations.to) {
 					journeyStations.toCode = stations[i].code;
 				}
 			}
@@ -60,7 +60,7 @@ var Train = {
 		var parts = stationName.split(',');
 		
 		// Take the part after the last comma, remove 'station' if present, and trim whitespaces.
-		return $.trim(parts[parts.length-1].replace('station',''));
+		return $.trim(parts[parts.length-1].toLowerCase().replace('station',''));
 	},
 
 
@@ -88,8 +88,6 @@ var Train = {
 			// If the old one doesn't have a price either, there is simply no price defined for this journey.
 			// This is an error in the dataset. I can't fix it, but I can handle the error gracefully.
 			} else if (tariffUnit == '?' && old) {
-				console.log(journeyStations);
-				return;
 				dfd.reject('We konden geen prijs vinden voor een reis tussen deze stations. Neem alstublieft contact op met de webmaster via bugs@treinofauto.nl.');
 			
 			// Due to a bug in the CSV file, the 'tariff unit' is sometimes
