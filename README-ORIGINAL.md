@@ -22,7 +22,9 @@ Hieronder volgen wireframes van de drie pagina's, zoals beschreven in de paragra
 <img src="doc/wireframes/detail.png" />
 
 
-## Benodigde datasets
+## Benodigde API's en datasets
+*Raadpleeg het [Design-document] (https://github.com/TheLeonKing/Programmeerproject/blob/master/DESIGN-UPDATED.md) voor een bijgewerkt overzicht van de benodigde API's en datasets.
+
 Benodigde API's:
 * [NS API] (http://www.ns.nl/reisinformatie/ns-api): Om de prijs en duur van de treinreis op te halen.
 * [Google Maps API] (https://developers.google.com/maps/): Om de afstand en duur van de autoroute op te halen.
@@ -46,10 +48,13 @@ Ik verwacht dat ik het grootste deel van de applicatie zal schrijven in PHP, al 
 ## Potentiële problemen
 Ik voorzie momenteel twee potentiële problemen:
 * **Het gebruik van de NS API.** Ik heb nog nooit gewerkt met een API als deze, dus hier zal ik veel uitzoekwerk voor moeten uitvoeren.
+** *Opmerking achteraf: omdat bleek dat het prijzencomponent van de NS API een contract vereist (dat een lange aanvraagperiode heeft), heb ik de NS API niet gebruikt. Omdat ik er toch mee wilde oefenen, heb ik wel code geschreven waarmee ik succesvol reisinformatie uit de NS API kan opvragen; deze is te vinden in eerdere commits (van begin week 3). Omdat ik uiteindelijk Google Maps heb gebruikt voor deze reisinformatie, zijn de NS API-functies niet in de uiteindelijke code te vinden.*
 * **Het ophalen van de brandstofgegevens per auto en deze combineren met de brandstofprijzen.** In de dataset van de Amerikaanse overheid staan duizenden auto's en van al deze auto's is ontzettend veel informatie opgeslagen. Ik zal deze dataset dus flink moeten opschonen en het wordt waarschijnlijk ook een uitdaging om deze gegevens te combineren met de real-time brandstofprijzen. Echter, als ik blijf proberen en indien nodig hulp vraag, verwacht ik dat ik er wel uit moet komen.
+** *Opmerking achteraf: ik heb uiteindelijk niet de dataset van de Amerikaanse overheid gebruikt omdat de gegevens van de RDW veel relevanter waren voor een Nederlandse website. Het was inderdaad een uitdaging om de autogegevens te combineren met de brandstofprijzen, maar zoals ik zelf al aangaf: na veel proberen en doorzetten is het me toch gelukt.*
+
 
 ## Gelijksoortige applicaties
-Er is momenteel geen website als "Trein of Auto", al worden de twee onderdelen waar de applicatie in feite uit bestaat, wel los aangeboden:
+Er is momenteel geen website als **Trein of Auto**, al worden de twee onderdelen waar de applicatie in feite uit bestaat, wel los aangeboden:
 * [NS.nl] (http://www.ns.nl/): Geeft de prijs en duur van een treinreis. Hier wordt cijfermatige data gegeven, maar er zijn geen visualisaties aanwezig.
 * [Benzinekosten-berekenen.nl] (http://benzinekosten-berekenen.nl/): Staat je toe om de benzinekosten van je reis te berekenen. Ook hier geldt dat er geen visualisaties zijn; alle data is in de vorm van cijfers.
-Door deze twee applicaties als het ware te "combineren" ontstaat nieuwe informatie. Nu kan de vraag "Wat is goedkoper: de auto of de trein?" namelijk snel en eenvoudig beantwoord worden! Bovendien zal "Trein of Auto" de gebruiker toestaan om zijn autotype in te geven, waarna de verbruiksgegevens automatisch worden opgehaald. Bij Benzinekosten-berekenen moet de gebruiker zelf het verbruik opzoeken en ingeven en dat is een stuk omslachtiger.
+Door deze twee applicaties als het ware te "combineren" ontstaat nieuwe informatie. Nu kan de vraag "Wat is goedkoper: de auto of de trein?" namelijk snel en eenvoudig beantwoord worden! Bovendien staat **Trein of Auto** de gebruiker toe om zijn autotype in te geven, waarna de verbruiksgegevens automatisch worden opgehaald. Bij Benzinekosten-berekenen.nl moet de gebruiker zelf het verbruik opzoeken en ingeven en dat is een stuk omslachtiger.

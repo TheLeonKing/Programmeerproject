@@ -5,7 +5,7 @@ Leon Kempers, 10626646.
 Maandag 4 januari 2016
 
 ## Belangrijke besluiten
-* Het belangrijkste besluit van allemaal: wat voor webapplicatie ik ga maken! Ik heb gekozen voor "Trein of Auto" na verschillende alternatieven geëvalueerd te hebben.
+* Het belangrijkste besluit van allemaal: wat voor webapplicatie ik ga maken! Ik heb gekozen voor **Trein of Auto** na verschillende alternatieven geëvalueerd te hebben.
 
 ## Bereikte mijlpalen
 * GitHub repository gecreëerd en voorzien van initiële mappen.
@@ -235,7 +235,7 @@ Maandag 25 januari 2016
 * Noot: vanaf vandaag beschrijf ik geen "Belangrijke besluiten" meer, omdat ik deze (nu mijn beta-versie is voltooid) niet meer zal maken. Om dezelfde reden beschrijf ik geen "Complicaties" meer.
 
 ## Bereikte mijlpalen
-* Nog enkele verbeterpunten voor mijn visualisatie vastgesteld (o.a. qua kleurgebruik en klasse-grenzen).
+* Nog enkele verbeterpunten voor mijn visualisatie vastgesteld (o.a. qua kleurgebruik en klassegrenzen).
 * Wireframes en schetsen gemaakt van definitieve design.
 * Readme- en Design-documenten bijgewerkt.
 

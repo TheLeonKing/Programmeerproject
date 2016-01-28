@@ -16,7 +16,8 @@ Daarnaast vinden we het milieu belangrijk. Daarom maakt **Trein of Auto** je bew
 
 
 ## Technisch design
-Om te voorkomen dat dit een gigantisch bestand wordt, heb ik ervoor gekozen mijn Design-document te updaten. Deze is te vinden onder de naam `DESIGN.md` en beschrijft alle aspecten van het technisch design. De originele versie draagt de naam `DESIGN-ORIGINAL.md`.
+Om te voorkomen dat dit een gigantisch bestand wordt, heb ik ervoor gekozen mijn Design-document te updaten. Deze is te vinden onder de naam [DESIGN-UPDATED.md] (https://github.com/TheLeonKing/Programmeerproject/blob/master/DESIGN-UPDATED.md) en beschrijft alle aspecten van het technisch design. De originele versie, die ik maakte aan het einde van week 1, draagt de naam [DESIGN-ORIGINAL.md] (https://github.com/TheLeonKing/Programmeerproject/blob/master/DESIGN-ORIGINAL.md).
+
 
 ## Wijzigingen en uitdagingen
 Dit hoofdstuk beschrijft de wijzigingen en uitdagingen die ik tegenkwam tijdens het programmeren van **Trein of Auto**.
@@ -31,7 +32,7 @@ Sinds ik mijn originele Design-document opstelde, heb ik flink wat wijzigingen d
 * Ik heb veel milieu-gerelateerde visualisaties toegevoegd. Denk aan de bar chart van de CO2-uitstoot, de bomenvisualisatie, de gemeentekaart en de line chart behorende bij deze kaart. Deze maakten allemaal geen deel uit van mijn oorspronkelijke plan.
 
 ### Rechtvaardiging van wijzigingen
-Ik ben ervan overtuigd dat **Trein of Auto** door de wijzigingen een betere en completere applicatie is geworden. Door bijvoorbeeld milieu-gerelateerde visualisaties toe te voegen kan de gebruiker een beter overwogen besluit maken. Ook de toevoeging van handige informatie als benzinestations op de route en parkeerplaatsen op de bestemming maken **Trein of Auto** naar mijn idee beter. Doordat de gebruiker deze informatie vooraf kan zien, is hij tijdens zijn reis minder tijd kwijt aan het zoeken naar deze faciliteiten. Uiteindelijk is **Trein of Auto** dus veel meer een "one-stop"-applicatie geworden: één applicatie waar de gebruiker al zijn benodigde informatie vindt. Dat sluit dus precies aan bij mijn originele filosofie: één applicatie maken die informatie die reeds in verschillende bronnen beschikbaar is, combineert!
+Ik ben ervan overtuigd dat **Trein of Auto** door de wijzigingen een betere en completere applicatie is geworden. Door bijvoorbeeld milieu-gerelateerde visualisaties toe te voegen kan de gebruiker een beter overwogen besluit maken. Ook de toevoeging van handige informatie als benzinestations op de route en parkeerplaatsen op de bestemming maken **Trein of Auto** naar mijn idee beter. Doordat de gebruiker deze informatie vooraf kan zien, is hij tijdens zijn reis minder tijd kwijt aan het zoeken naar deze faciliteiten. Uiteindelijk is **Trein of Auto** dus veel meer een "one-stop"-applicatie geworden: één applicatie waar de gebruiker al zijn benodigde informatie vindt. Dat sluit dus precies aan bij mijn originele filosofie: één applicatie maken die informatie die reeds op verschillende plaatsen beschikbaar is, combineert en visualiseert!
 
 ### Uitdagingen
 Ik ben veel uitdagingen tegengekomen tijdens het maken van **Trein of Auto**. De vier grootste zijn als volgt:
@@ -41,7 +42,7 @@ Ik ben veel uitdagingen tegengekomen tijdens het maken van **Trein of Auto**. De
 * Het TopoJSON-bestand werkt met gemeente ID's, maar de dataset van de CO2-uitstoot werkt met gemeentenamen. Ik kon deze twee dus niet zomaar combineren. Om dit op te lossen heb ik uiteindelijk zelf een Python-script geschreven dat het CSV-bestand met de ID's, combineert met het CSV-bestand met de namen. Dit script is te vinden in de map `python`.
 
 
-**Noot: naar mijn mening laat het verslag zoals beschreven op de Mprog-website, veel belangrijke dingen achterwege. Denk hierbij aan de theoretische rechtvaardiging van de designkeuzes en de belangrijke onderdelen van het script. Daarom heb ik dit verslag hieronder uitgebreid met deze zaken.**
+**Noot: naar mijn mening laat het verslag zoals beschreven op de Mprog-website, veel belangrijke zaken achterwege. Denk hierbij aan de theoretische rechtvaardiging van de designkeuzes en de belangrijke onderdelen van het script. Daarom heb ik dit verslag hieronder uitgebreid met deze aspecten.**
 
 
 ## Theoretische achtergrond
@@ -50,24 +51,24 @@ De visualisaties is **Trein of Auto** zijn gebaseerd op uitgebreid literatuurond
 
 ## Bekende bugs
 Ik heb mijn best gedaan om **Trein of Auto** zo bug-vrij mogelijk te maken. Toch bevat de applicatie nog een drietal bugs, die ik helaas niet op kan lossen:
-* De Google Maps Directions API bevat een vreemde bug. Wanneer je 'Schiphol' als eindbestemming opgeeft en kiest voor een OV-route, retourneert de API geen routes, terwijl hij dat op [http://maps.google.com] (http://maps.google.com) wel doet. Als ik 'Schiphol' als beginbestemming instel, retourneert hij wel gewoon routes. Ik heb deze bug reeds gerapporteerd bij Google en ze doen er momenteel onderzoek naar. Ik heb deze bug afgevangen met een duidelijke foutmelding.
+* De Google Maps Directions API bevat een vreemde bug. Wanneer je 'Schiphol' als eindbestemming opgeeft en kiest voor een OV-route, retourneert de API geen routes, terwijl hij dat op [http://maps.google.com] (http://maps.google.com) wel doet. Als ik 'Schiphol' als beginbestemming instel, retourneert hij wel gewoon routes. Ik heb deze bug reeds gerapporteerd bij Google en het bedrijf heeft me laten weten dat het de fout onderzoekt. In de tussentijd heb ik deze bug afgevangen met een duidelijke foutmelding.
 * Google Maps kan geen OV-route bepalen tussen sommige locaties, vooral wanneer deze erg ver van elkaar liggen. Tussen bijvoorbeeld 'Zaandam' en 'Walibi' kan Google Maps geen OV-routes vinden (ook niet op [http://maps.google.com] (http://maps.google.com)). Dit is een tekortkoming in Google Maps en ik kan hier dus niets aan doen. Ik heb deze bug wel gewoon netjes afgevangen, zodat de applicatie in dergelijke gevallen niet vastloopt.
-* Sommige tariefeenheden in de NS Prijsmatrix ontbreken. Voor bijvoorbeeld alle reizen van en naar het station 'Buitenpost' zijn geen prijzen gedefinieerd. Na veel zoeken vond ik een oude versie van de prijsmatrix (uit 2014), die voor veel meer stations het aantal tariefeenheden bevat. Echter, omdat deze voor sommige stations iets verouderd is (we praten hier doorgaans over 10 of 20 cent), geef ik de voorkeur aan het nieuwe bestand. Deze wordt eerst doorzocht. Als daar het aantal tariefeenheden ontbreekt, wordt de oude doorzocht. Als ook die geen aantal tariefeenheden bevat, kan ik echt niks meer doen en toon ik een foutmelding (zodat de applicatie tenminste niet vastloopt).
+* Sommige tariefeenheden in de NS Prijsmatrix ontbreken. Voor bijvoorbeeld alle reizen van en naar het station 'Buitenpost' zijn geen prijzen gedefinieerd. Na veel zoeken vond ik een oude versie van de prijsmatrix (uit 2014), die voor veel meer stations het aantal tariefeenheden bevat. Echter, omdat deze voor sommige stations iets verouderd is (we praten hier doorgaans over 10 of 20 cent in prijsverschil), geef ik de voorkeur aan het nieuwe bestand. Deze wordt eerst doorzocht. Als daar het aantal tariefeenheden ontbreekt, wordt de oude doorzocht. Als ook die geen aantal tariefeenheden bevat, kan ik echt niks meer doen en toon ik een foutmelding (zodat de applicatie tenminste niet vastloopt).
 
 
 ## Error handling
-"Trein of Auto" combineert data van zeven verschillende bronnen. Hoewel ik hard mijn best heb gedaan om deze aansluiting zo naadloos en bug-vrij mogelijk te maken, kan het zijn dat er hierin soms iets fout gaat, bijvoorbeeld als Google Maps een andere stationsbenaming gebruikt dan de NS of als de NS voor een bepaalde reis geen tariefeenheden heeft gedefinieerd.
+**Trein of Auto** combineert data van zeven verschillende bronnen. Hoewel ik hard mijn best heb gedaan om deze aansluiting zo naadloos en bug-vrij mogelijk te maken, kan het zijn dat er hierin soms iets fout gaat, bijvoorbeeld als Google Maps een andere stationsbenaming gebruikt dan de NS of als de NS voor een bepaalde reis geen tariefeenheden heeft gedefinieerd.
 
 Ik heb er echter voor gezorgd dat alle fouten die op dit gebied kunnen voorkomen, afgehandeld worden. Steeds wanneer zich een situatie voordoet die mogelijk fout kan gaan, bijvoorbeeld bij het verbinden met een API of combineren van verschillende databronnen, is er een stuk code dat mogelijke fouten afvangt. Ik heb er bovendien voor gezorgd dat de foutmeldingen altijd duidelijk en specifiek zijn, zodat de gebruiker direct begrijpt wat hij kan doen om de fout op te lossen.
 
 
 ## Duidelijk gestructureerde code
-"Trein of Auto" combineert data van maar liefst zeven verschillende bronnen. Deze data moet ook verwerkt en opgeschoond worden. Hier heb ik de afgelopen drie weken veel code voor moeten schrijven. Dit heeft ertoe geleid dat de applicatie uiteindelijk bestaat uit X regels code.
+**Trein of Auto** combineert data van maar liefst zeven verschillende bronnen. Deze data moet ook verwerkt en opgeschoond worden. Hier heb ik de afgelopen drie weken veel code voor moeten schrijven. Dit heeft ertoe geleid dat de applicatie uiteindelijk bestaat uit ruim 3000 regels code.
 
 Ik heb mijn uiterste best gedaan de code te structuren, om het nakijken ervan zo eenvoudig mogelijk te maken. Enkele maatregelen die ik daarvoor heb getroffen:
 * Elke "distinct" taak heeft een eigen functie.
 * Wanneer dezelfde code twee keer of vaker herhaald werd, heb ik deze in een losse functie geplaatst. Dit voorkomt de herhaling van code.
-* JavaScript ondersteunt helaas geen classes, maar wel [object literal] (http://www.dyn-web.com/tutorials/object-literal/). Hoewel de techniek hierachter verschilt, werkt dit in de praktijk grotendeels hetzelfde. Object literals zijn in mijn code eenvoudig te herkennen, aangezien ze beginnen met een hoofdletter (terwijl functie- en variabelenamen met een kleine letter beginnen). De JavaScript-code van Trein of Auto is gegroepeerd in vijf object literals:
+* JavaScript ondersteunt helaas geen classes, maar wel [object literals] (http://www.dyn-web.com/tutorials/object-literal/). Hoewel de techniek hierachter verschilt, werkt dit in de praktijk grotendeels hetzelfde. Object literals zijn in mijn code eenvoudig te herkennen, aangezien ze beginnen met een hoofdletter (terwijl functie- en variabelenamen met een kleine letter beginnen). De JavaScript-code van Trein of Auto is gegroepeerd in vijf object literals:
 ** Car: Alle functies die enkel gebruikt worden voor de autoreis.
 ** Train: Alle functies die enkel gebruikt worden voor de treinreis.
 ** Result: Alle algemene functies, die gedeeld worden door de auto- en treinreis.
@@ -93,7 +94,7 @@ Al mijn code is volledig valide volgens de officiële richtlijnen:
 ## Belangrijke terminologie
 Ik heb geprobeerd de variabelenamen zo duidelijk mogelijk te maken, zodat er geen domeinkennis nodig is om de code te begrijpen. Toch wil ik graag de term "step" nog even toelichten. Hier wordt vaak over gesproken i.r.t. Google Maps-objecten. Een "step" is één stap van een Google Maps-routebeschrijving. De Google Maps API kan bijvoorbeeld een Directions-object retourneren dat bestaat uit drie steps: "Loop naar Amsterdam Centraal", "Trein naar Amsterdam Science Park", "Loop naar Science Park 402".
 
-De rest van de termen worden uitgelegd in de code, indien nodig.
+Andere termen worden, indien nodig, toegelicht in de code.
 
 
 ## Stappen
@@ -112,7 +113,7 @@ Hoewel ik mijn code zo duidelijk mogelijk gestructureerd heb, leek het me versta
 <li>Zoek de afkortingen van deze treinstations op.</li>
 <li>Vind het aantal tariefeenheden tussen deze twee treinstations.</li>
 <li>Zoek de prijs behorende bij dit aantal tariefeenheden.</li>
-<li>Bereken de benzineprijs op basis van het aantal kilometers, autoverbruik en de benzineprijzen (die we alle drie in eerdere stappen ophaalden).</li>
+<li>Bereken de benzineprijs op basis van het aantal kilometers, het autoverbruik en de benzineprijzen (die we alle drie in eerdere stappen ophaalden).</li>
 <li>Bereken de CO2-uitstoot van de autoreis.</li>
 <li>Bereken de CO2-uitstoot van de treinreis.</li>
 <li>Print de algemene statistieken van de auto- en treinreis (prijs, reisduur, uitstoot) op de DOM.</li>
@@ -130,7 +131,7 @@ Hoewel ik mijn code zo duidelijk mogelijk gestructureerd heb, leek het me versta
 <li>Verwijder het laadscherm.</li>
 </ol>
 
-Noot: bovenstaande procedure beschrijft alleen de belangrijkste acties die de code uitvoert. Minder relevante acties, zoals het toevoegen van listeners en valideren van ouput verkregen uit de datasets en API's, is weggelaten om het stappenplan overzichtelijk te houden.
+Noot: bovenstaande procedure beschrijft alleen de belangrijkste acties die de code uitvoert. Minder invloedrijke acties, zoals het toevoegen van listeners en valideren van ouput verkregen uit de datasets en API's, zijn weggelaten om het stappenplan overzichtelijk te houden.
 
 
 ## Literatuur
