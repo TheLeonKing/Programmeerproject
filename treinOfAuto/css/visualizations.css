@@ -155,11 +155,11 @@ circle:hover {
 	stroke-width: 5px;
 }
 
-.chartLegendItem {
+.chartLegendItemText {
 	cursor: pointer;
 }
 
-.chartLegendItem:hover {
+.chartLegendItemText:hover {
 	fill: rgb(238, 17, 17);
 	text-decoration: line-through;
 }

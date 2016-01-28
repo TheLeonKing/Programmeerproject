@@ -405,13 +405,19 @@ var Visualize = {
 	
 	/* Adds the 'amountOfTrees' to the DOM. */
 	addTrees: function(type, amountOfTrees) {
-		// Determine how many full trees there are, and what te remainder is (e.g. 26.23 --> 26 & 0.23).
-		fullTrees = Math.floor(amountOfTrees);	
-		remainder = amountOfTrees % Math.floor(amountOfTrees);
-		
-		// Create 'fullTrees' number of fullTrees and 'remainder' part of the partial tree (width of full tree is 30 px).
-		var treesHTML = '<div class="treeContainer"><img src="images/tree.png" /></div>'.repeat(fullTrees) +
-			'<div class="treeContainer" style="width: ' + 30 * remainder + 'px;"><img src="images/tree.png" /></div>';
+		// If 'amountOfTrees' is less than one, show 'amountOfTrees' part of one single tree.
+		if (amountOfTrees < 1) {
+			var treesHTML = '<div class="treeContainer" style="width: ' + 30 * amountOfTrees + 'px;"><img src="images/tree.png" /></div>';
+		// If 'amountOfTrees' is more than one.
+		} else {			
+			// Determine how many full trees there are, and what te remainder is (e.g. 26.23 --> 26 & 0.23).
+			fullTrees = Math.floor(amountOfTrees);	
+			remainder = amountOfTrees % Math.floor(amountOfTrees);
+			
+			// Create 'fullTrees' number of fullTrees and 'remainder' part of the partial tree (width of full tree is 30 px).
+			var treesHTML = '<div class="treeContainer"><img src="images/tree.png" /></div>'.repeat(fullTrees) +
+				'<div class="treeContainer" style="width: ' + 30 * remainder + 'px;"><img src="images/tree.png" /></div>';
+		}	
 		
 		// Add tree text and symbols to DOM.
 		$('#trees_' + type + '_text').html(amountOfTrees.toFixed(2).toString().replace(/\./g, ','));
@@ -474,7 +480,7 @@ var Visualize = {
 	drawRegionChart: function() {
 
 		// Based on the example at http://bl.ocks.org/kramer/4745936.
-		var margin = { top: 50, right: 140, bottom: 50, left: 95 },
+		var margin = { top: 50, right: 160, bottom: 50, left: 95 },
 			width = 650 - margin.left - margin.right,
 			height = 400 - margin.top - margin.bottom;
 		
@@ -577,7 +583,7 @@ var Visualize = {
 
 			// Add region rectangle.
 			legend.append('rect')
-				.attr('x', width + margin.right - 120)
+				.attr('x', width + margin.right - 150)
 				.attr('y', function(d, i){ return i * 20;})
 				.attr('width', 10)
 				.attr('height', 10)
@@ -588,7 +594,7 @@ var Visualize = {
 
 			// Add region name.
 			legend.append('text')
-				.attr('x', width + margin.right - 100)
+				.attr('x', width + margin.right - 130)
 				.attr('y', function(d, i){ return (i * 20) + 9;})
 				.attr('class', 'chartLegendItemText')
 				// When user clicks legend item, remove it from the chart.
