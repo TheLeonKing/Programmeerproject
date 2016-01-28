@@ -16,7 +16,7 @@ Daarnaast vinden we het milieu belangrijk. Daarom maakt **Trein of Auto** je bew
 
 
 ## Technisch design
-Om te voorkomen dat dit een gigantisch bestand wordt, heb ik ervoor gekozen mijn Design-document te updaten. Deze is te vinden onder de naam [DESIGN-UPDATED.md] (https://github.com/TheLeonKing/Programmeerproject/blob/master/DESIGN-UPDATED.md) en beschrijft alle aspecten van het technisch design. De originele versie, die ik maakte aan het einde van week 1, draagt de naam [DESIGN-ORIGINAL.md] (https://github.com/TheLeonKing/Programmeerproject/blob/master/DESIGN-ORIGINAL.md).
+Om te voorkomen dat dit een gigantisch bestand wordt, heb ik ervoor gekozen mijn Design-document te updaten. Deze is te vinden onder de naam [DESIGN-UPDATED.md] (https://github.com/TheLeonKing/Programmeerproject/blob/master/DESIGN-UPDATED.md) en beschrijft alle aspecten van het technisch design. De originele versie, die ik maakte aan het einde van week 1, draagt de naam [DESIGN.md] (https://github.com/TheLeonKing/Programmeerproject/blob/master/DESIGN.md).
 
 
 ## Wijzigingen en uitdagingen
