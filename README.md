@@ -1,4 +1,4 @@
-# Trein of Auto (treinofauto.nl)
+# Trein of Auto ([treinofauto.nl] (http://treinofauto.nl))
 Leon Kempers, 10626646 (Data Processing).
 
 
@@ -25,8 +25,7 @@ De webapplicatie **Trein of Auto** is bedoeld om antwoord te geven op deze vrage
 
 
 ## Copyright statement
-Raadpleeg [LICENSE] (https://github.com/TheLeonKing/Programmeerproject/blob/master/LICENSE) voor een overzicht van de auteursrechten.
-Please refer to [LICENSE] (https://github.com/TheLeonKing/Programmeerproject/blob/master/LICENSE) for information about the copyrighted material in this repository.
+Raadpleeg [LICENSE] (https://github.com/TheLeonKing/Programmeerproject/blob/master/LICENSE) voor een overzicht van de auteursrechten. *Please refer to [LICENSE] (https://github.com/TheLeonKing/Programmeerproject/blob/master/LICENSE) for information about the copyrighted material in this repository.*
 
 
 ## Delen van de applicatie
