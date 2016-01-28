@@ -46,7 +46,7 @@ Ik heb mijn best gedaan om chartjunk te allen tijde te voorkomen. Ik heb daarom 
 De visualisaties in **Trein of Auto** bestaan praktisch enkel uit data. Ik heb dus geen onnodige elementen toegevoegd of veel witruimte geïntroduceerd. De enige uitzondering hierop is de gemeentekaart. Die heeft relatief veel witruimte, maar dat kon niet anders vanwege de langwerpige vorm van Nederland.
 
 ## Kleurenblindheid
-** Trein of Auto** moet voor iedereen toegankelijk zijn. Daarom heb ik constant rekening gehouden met kleurenblinde gebruikers.
+**Trein of Auto** moet voor iedereen toegankelijk zijn. Daarom heb ik constant rekening gehouden met kleurenblinde gebruikers.
 
 Rood-groene kleurenblindheid is de meest voorkomende vorm van kleurenblindheid (Colour Blind Awareness, n.d.). Omdat rood-groen kleurenblinde mensen moeite hebben met het zien van rood en groen, heb ik deze kleuren zoveel mogelijk vermeden in mijn visualisaties. De enige plaats waar ik deze kleuren wel heb gebruikt, is bij de cijfermatige data om de "beste" en "slechtste" optie aan te geven. Zo kunnen niet-kleurenblinden in één oogopslag zien wat de beste optie is, terwijl kleurenblinden nog steeds de cijfers kunnen aflezen.
 
